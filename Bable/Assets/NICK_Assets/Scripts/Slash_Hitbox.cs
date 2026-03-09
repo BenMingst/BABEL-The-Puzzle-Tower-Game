@@ -4,11 +4,11 @@ public class SlashHitbox : MonoBehaviour
 {
     public int damage = 1;
 
-    void OnTriggerEnter2D(Collider2D other)
+void OnTriggerEnter2D(Collider2D other)
+{
+    if (other.CompareTag("Enemy"))
     {
-        if (other.CompareTag("Enemy"))
-        {
-            other.GetComponent<EnemyHealth>()?.TakeDamageWithKnockback(damage, transform.position);
-        }
+        other.GetComponentInChildren<EnemyHealth>()?.TakeDamageWithKnockback(damage, transform.position);
     }
+}
 }
