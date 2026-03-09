@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
 	float currentSpeed;
 	//NEW
-	[SerializeField] private float JUMP_FORCE = 300f;
+	[SerializeField] private float JUMP_FORCE = 400f;
 	//private bool isGrounded = false;
 
 	// Start is called before the first frame update
