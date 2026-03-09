@@ -11,6 +11,14 @@ public class EnemyAI : MonoBehaviour
     [Header("Movement")]
     public float walkSpeed = 2f;
 
+    [Header("Jumping")]
+    public float jumpForce = 5f;
+    public LayerMask groundLayer;
+    protected bool isGrounded = false;
+    private bool hitWall = false;
+    private float jumpCooldown = 0.3f;
+    private float lastJumpTime = -999f;
+
     [Header("Attack")]
     public float attackCooldown = 1f;
     public GameObject enemyHitbox;
@@ -18,13 +26,13 @@ public class EnemyAI : MonoBehaviour
     public float hitboxDelay = 0.45f;
     public float hitboxDuration = 0.1f;
 
-    private Animator animator;
-    private bool isAttacking = false;
-    private bool facingRight = true;
-    private EnemyHealth enemyHealth;
-    private Rigidbody2D rb;
+    protected Animator animator;
+    protected bool isAttacking = false;
+    protected bool facingRight = true;
+    protected EnemyHealth enemyHealth;
+    protected Rigidbody2D rb;
 
-    void Start()
+    protected virtual void Start()
     {
         animator = GetComponent<Animator>();
         player = GameObject.FindWithTag("Player").transform;
@@ -32,9 +40,11 @@ public class EnemyAI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (player == null) return;
+
+        CheckGrounded();
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
@@ -52,27 +62,70 @@ public class EnemyAI : MonoBehaviour
 
         if (distanceToPlayer <= attackRange && !isAttacking && !enemyHealth.isHurt)
         {
-            // stop walking and attack
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             animator.SetBool("IsWalking", false);
             StartCoroutine(Attack());
         }
         else if (distanceToPlayer <= sightRange && !isAttacking && !enemyHealth.isHurt)
         {
-            // walk towards player
             float direction = player.position.x > transform.position.x ? 1f : -1f;
             rb.linearVelocity = new Vector2(direction * walkSpeed, rb.linearVelocity.y);
             animator.SetBool("IsWalking", true);
+
+            NavigateObstacles();
         }
         else
         {
-            // idle
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             animator.SetBool("IsWalking", false);
         }
     }
 
-    void Flip()
+    protected void CheckGrounded()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 0.6f, groundLayer);
+        isGrounded = hit.collider != null;
+    }
+
+    protected void NavigateObstacles()
+    {
+        if (!isGrounded || !hitWall) return;
+        if (Time.time - lastJumpTime < jumpCooldown) return;
+
+        Jump();
+    }
+
+    protected void Jump()
+    {
+        if (!isGrounded) return;
+        if (Time.time - lastJumpTime < jumpCooldown) return;
+
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        lastJumpTime = Time.time;
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) return;
+        if (collision.gameObject.CompareTag("Enemy")) return;
+
+        foreach (ContactPoint2D contact in collision.contacts)
+        {
+            // If the contact normal is mostly horizontal, it's a wall
+            if (Mathf.Abs(contact.normal.x) > 0.5f)
+            {
+                hitWall = true;
+                return;
+            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        hitWall = false;
+    }
+
+    protected virtual void Flip()
     {
         facingRight = !facingRight;
         Vector3 scale = transform.localScale;
@@ -80,7 +133,7 @@ public class EnemyAI : MonoBehaviour
         transform.localScale = scale;
     }
 
-    IEnumerator Attack()
+    protected virtual IEnumerator Attack()
     {
         isAttacking = true;
 
