@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf9e105b69fb0c4281ce24b51554ea4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  attackRange: 6
+  attackRange: 1
   sightRange: 20
   player: {fileID: 0}
   walkSpeed: 8

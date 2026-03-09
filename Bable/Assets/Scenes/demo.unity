@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 33e9bf8c13bd82bf19265fcf56f58b82, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -15299,6 +15299,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 937927694780734378, guid: 71a0ef979483c5a3283a37f9524a4d35, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 03bac165c97555d54b1cf5fb548f00ea, type: 2}
+    - target: {fileID: 1291812494407671207, guid: 71a0ef979483c5a3283a37f9524a4d35, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 03bac165c97555d54b1cf5fb548f00ea, type: 2}
     - target: {fileID: 1859813058793647406, guid: 71a0ef979483c5a3283a37f9524a4d35, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -15383,6 +15391,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4209545511805972975, guid: 71a0ef979483c5a3283a37f9524a4d35, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8629892063234205344, guid: 3bab613572f1c470fa1fc0336c4ca7d9, type: 3}
+    - target: {fileID: 6321673966406208619, guid: 71a0ef979483c5a3283a37f9524a4d35, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 03bac165c97555d54b1cf5fb548f00ea, type: 2}
+    - target: {fileID: 6967225469704243441, guid: 71a0ef979483c5a3283a37f9524a4d35, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8629892063234205344, guid: 3bab613572f1c470fa1fc0336c4ca7d9, type: 3}
+    - target: {fileID: 8425894784779846629, guid: 71a0ef979483c5a3283a37f9524a4d35, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 8629892063234205344, guid: 3bab613572f1c470fa1fc0336c4ca7d9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
