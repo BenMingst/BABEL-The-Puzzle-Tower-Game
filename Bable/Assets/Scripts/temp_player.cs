@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; //NEW
 
-public class PlayerController : MonoBehaviour
+public class temp_player : MonoBehaviour
 {
 	[SerializeField] private float BASE_SPEED = 250f;
 	private Rigidbody2D rb;
