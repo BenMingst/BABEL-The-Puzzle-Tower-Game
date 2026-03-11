@@ -47,11 +47,13 @@ public class PlayerController : MonoBehaviour
     {
         horizontalInput = 0f;
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
-        if (Input.GetKey(KeyCode.D)) horizontalInput =  1f;
+        if (Input.GetKey(KeyCode.D)) horizontalInput = 1f;
 
-        isCrouching = Input.GetKey(KeyCode.S) && isGrounded;
+        // crouch: S held, grounded, not attacking, not rolling, not hurt
+        isCrouching = Input.GetKey(KeyCode.S) && isGrounded && !isAttacking && !isRolling && !isHurt;
 
-        if (Input.GetKeyDown(KeyCode.W) && isGrounded && !isCrouching)
+        // jump: W pressed, grounded
+        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpTimer = 0f;
@@ -66,10 +68,10 @@ public class PlayerController : MonoBehaviour
             jumpTimer = 0f;
         }
 
+        // down attack: S pressed while airborne
         if (Input.GetKeyDown(KeyCode.S) && !isGrounded && jumpTimer >= downAttackDelay)
         {
-                Debug.Log("Down attack activated");
-
+            Debug.Log("Down attack activated");
             animator.SetBool("DownAttack", true);
             downAttackHitbox.GetComponent<Collider2D>().enabled = true;
         }
@@ -79,13 +81,17 @@ public class PlayerController : MonoBehaviour
             downAttackHitbox.GetComponent<Collider2D>().enabled = false;
         }
 
+        // slash exits crouch
         if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded)
         {
+            isCrouching = false;
             StartCoroutine(SlashAttack());
         }
 
+        // roll exits crouch
         if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)
         {
+            isCrouching = false;
             StartCoroutine(Roll());
         }
 
@@ -99,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
         float speed = isCrouching ? moveSpeed * crouchSpeedMultiplier : moveSpeed;
 
-        if (horizontalInput != 0 && !isAttacking && !isRolling && !isHurt)
+        if (horizontalInput != 0 && !isAttacking && !isRolling && !isHurt && !isCrouching)
         {
             rb.linearVelocity = new Vector2(horizontalInput * speed, rb.linearVelocity.y);
         }
@@ -167,6 +173,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("FacingRight", facingRight);
         animator.SetBool("IsJumping", !isGrounded);
         animator.SetBool("IsFalling", rb.linearVelocity.y < 0);
+        animator.SetBool("IsCrouching", isCrouching);
 
         if (!isAttacking && !isRolling)
         {
@@ -186,8 +193,8 @@ public class PlayerController : MonoBehaviour
     {
         if (standingCollider != null && crouchingCollider != null)
         {
-            standingCollider.enabled  = !isCrouching;
-            crouchingCollider.enabled =  isCrouching;
+            standingCollider.enabled = !isCrouching;
+            crouchingCollider.enabled = isCrouching;
         }
     }
 

@@ -4253,7 +4253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 509796635320564794, guid: 3f79cebc1f1164f01b995363ee34cd69, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3301889814299977434, guid: 3f79cebc1f1164f01b995363ee34cd69, type: 3}
       propertyPath: enemyHitbox
