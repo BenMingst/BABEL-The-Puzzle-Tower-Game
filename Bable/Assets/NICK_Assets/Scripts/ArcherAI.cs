@@ -5,6 +5,7 @@ public class ArcherAI : MonoBehaviour
 {
     [Header("Detection")]
     public float shootRange = 8f;
+    public float yTolerance = 2f;
     public Transform player;
 
     [Header("Attack")]
@@ -15,6 +16,9 @@ public class ArcherAI : MonoBehaviour
     public GameObject arrowPrefab;
     public Transform arrowSpawnPoint;
 
+    [Header("Sight")]
+    public LayerMask sightBlockLayers;
+
     private bool isAttacking = false;
     private bool facingRight = true;
     private EnemyHealth enemyHealth;
@@ -24,6 +28,19 @@ public class ArcherAI : MonoBehaviour
         player = GameObject.FindWithTag("Player").transform;
         enemyHealth = GetComponent<EnemyHealth>();
     }
+
+    bool CanSeePlayer()
+{
+    if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
+
+    Vector2 origin = new Vector2(transform.position.x, transform.position.y + 1f);
+    Vector2 target = new Vector2(player.position.x, player.position.y + 1f);
+    Vector2 direction = (target - origin).normalized;
+    float distance = Vector2.Distance(origin, target);
+    RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
+
+    return hit.collider == null;
+}
 
     void Update()
     {
@@ -36,7 +53,7 @@ public class ArcherAI : MonoBehaviour
             facingRight = player.position.x > transform.position.x;
         }
 
-        if (distanceToPlayer <= shootRange && !isAttacking)
+        if (distanceToPlayer <= shootRange && !isAttacking && CanSeePlayer())
         {
             StartCoroutine(ShootSequence());
         }
@@ -48,8 +65,10 @@ public class ArcherAI : MonoBehaviour
 
         yield return null;
 
-        while (Vector2.Distance(transform.position, player.position) <= shootRange)
+        while (Vector2.Distance(transform.position, player.position) <= shootRange && CanSeePlayer())
         {
+            if (enemyHealth.isHurt || enemyHealth.isDead) { yield return null; continue; }
+
             facingRight = player.position.x > transform.position.x;
 
             if (facingRight)
@@ -57,31 +76,8 @@ public class ArcherAI : MonoBehaviour
             else
                 archerTopAnimator.SetTrigger("AimLeft");
 
-            float aimTimer = 0f;
-            bool directionChanged = false;
-            while (aimTimer < 1f)
-            {
-                aimTimer += Time.deltaTime;
-                bool newFacingRight = player.position.x > transform.position.x;
-                if (newFacingRight != facingRight)
-                {
-                    directionChanged = true;
-                    break;
-                }
-                yield return null;
-            }
-
-            if (directionChanged) continue;
-
-            if (facingRight)
-                archerTopAnimator.SetTrigger("ShootRight");
-            else
-                archerTopAnimator.SetTrigger("ShootLeft");
-
-            // wait for shoot animation to finish
-            yield return new WaitForSeconds(0.8f);
-
-            yield return new WaitForSeconds(attackCooldown);
+            // wait for aim + shoot + cooldown
+            yield return new WaitForSeconds(1f + 0.8f + attackCooldown);
         }
 
         isAttacking = false;

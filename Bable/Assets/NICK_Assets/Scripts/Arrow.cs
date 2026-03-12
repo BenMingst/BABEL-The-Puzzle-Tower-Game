@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    public float speed = 6f;
+    public float speed = 1.5f;
     public float maxDistance = 15f;
     public float stickDuration = 3f;
     public int damage = 1;
+    public float spawnIgnoreTime = 0.1f;
 
     private float distanceTravelled = 0f;
     private bool isStuck = false;
+    private bool ignoreGround = true;
     private Vector2 travelDirection;
     private Rigidbody2D rb;
     private Collider2D hurtbox;
@@ -19,6 +21,13 @@ public class Arrow : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         hurtbox = GetComponent<Collider2D>();
         rb.linearVelocity = travelDirection * speed;
+        StartCoroutine(EnableGroundCollision());
+    }
+
+    IEnumerator EnableGroundCollision()
+    {
+        yield return new WaitForSeconds(spawnIgnoreTime);
+        ignoreGround = false;
     }
 
     public void SetDirection(bool facingRight)
@@ -44,9 +53,9 @@ public class Arrow : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerHealth>()?.TakeDamage(damage, transform.position);
+            other.GetComponentInParent<PlayerHealth>()?.TakeDamage(damage, transform.position);
         }
-        else if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        else if (!ignoreGround && other.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             StartCoroutine(StickToWall());
         }

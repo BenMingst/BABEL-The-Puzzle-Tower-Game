@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &327650010233382220
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5440842208730323075}
+  m_Layer: 0
+  m_Name: LedgeCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5440842208730323075
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 327650010233382220}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.8, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7844664892785623304}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &509796635320564794
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,6 +67,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5637014184812630795}
+  - {fileID: 5440842208730323075}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2463687014555826009
@@ -197,6 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   attackRange: 0.5
   sightRange: 2
+  yTolerance: 2
   player: {fileID: 0}
   walkSpeed: 1
   attackCooldown: 0.5
@@ -204,6 +237,14 @@ MonoBehaviour:
   animationDuration: 1.05
   hitboxDelay: 0.45
   hitboxDuration: 0.1
+  ledgeCheck: {fileID: 5440842208730323075}
+  ledgeCheckRadius: 0.1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  sightBlockLayers:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &3301889814299977434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -220,7 +261,11 @@ MonoBehaviour:
   knockbackForce: 2
   enemyHitbox: {fileID: 0}
   heartDropPrefab: {fileID: 0}
+  enemyAnimator: {fileID: 0}
+  archerBottom: {fileID: 0}
+  rb: {fileID: 0}
   isHurt: 0
+  isDead: 0
 --- !u!1 &1598112752036575456
 GameObject:
   m_ObjectHideFlags: 0
