@@ -85,6 +85,8 @@ public class ArcherAI : MonoBehaviour
 
     public void SpawnArrow()
     {
+    Debug.Log("SpawnArrow called on: " + gameObject.name + " ArcherAI enabled: " + enabled);
+
         if (enemyHealth.isHurt || enemyHealth.isDead) return;
 
         if (arrowPrefab != null && arrowSpawnPoint != null)
