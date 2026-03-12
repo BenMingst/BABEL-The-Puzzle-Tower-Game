@@ -253,7 +253,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleAnimations()
     {
-        animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
+        //animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
         animator.SetBool("Is_running", Mathf.Abs(horizontalInput) > 0.1f);
         animator.SetFloat("Horizontal_Velocity", horizontalInput);
         animator.SetBool("FacingRight", facingRight);
