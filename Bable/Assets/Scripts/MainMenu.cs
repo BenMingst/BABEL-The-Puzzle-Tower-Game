@@ -5,7 +5,7 @@ public class MainMenu : MonoBehaviour
 {
     public void playLevel1()
     {
-        SceneManager.LoadSceneAsync("Level One");
+        SceneManager.LoadSceneAsync("NICK");
     }
     public void playLevel2()
     {
