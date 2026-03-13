@@ -27,11 +27,12 @@ public class EnemyAI : MonoBehaviour
     [Header("Sight")]
     public LayerMask sightBlockLayers;
 
-    private Animator animator;
-    private bool isAttacking = false;
-    private bool facingRight = true;
-    private EnemyHealth enemyHealth;
-    private Rigidbody2D rb;
+    // Shared core components/state, accessible to subclasses like The_Stalker_AI
+    protected Animator animator;
+    protected bool isAttacking = false;
+    protected bool facingRight = true;
+    protected EnemyHealth enemyHealth;
+    protected Rigidbody2D rb;
 
     void Start()
     {
