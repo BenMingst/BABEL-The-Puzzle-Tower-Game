@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     public RuntimeAnimatorController swordAnimator;
     public bool hasSword = false;
 
+    public bool isDead = false;
     private Rigidbody2D rb;
     public Animator animator;
     private bool isGrounded;
@@ -70,6 +71,21 @@ public class PlayerController : MonoBehaviour
         isInsideDropdown = value;
     }
 
+    public void OnDeath()
+{
+    isDead = true;
+    rb.linearVelocity = Vector2.zero;
+    rb.gravityScale = 0f;
+    rb.constraints = RigidbodyConstraints2D.FreezeAll;
+    transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
+    if (facingRight)
+        animator.SetTrigger("DeathRight");
+        if (DeathScreenEffect.Instance == null)
+        Debug.Log("DeathScreenEffect Instance is NULL");
+    else
+        animator.SetTrigger("DeathLeft");
+}
+
     bool HasRoomToStand()
     {
         if (ceilingCheck == null) return true;
@@ -78,6 +94,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
         if (isHurt) return;
 
         ItemPickup pickup = FindObjectOfType<ItemPickup>();
@@ -160,6 +177,8 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return;
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         if (horizontalInput != 0 && !isAttacking && !isRolling && !isHurt && !isCrouching)
