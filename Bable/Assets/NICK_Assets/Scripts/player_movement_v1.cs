@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -94,6 +95,18 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // Needs to be checked before returns otherwise you cannot reset after dying
+        // Reset active scene
+        if (Input.GetKeyDown(KeyCode.R)) {
+            Debug.Log("Reset");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+        // Quit the game
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Debug.Log("Quit: Only works in built versions");
+            Application.Quit();
+        }
+
         if (isDead) return;
         if (isHurt) return;
 

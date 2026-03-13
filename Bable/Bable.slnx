@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿<Solution>
   <Project Path="Unity.Timeline.csproj" />
   <Project Path="Unity.RenderPipelines.GPUDriven.Runtime.csproj" />
@@ -96,3 +97,8 @@
 ﻿<Solution>
 </Solution>
 >>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291
+=======
+﻿<Solution>
+  <Project Path="Assembly-CSharp.csproj" />
+</Solution>
+>>>>>>> f7456959d0d67a53682aff7b0ab6c4a691035be5

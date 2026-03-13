@@ -226,6 +226,15 @@
         "com.unity.render-pipelines.core": "17.0.3"
       }
     },
+    "com.unity.sdk.linux-x86_64": {
+      "version": "1.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot.base": "1.0.2"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.searcher": {
       "version": "4.9.4",
       "depth": 2,
@@ -250,6 +259,7 @@
       }
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     "com.unity.splines": {
       "version": "2.8.2",
       "depth": 1,
@@ -261,6 +271,8 @@
       },
       "url": "https://packages.unity.com"
     },
+=======
+>>>>>>> f7456959d0d67a53682aff7b0ab6c4a691035be5
     "com.unity.sysroot.base": {
       "version": "1.0.2",
       "depth": 1,
@@ -268,8 +280,11 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+<<<<<<< HEAD
 =======
 >>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291
+=======
+>>>>>>> f7456959d0d67a53682aff7b0ab6c4a691035be5
     "com.unity.test-framework": {
       "version": "1.6.0",
       "depth": 0,
@@ -299,6 +314,15 @@
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.toolchain.linux-x86_64-linux": {
+      "version": "1.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.sysroot.base": "1.0.2"
       },
       "url": "https://packages.unity.com"
     },
