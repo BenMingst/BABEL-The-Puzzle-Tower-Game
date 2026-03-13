@@ -3,28 +3,18 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - Enemy
-<<<<<<< HEAD
-=======
-  - Door
-  - Pickup
->>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-<<<<<<< HEAD
-  - Collision Map
-=======
-  - Character
->>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291
+  - 
   - Water
   - UI
-  - Ground
-  - Pickup
-  - Dropdown
-  - DeathScreen
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -48,30 +38,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: BehindBackground
-    uniqueID: 3646901189
-    locked: 0
-  - name: Background
-    uniqueID: 1260054107
-    locked: 0
-  - name: BackgroundClose
-    uniqueID: 3408344525
-    locked: 0
-  - name: BackgroundProps
-    uniqueID: 2746308211
-    locked: 0
-  - name: Stage
-    uniqueID: 672610427
-    locked: 0
-  - name: Foreground
-    uniqueID: 2624389795
-    locked: 0
-  - name: UI
-    uniqueID: 3105478917
-    locked: 0
-  - name: Menu
-    uniqueID: 368488925
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
