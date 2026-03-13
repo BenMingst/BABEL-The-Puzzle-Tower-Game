@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
         if (isDead) return;
         if (isHurt) return;
 
-        ItemPickup pickup = FindObjectOfType<ItemPickup>();
+        ItemPickup pickup = FindFirstObjectByType<ItemPickup>();
         if (pickup != null && pickup.inCutscene) return;
 
         horizontalInput = 0f;
@@ -272,7 +272,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleAnimations()
     {
-        animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
+        //animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
         animator.SetBool("Is_running", Mathf.Abs(horizontalInput) > 0.1f);
         animator.SetFloat("Horizontal_Velocity", horizontalInput);
         animator.SetBool("FacingRight", facingRight);
