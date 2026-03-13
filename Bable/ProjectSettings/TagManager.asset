@@ -5,17 +5,26 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+<<<<<<< HEAD
+=======
+  - Door
+  - Pickup
+>>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
+<<<<<<< HEAD
   - Collision Map
+=======
+  - Character
+>>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Ground
+  - Pickup
+  - Dropdown
+  - DeathScreen
   - 
   - 
   - 

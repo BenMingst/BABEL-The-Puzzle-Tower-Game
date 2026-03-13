@@ -6,11 +6,14 @@ public class EnemyHitbox : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-            Debug.Log("EnemyHitbox detected: " + other.gameObject.name);
+        Debug.Log("EnemyHitbox detected: " + other.gameObject.name);
 
         if (other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerHealth>()?.TakeDamage(damage, transform.position);
+            Debug.Log("Player detected, attempting TakeDamage");
+            PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
+            Debug.Log("PlayerHealth found: " + (health != null));
+            health?.TakeDamage(damage, transform.position);
         }
     }
 }

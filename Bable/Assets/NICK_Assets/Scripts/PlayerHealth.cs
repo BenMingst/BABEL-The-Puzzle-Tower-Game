@@ -29,6 +29,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isInvincible) return;
         if (playerController.isRolling) return;
+        if (playerController.isDead) return;  // add this line
 
         int heartIndex = (currentHearts - 1) / 2;
         bool isFullToHalf = currentHearts % 2 == 0;
@@ -103,7 +104,19 @@ public class PlayerHealth : MonoBehaviour
     }
 
     void Die()
-    {
-        Debug.Log("Player died");
-    }
+{
+    playerController.OnDeath();
+    StartCoroutine(DeathSequence());
+}
+
+
+
+IEnumerator DeathSequence()
+{
+    // wait for death animation to finish
+    yield return new WaitForSeconds(1f); // match your animation length
+
+    // TODO: show game over screen here
+    Debug.Log("Game Over");
+}
 }

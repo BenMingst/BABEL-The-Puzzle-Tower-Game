@@ -6,6 +6,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Detection")]
     public float attackRange = 1.5f;
     public float sightRange = 5f;
+    public float yTolerance = 2f;
     public Transform player;
 
     [Header("Movement")]
@@ -17,6 +18,14 @@ public class EnemyAI : MonoBehaviour
     public float animationDuration = 1.05f;
     public float hitboxDelay = 0.45f;
     public float hitboxDuration = 0.1f;
+
+    [Header("Ledge Detection")]
+    public Transform ledgeCheck;
+    public float ledgeCheckRadius = 0.1f;
+    public LayerMask groundLayer;
+
+    [Header("Sight")]
+    public LayerMask sightBlockLayers;
 
     private Animator animator;
     private bool isAttacking = false;
@@ -32,13 +41,27 @@ public class EnemyAI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
+bool CanSeePlayer()
+{
+    if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
+
+    Vector2 origin = new Vector2(transform.position.x, transform.position.y + 1f);
+    Vector2 target = new Vector2(player.position.x, player.position.y + 1f);
+    Vector2 direction = (target - origin).normalized;
+    float distance = Vector2.Distance(origin, target);
+    RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
+
+    return hit.collider == null;
+}
+
     void Update()
     {
         if (player == null) return;
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        bool canSee = CanSeePlayer();
 
-        if (!isAttacking && !enemyHealth.isHurt)
+        if (!isAttacking && !enemyHealth.isHurt && canSee)
         {
             if (player.position.x < transform.position.x && facingRight)
             {
@@ -50,16 +73,19 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        if (distanceToPlayer <= attackRange && !isAttacking && !enemyHealth.isHurt)
+        // check if there is ground ahead
+        bool groundAhead = ledgeCheck == null || Physics2D.OverlapCircle(ledgeCheck.position, ledgeCheckRadius, groundLayer);
+
+        if (distanceToPlayer <= attackRange && !isAttacking && !enemyHealth.isHurt && canSee)
         {
             // stop walking and attack
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             animator.SetBool("IsWalking", false);
             StartCoroutine(Attack());
         }
-        else if (distanceToPlayer <= sightRange && !isAttacking && !enemyHealth.isHurt)
+        else if (distanceToPlayer <= sightRange && !isAttacking && !enemyHealth.isHurt && groundAhead && canSee)
         {
-            // walk towards player
+            // walk towards player only if ground ahead and can see player
             float direction = player.position.x > transform.position.x ? 1f : -1f;
             rb.linearVelocity = new Vector2(direction * walkSpeed, rb.linearVelocity.y);
             animator.SetBool("IsWalking", true);
