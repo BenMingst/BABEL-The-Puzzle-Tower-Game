@@ -5,19 +5,42 @@ public class ArcherAI : MonoBehaviour
 {
     [Header("Detection")]
     public float shootRange = 8f;
+    public float yTolerance = 2f;
     public Transform player;
 
     [Header("Attack")]
     public float attackCooldown = 2f;
     public Animator archerTopAnimator;
 
+    [Header("Arrow")]
+    public GameObject arrowPrefab;
+    public Transform arrowSpawnPoint;
+
+    [Header("Sight")]
+    public LayerMask sightBlockLayers;
+
     private bool isAttacking = false;
     private bool facingRight = true;
+    private EnemyHealth enemyHealth;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        enemyHealth = GetComponent<EnemyHealth>();
     }
+
+    bool CanSeePlayer()
+{
+    if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
+
+    Vector2 origin = new Vector2(transform.position.x, transform.position.y + 1f);
+    Vector2 target = new Vector2(player.position.x, player.position.y + 1f);
+    Vector2 direction = (target - origin).normalized;
+    float distance = Vector2.Distance(origin, target);
+    RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
+
+    return hit.collider == null;
+}
 
     void Update()
     {
@@ -25,59 +48,59 @@ public class ArcherAI : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        // update facing direction when not attacking
         if (!isAttacking)
         {
             facingRight = player.position.x > transform.position.x;
         }
 
-        if (distanceToPlayer <= shootRange && !isAttacking)
+        if (distanceToPlayer <= shootRange && !isAttacking && CanSeePlayer())
         {
             StartCoroutine(ShootSequence());
         }
     }
 
     IEnumerator ShootSequence()
-{
-    isAttacking = true;
-
-    yield return null;
-
-    while (Vector2.Distance(transform.position, player.position) <= shootRange)
     {
-        // update facing direction each shot
-        facingRight = player.position.x > transform.position.x;
+        isAttacking = true;
 
-        if (facingRight)
-        {
-            archerTopAnimator.SetTrigger("AimRight");
-        }
-        else
-        {
-            archerTopAnimator.SetTrigger("AimLeft");
-        }
+        yield return null;
 
-        // wait for aim animation - 1000ms
-        yield return new WaitForSeconds(1f);
-
-        if (facingRight)
+        while (Vector2.Distance(transform.position, player.position) <= shootRange && CanSeePlayer())
         {
-            archerTopAnimator.SetTrigger("ShootRight");
-        }
-        else
-        {
-                Debug.Log("Firing ShootLeft trigger");
+            if (enemyHealth.isHurt || enemyHealth.isDead) { yield return null; continue; }
 
-            archerTopAnimator.SetTrigger("ShootLeft");
+            facingRight = player.position.x > transform.position.x;
+
+            if (facingRight)
+                archerTopAnimator.SetTrigger("AimRight");
+            else
+                archerTopAnimator.SetTrigger("AimLeft");
+
+            // wait for aim + shoot + cooldown
+            yield return new WaitForSeconds(1f + 0.8f + attackCooldown);
         }
 
-        // wait for shoot animation - 800ms
-        yield return new WaitForSeconds(0.8f);
-
-        // cooldown before next shot
-        yield return new WaitForSeconds(attackCooldown);
+        isAttacking = false;
     }
 
-    isAttacking = false;
-}
+    public void SpawnArrow()
+    {
+    Debug.Log("SpawnArrow called on: " + gameObject.name + " ArcherAI enabled: " + enabled);
+
+        if (enemyHealth.isHurt || enemyHealth.isDead) return;
+
+        if (arrowPrefab != null && arrowSpawnPoint != null)
+        {
+            GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+            Arrow arrowScript = arrow.GetComponent<Arrow>();
+            arrowScript.SetDirection(facingRight);
+
+            if (!facingRight)
+            {
+                Vector3 scale = arrow.transform.localScale;
+                scale.x *= -1;
+                arrow.transform.localScale = scale;
+            }
+        }
+    }
 }
