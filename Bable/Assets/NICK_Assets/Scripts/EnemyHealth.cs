@@ -116,7 +116,7 @@ public class EnemyHealth : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        if (heartDropPrefab != null && Random.value > 0.5f)
+        if (heartDropPrefab != null && Random.value > 0.25f)
         {
             Instantiate(heartDropPrefab, transform.position, Quaternion.identity);
         }
