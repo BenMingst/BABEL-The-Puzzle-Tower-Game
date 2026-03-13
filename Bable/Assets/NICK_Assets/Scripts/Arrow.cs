@@ -1,27 +1,8 @@
-<<<<<<< HEAD
-=======
 using System.Collections;
->>>>>>> d84f4e240e1a950fc9fa3dcae56d38f5a56a9654
 using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-<<<<<<< HEAD
-    public float speed = 10f;
-    public int damage = 1;
-    public float lifetime = 3f;
-
-    private Vector2 direction;
-
-    void Start()
-    {
-        Destroy(gameObject, lifetime);
-    }
-
-    void Update()
-    {
-        transform.Translate(direction * speed * Time.deltaTime);
-=======
     public float speed = 6f;
     public float maxDistance = 15f;
     public float stickDuration = 3f;
@@ -38,14 +19,10 @@ public class Arrow : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         hurtbox = GetComponent<Collider2D>();
         rb.linearVelocity = travelDirection * speed;
->>>>>>> d84f4e240e1a950fc9fa3dcae56d38f5a56a9654
     }
 
     public void SetDirection(bool facingRight)
     {
-<<<<<<< HEAD
-        direction = facingRight ? Vector2.right : Vector2.left;
-=======
         travelDirection = facingRight ? Vector2.right : Vector2.left;
     }
 
@@ -59,26 +36,10 @@ public class Arrow : MonoBehaviour
         {
             Destroy(gameObject);
         }
->>>>>>> d84f4e240e1a950fc9fa3dcae56d38f5a56a9654
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-<<<<<<< HEAD
-        if (other.CompareTag("Player"))
-        {
-            // hook into your PlayerHealth here, e.g.:
-            // other.GetComponent<PlayerHealth>()?.TakeDamage(damage);
-            Destroy(gameObject);
-        }
-
-        // destroy on hitting terrain
-        if (other.CompareTag("Ground") || other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            Destroy(gameObject);
-        }
-    }
-=======
         if (isStuck) return;
 
         if (other.CompareTag("Player"))
@@ -103,5 +64,4 @@ public class Arrow : MonoBehaviour
 
         Destroy(gameObject);
     }
->>>>>>> d84f4e240e1a950fc9fa3dcae56d38f5a56a9654
 }

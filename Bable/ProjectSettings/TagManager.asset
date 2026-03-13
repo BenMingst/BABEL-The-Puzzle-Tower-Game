@@ -3,12 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Collision Map
   - Water
   - UI
   - 
@@ -38,6 +39,30 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BehindBackground
+    uniqueID: 3646901189
+    locked: 0
+  - name: Background
+    uniqueID: 1260054107
+    locked: 0
+  - name: BackgroundClose
+    uniqueID: 3408344525
+    locked: 0
+  - name: BackgroundProps
+    uniqueID: 2746308211
+    locked: 0
+  - name: Stage
+    uniqueID: 672610427
+    locked: 0
+  - name: Foreground
+    uniqueID: 2624389795
+    locked: 0
+  - name: UI
+    uniqueID: 3105478917
+    locked: 0
+  - name: Menu
+    uniqueID: 368488925
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

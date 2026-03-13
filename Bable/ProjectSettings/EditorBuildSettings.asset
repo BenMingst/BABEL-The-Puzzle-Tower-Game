@@ -8,6 +8,16 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/NICK_Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/Level One.unity
+    guid: 33b9e6857f652914ba9a447838348b85
+  - enabled: 1
+    path: Assets/Scenes/Level One.unity
+    guid: c58310a20c541f157b1f1dad79716784
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: 7d2deb8dd525ab949ab723fbb7784ec3
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: deaaba4d3a502f740a89654d90c9f108, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

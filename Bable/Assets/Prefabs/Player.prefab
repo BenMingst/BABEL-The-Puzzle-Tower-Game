@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DownAttackHitbox
   damage: 1
-  playerController: {fileID: 8853078162627155362}
+  playerController: {fileID: 0}
 --- !u!61 &7555770276525727730
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -374,26 +374,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2884119340920938706}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc19eecba5aef4fb285b9472817b21db, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d687537154440a3913a9a3c7977978c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 2
-  jumpForce: 5
-  groundCheck: {fileID: 3790474275806613055}
-  groundCheckRadius: 0.1
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  crouchSpeedMultiplier: 0.5
-  standingCollider: {fileID: 0}
-  crouchingCollider: {fileID: 0}
-  slashDuration: 0.5
-  slashHitbox: {fileID: 2187212290560249975}
-  downAttackHitbox: {fileID: 2837186536565653910}
-  downAttackBounceForce: 4
-  downAttackDelay: 0.15
-  isRolling: 0
-  isHurt: 0
+  CameraTarget: {fileID: 0}
+  FollowDistance: 30
+  MaxFollowDistance: 100
+  MinFollowDistance: 2
+  ElevationAngle: 30
+  MaxElevationAngle: 85
+  MinElevationAngle: 0
+  OrbitalAngle: 0
+  CameraMode: 0
+  MovementSmoothing: 1
+  RotationSmoothing: 0
+  MovementSmoothingValue: 25
+  RotationSmoothingValue: 5
+  MoveSensitivity: 2
 --- !u!61 &5298372013010565340
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -496,7 +493,7 @@ MonoBehaviour:
   - {fileID: 0}
   playerAnimator: {fileID: 2102691467477269260}
   playerRb: {fileID: 4130798364806148106}
-  playerController: {fileID: 8853078162627155362}
+  playerController: {fileID: 0}
   knockbackForce: 3
   hurtDuration: 0.6
   invincibilityDuration: 1
