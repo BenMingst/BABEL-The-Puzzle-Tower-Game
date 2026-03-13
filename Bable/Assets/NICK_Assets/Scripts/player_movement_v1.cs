@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isHurt) return;
 
-        ItemPickup pickup = FindObjectOfType<ItemPickup>();
+        ItemPickup pickup = FindFirstObjectByType<ItemPickup>();
         if (pickup != null && pickup.inCutscene) return;
 
         horizontalInput = 0f;
