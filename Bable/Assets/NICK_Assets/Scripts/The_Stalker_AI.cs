@@ -46,15 +46,22 @@ public class The_Stalker_AI : EnemyAI
     private float decisionTimer = 0f;
     private bool waitingForOpening = true;
 
-    protected override void Start()
+    // Local-only state for this AI
+    private bool isGrounded = false;
+
+    protected new void Start()
     {
-        base.Start();
+        animator = GetComponent<Animator>();
+        enemyHealth = GetComponent<EnemyHealth>();
+        rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         mainCam = Camera.main;
 
         GameObject playerObj = GameObject.FindWithTag("Player");
         if (playerObj != null)
         {
+            // Cache player transform for EnemyAI fields and local use
+            player = playerObj.transform;
             playerController = playerObj.GetComponent<PlayerController>();
             playerAnim = playerObj.GetComponent<Animator>();
         }
@@ -64,7 +71,7 @@ public class The_Stalker_AI : EnemyAI
         circleDirection = Random.value > 0.5f ? 1f : -1f;
     }
 
-    protected override void Update()
+    protected new void Update()
     {
         if (player == null || enemyHealth.isHurt) return;
 
@@ -335,36 +342,34 @@ public class The_Stalker_AI : EnemyAI
         isAttacking = true;
         BecomeVisible(0.6f);
 
+        // Mirror damage / hitbox timing from EnemyAI.Attack()
         yield return null;
+
         if (enemyHealth.isHurt) { isAttacking = false; yield break; }
 
         animator.SetTrigger("AttackRight");
+
         yield return new WaitForSeconds(hitboxDelay);
 
         if (enemyHealth.isHurt)
         {
-            if (enemyHitbox != null)
-                enemyHitbox.GetComponent<Collider2D>().enabled = false;
+            enemyHitbox.GetComponent<Collider2D>().enabled = false;
             isAttacking = false;
             yield break;
         }
 
-        if (enemyHitbox != null)
-        {
-            Vector3 hitboxPos = enemyHitbox.transform.localPosition;
-            hitboxPos.x = facingRight ? Mathf.Abs(hitboxPos.x) : -Mathf.Abs(hitboxPos.x);
-            enemyHitbox.transform.localPosition = hitboxPos;
-            enemyHitbox.GetComponent<Collider2D>().enabled = true;
-        }
+        Vector3 hitboxPos = enemyHitbox.transform.localPosition;
+        hitboxPos.x = facingRight ? Mathf.Abs(hitboxPos.x) : -Mathf.Abs(hitboxPos.x);
+        enemyHitbox.transform.localPosition = hitboxPos;
 
-        // Check if we actually hit the player
+        enemyHitbox.GetComponent<Collider2D>().enabled = true;
+
         yield return new WaitForSeconds(hitboxDuration);
 
+        enemyHitbox.GetComponent<Collider2D>().enabled = false;
+
+        // Learning logic on top of the base damage behavior
         bool landed = CheckHitLanded();
-
-        if (enemyHitbox != null)
-            enemyHitbox.GetComponent<Collider2D>().enabled = false;
-
         if (landed)
         {
             attacksLanded++;
@@ -469,6 +474,30 @@ public class The_Stalker_AI : EnemyAI
     // ═════════════════════════════════════════════
     // HELPERS
     // ═════════════════════════════════════════════
+
+    void CheckGrounded()
+    {
+        if (ledgeCheck == null) return;
+        isGrounded = Physics2D.OverlapCircle(ledgeCheck.position, ledgeCheckRadius, groundLayer);
+    }
+
+    void NavigateObstacles()
+    {
+        if (ledgeCheck == null) return;
+        bool groundAhead = Physics2D.OverlapCircle(ledgeCheck.position, ledgeCheckRadius, groundLayer);
+        if (!groundAhead && rb != null)
+        {
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        }
+    }
+
+    void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1f;
+        transform.localScale = scale;
+    }
 
     void FacePlayer()
     {
