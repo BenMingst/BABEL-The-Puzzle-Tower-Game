@@ -5,12 +5,12 @@ public class DownAttackHitbox : MonoBehaviour
     public int damage = 1;
     public PlayerController playerController;
 
-    void OnTriggerEnter2D(Collider2D other)
+ void OnTriggerEnter2D(Collider2D other)
+{
+    if (other.CompareTag("Enemy"))
     {
-        if (other.CompareTag("Enemy"))
-        {
-            other.GetComponent<EnemyHealth>()?.TakeDamageWithKnockback(damage, transform.position);
-            playerController.DownAttackBounce();
-        }
+        other.GetComponentInChildren<EnemyHealth>()?.TakeDamageWithKnockback(damage, transform.position);
+        playerController.DownAttackBounce();
     }
+}
 }

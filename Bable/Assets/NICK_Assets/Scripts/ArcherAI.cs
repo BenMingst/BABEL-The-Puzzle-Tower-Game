@@ -11,12 +11,18 @@ public class ArcherAI : MonoBehaviour
     public float attackCooldown = 2f;
     public Animator archerTopAnimator;
 
+    [Header("Arrow")]
+    public GameObject arrowPrefab;
+    public Transform arrowSpawnPoint;
+
     private bool isAttacking = false;
     private bool facingRight = true;
+    private EnemyHealth enemyHealth;
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        enemyHealth = GetComponent<EnemyHealth>();
     }
 
     void Update()
@@ -25,7 +31,6 @@ public class ArcherAI : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
 
-        // update facing direction when not attacking
         if (!isAttacking)
         {
             facingRight = player.position.x > transform.position.x;
@@ -38,46 +43,66 @@ public class ArcherAI : MonoBehaviour
     }
 
     IEnumerator ShootSequence()
-{
-    isAttacking = true;
-
-    yield return null;
-
-    while (Vector2.Distance(transform.position, player.position) <= shootRange)
     {
-        // update facing direction each shot
-        facingRight = player.position.x > transform.position.x;
+        isAttacking = true;
 
-        if (facingRight)
+        yield return null;
+
+        while (Vector2.Distance(transform.position, player.position) <= shootRange)
         {
-            archerTopAnimator.SetTrigger("AimRight");
+            facingRight = player.position.x > transform.position.x;
+
+            if (facingRight)
+                archerTopAnimator.SetTrigger("AimRight");
+            else
+                archerTopAnimator.SetTrigger("AimLeft");
+
+            float aimTimer = 0f;
+            bool directionChanged = false;
+            while (aimTimer < 1f)
+            {
+                aimTimer += Time.deltaTime;
+                bool newFacingRight = player.position.x > transform.position.x;
+                if (newFacingRight != facingRight)
+                {
+                    directionChanged = true;
+                    break;
+                }
+                yield return null;
+            }
+
+            if (directionChanged) continue;
+
+            if (facingRight)
+                archerTopAnimator.SetTrigger("ShootRight");
+            else
+                archerTopAnimator.SetTrigger("ShootLeft");
+
+            // wait for shoot animation to finish
+            yield return new WaitForSeconds(0.8f);
+
+            yield return new WaitForSeconds(attackCooldown);
         }
-        else
-        {
-            archerTopAnimator.SetTrigger("AimLeft");
-        }
 
-        // wait for aim animation - 1000ms
-        yield return new WaitForSeconds(1f);
-
-        if (facingRight)
-        {
-            archerTopAnimator.SetTrigger("ShootRight");
-        }
-        else
-        {
-                Debug.Log("Firing ShootLeft trigger");
-
-            archerTopAnimator.SetTrigger("ShootLeft");
-        }
-
-        // wait for shoot animation - 800ms
-        yield return new WaitForSeconds(0.8f);
-
-        // cooldown before next shot
-        yield return new WaitForSeconds(attackCooldown);
+        isAttacking = false;
     }
 
-    isAttacking = false;
-}
+    public void SpawnArrow()
+    {
+        if (enemyHealth.isHurt || enemyHealth.isDead) return;
+
+        if (arrowPrefab != null && arrowSpawnPoint != null)
+        {
+            GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+            Arrow arrowScript = arrow.GetComponent<Arrow>();
+            arrowScript.SetDirection(facingRight);
+
+            if (!facingRight)
+            {
+                Vector3 scale = arrow.transform.localScale;
+                scale.x *= -1;
+                arrow.transform.localScale = scale;
+            }
+        }
+    }
 }
