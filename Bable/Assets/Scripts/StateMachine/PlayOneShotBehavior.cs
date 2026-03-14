@@ -2,46 +2,66 @@ using UnityEngine;
 
 public class PlayOneShotBehavior : StateMachineBehaviour
 {
-    public AudioClip soundToPlay;
+    public AudioClip[] soundsToPlay;
     public float volume = 1f;
-    public bool playOnEnter = true, playOnExit = false, playAfterDelay = false;
+    public bool playOnEnter = true, playOnExit = false;
 
-    // Delayed Sound Timer
-    public float playDelay = 0.25f;
-    private float timeSinceEntered = 0;
-    private bool hasDelayedSoundPlayed = false;
+    [Tooltip("How many times to play a clip during the animation, evenly spaced.")]
+    public int playCount = 0;
+    private int playsTriggered = 0;
+    private int lastLoop = 0;
 
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    private void PlayClip(Animator animator)
     {
-        if (playOnEnter)
+        if (soundsToPlay == null || soundsToPlay.Length == 0)
         {
-            AudioSource.PlayClipAtPoint(soundToPlay, animator.gameObject.transform.position, volume);
+            Debug.LogWarning("PlayOneShotBehavior: No audio clips assigned!", animator);
+            return;
         }
 
-        timeSinceEntered = 0f;
-        hasDelayedSoundPlayed = false;
+        AudioClip clip = soundsToPlay[Random.Range(0, soundsToPlay.Length)];
 
+        if (clip == null)
+        {
+            Debug.LogWarning("PlayOneShotBehavior: Null clip in soundsToPlay array.", animator);
+            return;
+        }
+
+        AudioSource.PlayClipAtPoint(clip, animator.gameObject.transform.position, volume);
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+{
+    if (playOnEnter && soundsToPlay != null && soundsToPlay.Length > 0)
+        AudioSource.PlayClipAtPoint(soundsToPlay[Random.Range(0, soundsToPlay.Length)], animator.gameObject.transform.position, volume);
+
+    playsTriggered = 0;
+    lastLoop = 0;
+}
+
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (playAfterDelay && !hasDelayedSoundPlayed)
-        {
-            timeSinceEntered += Time.deltaTime;
+        if (playCount <= 0) return;
 
-            if (timeSinceEntered > playDelay)
-            {
-                hasDelayedSoundPlayed = true;
-            }    
+        int currentLoop = (int)stateInfo.normalizedTime;
+        if (currentLoop > lastLoop)
+        {
+            playsTriggered = 0;
+            lastLoop = currentLoop;
+        }
+
+        float nextThreshold = (playsTriggered + 1f) / (playCount + 1f);
+
+        if (stateInfo.normalizedTime % 1f >= nextThreshold)
+        {
+            AudioSource.PlayClipAtPoint(soundsToPlay[Random.Range(0, soundsToPlay.Length)], animator.gameObject.transform.position, volume);
+            playsTriggered++;
         }
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        
-    }
-
+{
+    if (playOnExit && soundsToPlay != null && soundsToPlay.Length > 0)
+        AudioSource.PlayClipAtPoint(soundsToPlay[Random.Range(0, soundsToPlay.Length)], animator.gameObject.transform.position, volume);
+}
 }

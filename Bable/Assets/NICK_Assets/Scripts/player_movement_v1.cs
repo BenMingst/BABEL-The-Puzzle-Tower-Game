@@ -72,9 +72,10 @@ public class PlayerController : MonoBehaviour
         isInsideDropdown = value;
     }
 
-    public void OnDeath()
+    public void OnDeath(bool dead)
 {
-    isDead = true;
+    isDead = dead;
+
     rb.linearVelocity = Vector2.zero;
     rb.gravityScale = 0f;
     rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -85,6 +86,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log("DeathScreenEffect Instance is NULL");
     else
         animator.SetTrigger("DeathLeft");
+    if (deathPanel != null)
+        deathPanel.SetActive(dead);
 }
 
     bool HasRoomToStand()
@@ -103,8 +106,7 @@ public class PlayerController : MonoBehaviour
         }
         // Quit the game
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            Debug.Log("Quit: Only works in built versions");
-            Application.Quit();
+            SetPaused(!isPaused);
         }
 
         if (isDead) return;
@@ -124,6 +126,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpTimer = 0f;
         }
+
 
         if (!isGrounded)
         {
@@ -343,5 +346,54 @@ public class PlayerController : MonoBehaviour
             Gizmos.color = HasRoomToStand() ? Color.green : Color.red;
             Gizmos.DrawWireSphere(ceilingCheck.position, ceilingCheckRadius);
         }
+    }
+
+// Yancey
+    [Header("Death")]
+    [SerializeField] private GameObject deathPanel;
+    [SerializeField] private bool _isDead = false;
+
+    [Header("Pause")]
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private bool pauseStopsTime = true;
+    private bool isPaused;
+    private float prevTimeScale = 1f;
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f; // important: reset time before leaving
+        SceneManager.LoadScene("Main Menu");
+    }
+
+    private void SetPaused(bool paused)
+    {
+        isPaused = paused;
+
+        if (pausePanel != null)
+            pausePanel.SetActive(paused);
+
+        if (pauseStopsTime)
+        {
+            if (paused)
+            {
+                prevTimeScale = Time.timeScale;
+                Time.timeScale = 0f;
+            }
+            else
+            {
+                Time.timeScale = prevTimeScale;
+            }
+        }
+        
+    }
+
+    public void ResumeGame()
+    {
+        SetPaused(false);
+    }
+
+    public void Retry()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
     }
 }
