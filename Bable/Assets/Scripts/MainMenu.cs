@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
     }
     public void playLevel2()
     {
-        SceneManager.LoadSceneAsync("Level Two");
+        SceneManager.LoadSceneAsync("another_test");
     }
     public void playLevel3()
     {
