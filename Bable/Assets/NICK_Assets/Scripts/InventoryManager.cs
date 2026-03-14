@@ -67,6 +67,11 @@ public class InventoryManager : MonoBehaviour
         RefreshUI();
     }
 
+    public bool IsSwordSelected()
+    {
+        return currentSlot == 0 && slotFilled[0];
+    }
+
     void SelectSlot(int index)
     {
         currentSlot = index;

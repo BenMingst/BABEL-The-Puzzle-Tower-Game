@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -72,20 +71,29 @@ public class PlayerController : MonoBehaviour
         isInsideDropdown = value;
     }
 
+    bool CanUseSword()
+    {
+        return hasSword && InventoryManager.Instance != null && InventoryManager.Instance.IsSwordSelected();
+    }
+
     public void OnDeath()
-{
-    isDead = true;
-    rb.linearVelocity = Vector2.zero;
-    rb.gravityScale = 0f;
-    rb.constraints = RigidbodyConstraints2D.FreezeAll;
-    transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
-    if (facingRight)
-        animator.SetTrigger("DeathRight");
+    {
+        isDead = true;
+        rb.linearVelocity = Vector2.zero;
+        rb.gravityScale = 0f;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
+
+        if (facingRight)
+            animator.SetTrigger("DeathRight");
+        else
+            animator.SetTrigger("DeathLeft");
+
         if (DeathScreenEffect.Instance == null)
-        Debug.Log("DeathScreenEffect Instance is NULL");
-    else
-        animator.SetTrigger("DeathLeft");
-}
+            Debug.Log("DeathScreenEffect Instance is NULL");
+        else
+            DeathScreenEffect.Instance.PlayDeathEffect();
+    }
 
     bool HasRoomToStand()
     {
@@ -95,22 +103,10 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Needs to be checked before returns otherwise you cannot reset after dying
-        // Reset active scene
-        if (Input.GetKeyDown(KeyCode.R)) {
-            Debug.Log("Reset");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-        // Quit the game
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Debug.Log("Quit: Only works in built versions");
-            Application.Quit();
-        }
-
         if (isDead) return;
         if (isHurt) return;
 
-        ItemPickup pickup = FindFirstObjectByType<ItemPickup>();
+        ItemPickup pickup = FindObjectOfType<ItemPickup>();
         if (pickup != null && pickup.inCutscene) return;
 
         horizontalInput = 0f;
@@ -155,7 +151,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.S))
         {
-            if (!isGrounded && jumpTimer >= downAttackDelay)
+            if (!isGrounded && jumpTimer >= downAttackDelay && CanUseSword())
             {
                 animator.SetBool("DownAttack", true);
                 downAttackHitbox.GetComponent<Collider2D>().enabled = true;
@@ -172,7 +168,7 @@ public class PlayerController : MonoBehaviour
             downAttackHitbox.GetComponent<Collider2D>().enabled = false;
         }
 
-        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && hasSword)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && CanUseSword())
         {
             isCrouching = false;
             StartCoroutine(SlashAttack());
@@ -285,7 +281,9 @@ public class PlayerController : MonoBehaviour
 
     void HandleAnimations()
     {
-        //animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
+        if (isDead) return;
+
+        animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
         animator.SetBool("Is_running", Mathf.Abs(horizontalInput) > 0.1f);
         animator.SetFloat("Horizontal_Velocity", horizontalInput);
         animator.SetBool("FacingRight", facingRight);
