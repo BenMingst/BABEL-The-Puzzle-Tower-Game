@@ -5,17 +5,19 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+  - Door
+  - Pickup
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Character
   - Water
   - UI
-  - Menu
-  - 
-  - 
-  - 
+  - Ground
+  - Pickup
+  - Dropdown
+  - DeathScreen
   - 
   - 
   - 

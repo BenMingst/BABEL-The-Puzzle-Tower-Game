@@ -4,6 +4,11 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Menus")]
+    public GameObject deathCanvas;
+    public GameObject pausePanel;
+    public bool isPaused = false;
+    
     [Header("Movement")]
     public float moveSpeed = 7f;
     public float jumpForce = 12f;
@@ -72,10 +77,9 @@ public class PlayerController : MonoBehaviour
         isInsideDropdown = value;
     }
 
-    public void OnDeath(bool dead)
+    public void OnDeath()
 {
-    isDead = dead;
-
+    isDead = true;
     rb.linearVelocity = Vector2.zero;
     rb.gravityScale = 0f;
     rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -86,8 +90,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("DeathScreenEffect Instance is NULL");
     else
         animator.SetTrigger("DeathLeft");
-    if (deathPanel != null)
-        deathPanel.SetActive(dead);
 }
 
     bool HasRoomToStand()
@@ -105,8 +107,10 @@ public class PlayerController : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         // Quit the game
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            SetPaused(!isPaused);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(!isDead)
+                Pause();
         }
 
         if (isDead) return;
@@ -126,7 +130,6 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             jumpTimer = 0f;
         }
-
 
         if (!isGrounded)
         {
@@ -206,6 +209,7 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
         }
     }
+
 
     IEnumerator DropDown()
     {
@@ -348,52 +352,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-// Yancey
-    [Header("Death")]
-    [SerializeField] private GameObject deathPanel;
-    [SerializeField] private bool _isDead = false;
-
-    [Header("Pause")]
-    [SerializeField] private GameObject pausePanel;
-    [SerializeField] private bool pauseStopsTime = true;
-    private bool isPaused;
-    private float prevTimeScale = 1f;
-    public void GoToMainMenu()
+    public void Pause()
     {
-        Time.timeScale = 1f; // important: reset time before leaving
-        SceneManager.LoadScene("Main Menu");
-    }
-
-    private void SetPaused(bool paused)
-    {
-        isPaused = paused;
-
-        if (pausePanel != null)
-            pausePanel.SetActive(paused);
-
-        if (pauseStopsTime)
+        if (!isPaused)
         {
-            if (paused)
-            {
-                prevTimeScale = Time.timeScale;
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Time.timeScale = prevTimeScale;
-            }
+            pausePanel.SetActive(true);
+            Time.timeScale = 0f;
+            isPaused = true;
         }
-        
-    }
-
-    public void ResumeGame()
-    {
-        SetPaused(false);
-    }
-
-    public void Retry()
-    {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        else
+        {
+            pausePanel.SetActive(false);
+            Time.timeScale = 1f;
+            isPaused = false;
+        }
     }
 }

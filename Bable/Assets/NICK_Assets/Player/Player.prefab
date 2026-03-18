@@ -100,109 +100,6 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-<<<<<<< HEAD:Bable/Assets/Prefabs/Player.prefab
-  - component: {fileID: 6860072766158209504}
-  - component: {fileID: 8251920217674338944}
-  - component: {fileID: 7555770276525727730}
-  m_Layer: 0
-  m_Name: DownAttackHitbox
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6860072766158209504
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2837186536565653910}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.3, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6247451337713234994}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8251920217674338944
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2837186536565653910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17b94fb47fb6a4991893c3130cd5cfe8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DownAttackHitbox
-  damage: 1
-  playerController: {fileID: 0}
---- !u!61 &7555770276525727730
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2837186536565653910}
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!1 &2884119340920938706
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6247451337713234994}
-  - component: {fileID: 4388845721842844433}
-  - component: {fileID: 2102691467477269260}
-  - component: {fileID: 4130798364806148106}
-  - component: {fileID: 8853078162627155362}
-  - component: {fileID: 5298372013010565340}
-  - component: {fileID: 145796455845247293}
-  - component: {fileID: 6706502884093038833}
-=======
   - component: {fileID: 4836977052720142726}
   - component: {fileID: 8905974731728285179}
   - component: {fileID: 7461484327890838696}
@@ -212,7 +109,6 @@ GameObject:
   - component: {fileID: 8901306041131791240}
   - component: {fileID: 7716424762460086005}
   - component: {fileID: 1822848614964258274}
->>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291:Bable/Assets/NICK_Assets/Player/Player.prefab
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -357,26 +253,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6382934404474534495}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d687537154440a3913a9a3c7977978c, type: 3}
+  m_Script: {fileID: 11500000, guid: cc19eecba5aef4fb285b9472817b21db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-<<<<<<< HEAD:Bable/Assets/Prefabs/Player.prefab
-  CameraTarget: {fileID: 0}
-  FollowDistance: 30
-  MaxFollowDistance: 100
-  MinFollowDistance: 2
-  ElevationAngle: 30
-  MaxElevationAngle: 85
-  MinElevationAngle: 0
-  OrbitalAngle: 0
-  CameraMode: 0
-  MovementSmoothing: 1
-  RotationSmoothing: 0
-  MovementSmoothingValue: 25
-  RotationSmoothingValue: 5
-  MoveSensitivity: 2
---- !u!61 &5298372013010565340
-=======
   moveSpeed: 2
   jumpForce: 5
   groundCheck: {fileID: 4937548766268005794}
@@ -407,7 +286,6 @@ MonoBehaviour:
   isRolling: 0
   isHurt: 0
 --- !u!61 &2054667115459649910
->>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291:Bable/Assets/NICK_Assets/Player/Player.prefab
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -507,15 +385,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-<<<<<<< HEAD:Bable/Assets/Prefabs/Player.prefab
-  playerAnimator: {fileID: 2102691467477269260}
-  playerRb: {fileID: 4130798364806148106}
-  playerController: {fileID: 0}
-=======
   playerAnimator: {fileID: 7461484327890838696}
   playerRb: {fileID: 1528311366142573439}
   playerController: {fileID: 1599378882425168468}
->>>>>>> 00cf1f349f2ebb151bf8a4e5b837fa116e929291:Bable/Assets/NICK_Assets/Player/Player.prefab
   knockbackForce: 3
   hurtDuration: 0.6
   invincibilityDuration: 1
