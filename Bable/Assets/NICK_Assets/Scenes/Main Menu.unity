@@ -401,7 +401,6 @@ GameObject:
   - component: {fileID: 281060557}
   - component: {fileID: 281060560}
   - component: {fileID: 281060561}
-  - component: {fileID: 281060562}
   - component: {fileID: 281060563}
   m_Layer: 0
   m_Name: Main Camera
@@ -540,20 +539,6 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!114 &281060562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 281060556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baffb90a9ebcd53449cd28daada850e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MusicPlayer
-  introSource: {fileID: 0}
-  loopSource: {fileID: 0}
 --- !u!114 &281060563
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2140,6 +2125,18 @@ MonoBehaviour:
       - m_Target: {fileID: 281060563}
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
         m_MethodName: PlayButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 281060560}
+        m_TargetAssemblyTypeName: SceneController, Assembly-CSharp
+        m_MethodName: playLevel1
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

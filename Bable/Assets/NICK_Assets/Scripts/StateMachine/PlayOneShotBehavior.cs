@@ -31,7 +31,7 @@ public class PlayOneShotBehavior : StateMachineBehaviour
             return;
         }
 
-        AudioSource.PlayClipAtPoint(clip, animator.transform.position, volume);
+        AudioSource.PlayClipAtPoint(clip, animator.targetPosition, volume);
     }
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

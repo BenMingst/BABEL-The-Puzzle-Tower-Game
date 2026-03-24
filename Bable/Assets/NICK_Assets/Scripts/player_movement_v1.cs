@@ -4,6 +4,18 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip[] deathSounds;
+    [SerializeField] private AudioClip[] swordAttackSounds;
+    [SerializeField] private AudioClip[] swordAirAttackSounds;
+    [SerializeField] private AudioClip[] playerWalkSounds;
+    [SerializeField] private AudioClip[] playerRollSounds;
+    [SerializeField] private AudioClip[] playerJumpSounds;
+
+
+    private AudioSource audioSource;
+
     [Header("Menus")]
     public GameObject deathCanvas;
     public GameObject pausePanel;
@@ -84,6 +96,12 @@ public class PlayerController : MonoBehaviour
     rb.gravityScale = 0f;
     rb.constraints = RigidbodyConstraints2D.FreezeAll;
     transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
+
+    // play death sound
+    SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f);
+    
+    deathCanvas.SetActive(true);
+    
     if (facingRight)
         animator.SetTrigger("DeathRight");
         if (DeathScreenEffect.Instance == null)
@@ -128,6 +146,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && isGrounded && HasRoomToStand())
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            // play jump sound
+            SoundFXManager.instance.PlayRandomSoundFXClip(playerJumpSounds, transform, 1f);
             jumpTimer = 0f;
         }
 
@@ -258,10 +278,17 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsSlashing", false);
         isAttacking = false;
+
+        // play sword attack sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(swordAttackSounds, transform, 1f);
+
     }
 
     IEnumerator Roll()
     {
+        // play roll sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(playerRollSounds, transform, 1f);
+
         isRolling = true;
         animator.SetBool("IsRolling", true);
 
@@ -276,6 +303,8 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsRolling", false);
         isRolling = false;
+
+
 
         if (!HasRoomToStand() && isGrounded)
         {

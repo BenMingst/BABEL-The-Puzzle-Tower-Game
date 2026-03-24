@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+
+    [SerializeField] private AudioClip[] hurtSounds;
+    [SerializeField] private AudioClip[] deathSounds;
+
+    private AudioSource audioSource;
+     
+
     public int maxHealth = 3;
     private int currentHealth;
 
@@ -20,6 +27,12 @@ public class EnemyHealth : MonoBehaviour
     public bool isHurt = false;
     public bool isDead = false;
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+    }
     void Awake()
     {
         currentHealth = maxHealth;
@@ -36,6 +49,9 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+
+        // play hurt sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f);
 
         if (currentHealth <= 0)
         {
@@ -86,6 +102,10 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         isDead = true;
+
+        // play death sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f);
+
         StopAllCoroutines();
         StartCoroutine(DeathSequence());
     }
