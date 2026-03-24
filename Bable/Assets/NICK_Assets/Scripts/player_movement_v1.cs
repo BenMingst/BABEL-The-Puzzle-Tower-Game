@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
     transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
 
     // play death sound
-    SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f);
+    SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f, 0f);
     
     deathCanvas.SetActive(true);
     
@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             // play jump sound
-            SoundFXManager.instance.PlayRandomSoundFXClip(playerJumpSounds, transform, 1f);
+            SoundFXManager.instance.PlayRandomSoundFXClip(playerJumpSounds, transform, 1f, 0f);
             jumpTimer = 0f;
         }
 
@@ -259,6 +259,9 @@ public class PlayerController : MonoBehaviour
         isAttacking = true;
         animator.SetBool("IsSlashing", true);
 
+        // play sword attack sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(swordAttackSounds, transform, 1f, 0f);
+
         float lungeDirection = facingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
 
@@ -279,15 +282,13 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsSlashing", false);
         isAttacking = false;
 
-        // play sword attack sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(swordAttackSounds, transform, 1f);
-
+        
     }
 
     IEnumerator Roll()
     {
         // play roll sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(playerRollSounds, transform, 1f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(playerRollSounds, transform, 1f, 0f);
 
         isRolling = true;
         animator.SetBool("IsRolling", true);

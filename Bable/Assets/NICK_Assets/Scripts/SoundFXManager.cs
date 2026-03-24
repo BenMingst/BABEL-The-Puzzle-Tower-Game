@@ -15,7 +15,7 @@ public class SoundFXManager : MonoBehaviour
         }
     }
 
-    public void PlayRandomSoundFXClip(AudioClip[] audioClip, Transform spawnTransform, float volume)
+    public void PlayRandomSoundFXClip(AudioClip[] audioClip, Transform spawnTransform, float volume, float delay)
     {
         // assign a random index to select a clip from the array
         int rand = Random.Range(0, audioClip.Length);
@@ -30,13 +30,13 @@ public class SoundFXManager : MonoBehaviour
         audioSource.volume = volume;
 
         // play sound
-        audioSource.Play();
+        audioSource.PlayDelayed(delay);
 
         // get length of sound FX clip
 
         float clipLength = audioSource.clip.length;
 
         // destroy the clip after it is done playing
-        Destroy(audioSource.gameObject, clipLength);
+        Destroy(audioSource.gameObject, clipLength + delay);
     }
 }

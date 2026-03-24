@@ -257,6 +257,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  hurtSounds:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: 241493ea4fd5cce4f93511012c324a87, type: 3}
   maxHealth: 3
   knockbackForce: 2
   enemyHitbox: {fileID: 0}

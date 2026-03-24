@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class DoorHealth : MonoBehaviour
 {
+
+    [SerializeField] private AudioClip[] hurtSounds;
+    [SerializeField] private AudioClip[] deathSounds;
+    private AudioSource audioSource;
     private int hits = 0;
     private Animator animator;
     private Rigidbody2D rb;
@@ -12,6 +16,9 @@ public class DoorHealth : MonoBehaviour
 
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
@@ -20,6 +27,9 @@ public class DoorHealth : MonoBehaviour
     public void TakeHit()
     {
         if (isDestroyed || isHit) return;
+
+        // play hit sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
 
         hits++;
 
@@ -37,6 +47,9 @@ public class DoorHealth : MonoBehaviour
     {
         isHit = true;
         animator.SetTrigger("Hit");
+
+        // play destroy sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f, 0.1f);
 
         // wait for hit animation to finish
         yield return new WaitForSeconds(0.3f);

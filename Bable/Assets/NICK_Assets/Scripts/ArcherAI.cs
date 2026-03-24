@@ -23,10 +23,16 @@ public class ArcherAI : MonoBehaviour
     private bool facingRight = true;
     private EnemyHealth enemyHealth;
 
+    [SerializeField] private AudioClip[] hurtSounds;
+    [SerializeField] private AudioClip[] deathSounds;
+    [SerializeField] private AudioClip[] attackSounds;
+    private AudioSource audioSource;
+
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
         enemyHealth = GetComponent<EnemyHealth>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     bool CanSeePlayer()
@@ -75,6 +81,9 @@ public class ArcherAI : MonoBehaviour
                 archerTopAnimator.SetTrigger("AimRight");
             else
                 archerTopAnimator.SetTrigger("AimLeft");
+
+            // play shoot sound
+            SoundFXManager.instance.PlayRandomSoundFXClip(attackSounds, transform, 1f, 0.1f);
 
             // wait for aim + shoot + cooldown
             yield return new WaitForSeconds(1f + 0.8f + attackCooldown);

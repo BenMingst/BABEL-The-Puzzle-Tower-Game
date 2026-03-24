@@ -55,7 +55,7 @@ public class PlayerHealth : MonoBehaviour
 
         
         // play hurt sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
 
         if (currentHearts <= 0)
         {
