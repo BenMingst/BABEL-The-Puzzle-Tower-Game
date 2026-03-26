@@ -9,11 +9,11 @@ EditorBuildSettings:
     path: Assets/NICK_Assets/Scenes/Main Menu.unity
     guid: 6af00106ac533dd43acc7ab9bffa0400
   - enabled: 1
-    path: Assets/NICK_Assets/Scenes/NICK.unity
-    guid: 787e444f8d7b8482da7ba33bb2e6a9dd
-  - enabled: 1
     path: Assets/NICK_Assets/Scenes/another_test.unity
     guid: 8c48e6918fd01430992fc6e7b594fd7f
+  - enabled: 1
+    path: Assets/NICK_Assets/Scenes/NICK.unity
+    guid: 787e444f8d7b8482da7ba33bb2e6a9dd
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

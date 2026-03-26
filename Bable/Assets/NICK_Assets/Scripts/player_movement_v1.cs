@@ -198,13 +198,13 @@ public class PlayerController : MonoBehaviour
             downAttackHitbox.GetComponent<Collider2D>().enabled = false;
         }
 
-        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && hasSword)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && hasSword && !isPaused)
         {
             isCrouching = false;
             StartCoroutine(SlashAttack());
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded && !isPaused)
         {
             isCrouching = false;
             StartCoroutine(Roll());
@@ -281,9 +281,6 @@ public class PlayerController : MonoBehaviour
 
         animator.SetBool("IsSlashing", false);
         isAttacking = false;
-
-        // play sword attack sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(swordAttackSounds, transform, 1f, 0.1f);
 
     }
 
