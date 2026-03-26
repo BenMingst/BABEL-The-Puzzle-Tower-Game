@@ -282,7 +282,9 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsSlashing", false);
         isAttacking = false;
 
-        
+        // play sword attack sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(swordAttackSounds, transform, 1f, 0.1f);
+
     }
 
     IEnumerator Roll()
