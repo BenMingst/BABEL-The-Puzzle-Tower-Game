@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [SerializeField] private AudioClip[] jumpSounds;
+    [SerializeField] private AudioClip[] attackSounds;
 
     [SerializeField] private AudioClip[] hurtSounds;
     [SerializeField] private AudioClip[] deathSounds;
@@ -51,7 +53,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
 
         // play hurt sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -104,7 +106,7 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
 
         // play death sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f, 0f);
 
         StopAllCoroutines();
         StartCoroutine(DeathSequence());
