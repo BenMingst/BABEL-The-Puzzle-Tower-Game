@@ -6,6 +6,11 @@ public class PlayerHealth : MonoBehaviour
     public int maxHearts = 3;
     private int currentHearts;
 
+    [SerializeField] private AudioClip[] hurtSounds;
+
+
+    private AudioSource audioSource;
+
     [Header("Heart UI")]
     public Animator[] heartAnimators;
 
@@ -43,6 +48,10 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(HurtSequence(enemyPosition));
 
         currentHearts -= damage;
+
+        
+        // play hurt sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
 
         if (currentHearts <= 0)
             Die();

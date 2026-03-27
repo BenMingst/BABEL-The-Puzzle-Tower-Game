@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [SerializeField] private AudioClip[] jumpSounds;
+    [SerializeField] private AudioClip[] attackSounds;
+
+    [SerializeField] private AudioClip[] hurtSounds;
+    [SerializeField] private AudioClip[] deathSounds;
+
+    private AudioSource audioSource;
+     
+
     public int maxHealth = 3;
     private int currentHealth;
 
@@ -23,6 +32,12 @@ public class EnemyHealth : MonoBehaviour
     public bool isHurt = false;
     public bool isDead = false;
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+    }
     void Awake()
     {
         currentHealth = maxHealth;
@@ -64,6 +79,9 @@ public bool IsImmuneToArrow(Arrow.ArrowType arrowType)
         if (IsInvulnerable()) return;
 
         currentHealth -= damage;
+
+        // play hurt sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -166,6 +184,10 @@ public bool IsImmuneToArrow(Arrow.ArrowType arrowType)
     void Die()
     {
         isDead = true;
+
+        // play death sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f, 0f);
+
         StopAllCoroutines();
 
         if (rb != null)
