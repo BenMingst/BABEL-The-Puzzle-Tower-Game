@@ -37,18 +37,43 @@ public class PlayerController : MonoBehaviour
     public float downAttackDelay = 0.15f;
     private float jumpTimer = 0f;
 
+    [Header("Bow")]
+    public GameObject playerArrowPrefab;
+    public GameObject iceArrowPrefab;
+    public GameObject fireArrowPrefab;
+    public Transform arrowSpawnPoint;
+    public BowCooldownUI bowCooldownUI;
+
     [Header("Animator Controllers")]
     public RuntimeAnimatorController noSwordAnimator;
     public RuntimeAnimatorController swordAnimator;
+    public RuntimeAnimatorController bowAnimator;
     public bool hasSword = false;
+    public bool hasBow = false;
+
+    [Header("Freeze Effect")]
+    public float freezeEffect = 0.3f;
+    public float freezeDuration = 1.5f;
+    public float afterFreezeDuration = 1f;
+    public GameObject freezeOverlayObject;
+    private bool isFrozen = false;
+    private Coroutine freezeCoroutine;
+
+    [Header("Burn Effect")]
+    public float afterBurnDuration = 1f;
+    public int afterBurnDamage = 1;
+    public GameObject burnOverlayObject;
+    private bool isBurning = false;
+    private Coroutine burnCoroutine;
 
     public bool isDead = false;
+    public Vector2 platformVelocity = Vector2.zero;
     private Rigidbody2D rb;
     public Animator animator;
     private bool isGrounded;
     private bool isCrouching;
     private float horizontalInput;
-    private bool facingRight = true;
+    public bool facingRight = true;
     private bool isAttacking = false;
     public bool isRolling = false;
     public bool isHurt = false;
@@ -58,12 +83,25 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         animator.runtimeAnimatorController = noSwordAnimator;
+
+        if (freezeOverlayObject != null)
+            freezeOverlayObject.SetActive(false);
+        if (burnOverlayObject != null)
+            burnOverlayObject.SetActive(false);
     }
 
     public void EquipSword()
     {
         hasSword = true;
+        GameManager.hasSword = true;
         InventoryManager.Instance.AddItem(0, swordAnimator);
+    }
+
+    public void EquipBow()
+    {
+        hasBow = true;
+        GameManager.hasBow = true;
+        InventoryManager.Instance.AddItem(1, bowAnimator);
     }
 
     public void SetInsideDropdown(bool value)
@@ -74,6 +112,11 @@ public class PlayerController : MonoBehaviour
     bool CanUseSword()
     {
         return hasSword && InventoryManager.Instance != null && InventoryManager.Instance.IsSwordSelected();
+    }
+
+    bool CanUseBow()
+    {
+        return hasBow && InventoryManager.Instance != null && InventoryManager.Instance.IsBowSelected();
     }
 
     public void OnDeath()
@@ -95,10 +138,106 @@ public class PlayerController : MonoBehaviour
             DeathScreenEffect.Instance.PlayDeathEffect();
     }
 
+    public void SpawnPlayerArrow()
+    {
+        if (!isAttacking) return;
+        if (bowCooldownUI != null)
+            bowCooldownUI.UseArrow();
+        SpawnArrowOfType(Arrow.ArrowType.Normal, playerArrowPrefab);
+    }
+
+    public void SpawnIceArrow()
+    {
+        if (!isAttacking) return;
+        if (bowCooldownUI != null)
+            bowCooldownUI.UseArrow();
+        SpawnArrowOfType(Arrow.ArrowType.Ice, iceArrowPrefab);
+    }
+
+    public void SpawnFireArrow()
+    {
+        if (!isAttacking) return;
+        if (bowCooldownUI != null)
+            bowCooldownUI.UseArrow();
+        SpawnArrowOfType(Arrow.ArrowType.Fire, fireArrowPrefab);
+    }
+
+    void SpawnArrowOfType(Arrow.ArrowType type, GameObject prefab)
+    {
+        if (prefab == null) return;
+        GameObject arrow = Instantiate(prefab, arrowSpawnPoint.position, Quaternion.identity);
+        Arrow arrowScript = arrow.GetComponent<Arrow>();
+        arrowScript.arrowType = type;
+        arrowScript.SetDirection(facingRight);
+        if (!facingRight)
+        {
+            Vector3 scale = arrow.transform.localScale;
+            scale.x = -Mathf.Abs(scale.x);
+            arrow.transform.localScale = scale;
+        }
+    }
+
     bool HasRoomToStand()
     {
         if (ceilingCheck == null) return true;
         return !Physics2D.OverlapCircle(ceilingCheck.position, ceilingCheckRadius, ceilingLayer);
+    }
+
+    public void ApplyFreezeEffect()
+    {
+        if (freezeCoroutine != null)
+            StopCoroutine(freezeCoroutine);
+        freezeCoroutine = StartCoroutine(FreezeSequence());
+    }
+
+    IEnumerator FreezeSequence()
+    {
+        if (isFrozen)
+            moveSpeed = moveSpeed / freezeEffect;
+
+        isFrozen = true;
+        float originalSpeed = moveSpeed;
+        moveSpeed *= freezeEffect;
+
+        if (freezeOverlayObject != null)
+            freezeOverlayObject.SetActive(true);
+
+        yield return new WaitForSeconds(freezeDuration);
+        yield return new WaitForSeconds(afterFreezeDuration);
+
+        if (freezeOverlayObject != null)
+            freezeOverlayObject.SetActive(false);
+
+        moveSpeed = originalSpeed;
+        isFrozen = false;
+        freezeCoroutine = null;
+    }
+
+    public void ApplyBurnEffect()
+    {
+        if (burnCoroutine != null)
+            StopCoroutine(burnCoroutine);
+        burnCoroutine = StartCoroutine(BurnSequence());
+    }
+
+    IEnumerator BurnSequence()
+    {
+        isBurning = true;
+
+        if (burnOverlayObject != null)
+            burnOverlayObject.SetActive(true);
+
+        yield return new WaitForSeconds(afterBurnDuration);
+
+        PlayerHealth ph = GetComponent<PlayerHealth>();
+        if (ph != null)
+            ph.TakeDamageNoKnockback(afterBurnDamage);
+
+        if (burnOverlayObject != null)
+            burnOverlayObject.SetActive(false);
+
+        isBurning = false;
+        burnCoroutine = null;
     }
 
     void Update()
@@ -108,6 +247,18 @@ public class PlayerController : MonoBehaviour
 
         ItemPickup pickup = FindObjectOfType<ItemPickup>();
         if (pickup != null && pickup.inCutscene) return;
+
+        Chest chest = FindObjectOfType<Chest>();
+        if (chest != null && chest.inCutscene) return;
+
+        LockedDoor door = FindObjectOfType<LockedDoor>();
+        if (door != null && door.inCutscene) return;
+
+        OneWayDoorEntrance entranceDoor = FindObjectOfType<OneWayDoorEntrance>();
+        if (entranceDoor != null && entranceDoor.inCutscene) return;
+
+        OneWayDoorExit exitDoor = FindObjectOfType<OneWayDoorExit>();
+        if (exitDoor != null && exitDoor.inCutscene) return;
 
         horizontalInput = 0f;
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
@@ -173,6 +324,12 @@ public class PlayerController : MonoBehaviour
             isCrouching = false;
             StartCoroutine(SlashAttack());
         }
+        else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseBow())
+        {
+            if (bowCooldownUI != null && !bowCooldownUI.HasArrows()) return;
+            isCrouching = false;
+            StartCoroutine(BowAttack());
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)
         {
@@ -192,12 +349,14 @@ public class PlayerController : MonoBehaviour
 
         if (horizontalInput != 0 && !isAttacking && !isRolling && !isHurt && !isCrouching)
         {
-            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed + platformVelocity.x, rb.linearVelocity.y);
         }
         else if (!isAttacking && !isRolling && !isHurt)
         {
-            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(platformVelocity.x, rb.linearVelocity.y);
         }
+
+        platformVelocity = Vector2.zero;
     }
 
     IEnumerator DropDown()
@@ -246,6 +405,57 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.375f);
 
         animator.SetBool("IsSlashing", false);
+        isAttacking = false;
+    }
+
+    IEnumerator BowAttack()
+    {
+        isAttacking = true;
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+
+        if (ArrowTypeManager.Instance != null)
+            ArrowTypeManager.Instance.isShooting = true;
+
+        ArrowTypeManager.ArrowType arrowType = ArrowTypeManager.Instance != null ?
+            ArrowTypeManager.Instance.currentArrowType :
+            ArrowTypeManager.ArrowType.Normal;
+
+        if (facingRight)
+        {
+            switch (arrowType)
+            {
+                case ArrowTypeManager.ArrowType.Normal:
+                    animator.SetTrigger("BowAttackRight");
+                    break;
+                case ArrowTypeManager.ArrowType.Ice:
+                    animator.SetTrigger("IceBowAttackRight");
+                    break;
+                case ArrowTypeManager.ArrowType.Fire:
+                    animator.SetTrigger("FireBowAttackRight");
+                    break;
+            }
+        }
+        else
+        {
+            switch (arrowType)
+            {
+                case ArrowTypeManager.ArrowType.Normal:
+                    animator.SetTrigger("BowAttackLeft");
+                    break;
+                case ArrowTypeManager.ArrowType.Ice:
+                    animator.SetTrigger("IceBowAttackLeft");
+                    break;
+                case ArrowTypeManager.ArrowType.Fire:
+                    animator.SetTrigger("FireBowAttackLeft");
+                    break;
+            }
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (ArrowTypeManager.Instance != null)
+            ArrowTypeManager.Instance.isShooting = false;
+
         isAttacking = false;
     }
 

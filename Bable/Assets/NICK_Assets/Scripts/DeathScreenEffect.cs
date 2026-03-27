@@ -25,23 +25,23 @@ public class DeathScreenEffect : MonoBehaviour
     {
         Instance = this;
     }
+public Canvas mainCanvas;
 
-    public void PlayDeathEffect()
-    {
-        deathOverlay.gameObject.SetActive(true);
-        deathOverlay.color = new Color(1f, 1f, 1f, 1f);
-        StartCoroutine(DeathEffect());
-    }
-
+public void PlayDeathEffect()
+{
+    deathOverlay.gameObject.SetActive(true);
+    deathOverlay.color = new Color(1f, 1f, 1f, 1f);
+    StartCoroutine(DeathEffect());
+    if (mainCanvas != null)
+        mainCanvas.gameObject.SetActive(false);
+}
     IEnumerator DeathEffect()
     {
-        // flash white
         deathOverlay.gameObject.SetActive(true);
         deathOverlay.color = new Color(1f, 1f, 1f, 1f);
 
         yield return new WaitForSeconds(holdDuration);
 
-        // fade white out
         float t = 0f;
         while (t < flashDuration)
         {
@@ -53,10 +53,8 @@ public class DeathScreenEffect : MonoBehaviour
 
         deathOverlay.color = new Color(1f, 1f, 1f, 0f);
 
-        // wait for death animation
         yield return new WaitForSeconds(deathAnimationLength);
 
-        // fade to black
         t = 0f;
         while (t < fadeDuration)
         {
@@ -68,7 +66,6 @@ public class DeathScreenEffect : MonoBehaviour
 
         deathOverlay.color = new Color(0f, 0f, 0f, 1f);
 
-        // wait then fade in game over text
         yield return new WaitForSeconds(gameOverFadeDelay);
 
         if (gameOverText != null)
@@ -88,7 +85,6 @@ public class DeathScreenEffect : MonoBehaviour
             gameOverText.color = new Color(gameOverColor.r, gameOverColor.g, gameOverColor.b, 1f);
         }
 
-        // wait then fade in buttons
         yield return new WaitForSeconds(buttonFadeDelay);
 
         if (buttonContainer != null)

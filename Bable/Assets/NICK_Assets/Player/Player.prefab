@@ -1,5 +1,116 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &672133526649943290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2477152480082808264}
+  - component: {fileID: 3286549354853226975}
+  - component: {fileID: 6719791539091142066}
+  m_Layer: 0
+  m_Name: ArrowTypeIndicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2477152480082808264
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672133526649943290}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4836977052720142726}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 3722.4, y: 2115.2}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!223 &3286549354853226975
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672133526649943290}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &6719791539091142066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 672133526649943290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 101ddd1698e244eb69111cd437a36817, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArrowTypeIndicator
+  indicatorImage: {fileID: 0}
+  fireArrowSprite: {fileID: -4945955706433825557, guid: fea879b89aef84b51876768a06169d93, type: 3}
+  normalArrowSprite: {fileID: 8316305910954090100, guid: 6a0abebebcc014fe8ad36431020e3cca, type: 3}
+  iceArrowSprite: {fileID: 5939603102125142202, guid: d1703592b061241edb3dfdae0d56b3a7, type: 3}
+  displayDuration: 0.3
+  fadeDuration: 0.2
+  playerTransform: {fileID: 0}
+  offset: {x: 0, y: 1.5, z: 0}
+--- !u!1 &2603757586990992990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2604608624754579562}
+  m_Layer: 0
+  m_Name: ArrowSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2604608624754579562
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603757586990992990}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.16, y: 2.26, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4836977052720142726}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4218304765587284175
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,6 +220,7 @@ GameObject:
   - component: {fileID: 8901306041131791240}
   - component: {fileID: 7716424762460086005}
   - component: {fileID: 1822848614964258274}
+  - component: {fileID: 5779299248859136235}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -134,6 +246,8 @@ Transform:
   - {fileID: 2873923780689696785}
   - {fileID: 3890536917851529956}
   - {fileID: 6654586208256325183}
+  - {fileID: 2604608624754579562}
+  - {fileID: 2477152480082808264}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8905974731728285179
@@ -266,23 +380,33 @@ MonoBehaviour:
   crouchSpeedMultiplier: 0.5
   standingCollider: {fileID: 8901306041131791240}
   crouchingCollider: {fileID: 1822848614964258274}
-  rollingCollider: {fileID: 0}
+  rollingCollider: {fileID: 1822848614964258274}
   ceilingCheck: {fileID: 3890536917851529956}
   ceilingCheckRadius: 0.1
   ceilingLayer:
     serializedVersion: 2
     m_Bits: 64
-  dropdownCollider: {fileID: 0}
+  dropdownCollider: {fileID: 2850864575264532610}
   dropdownCooldown: 0.5
   slashDuration: 0.5
   slashHitbox: {fileID: 4218304765587284175}
   downAttackHitbox: {fileID: 7297578529870111843}
   downAttackBounceForce: 4
   downAttackDelay: 0.15
+  playerArrowPrefab: {fileID: 6203211016278968772, guid: bae41982e360041d4b80d31257f76d01, type: 3}
+  iceArrowPrefab: {fileID: 1442446161805661606, guid: c21b11f0e4dd6477d9fea3292a1abfc7, type: 3}
+  fireArrowPrefab: {fileID: 4896599101147325911, guid: 1b73fcbef3c524a9ba8ee0efb98903dd, type: 3}
+  arrowSpawnPoint: {fileID: 2604608624754579562}
+  bowCooldownUI: {fileID: 0}
   noSwordAnimator: {fileID: 9100000, guid: f4b8b340942bc40e28d11f2af7d9d6b4, type: 2}
   swordAnimator: {fileID: 9100000, guid: 54040aad9453841d3a5337a8804e1899, type: 2}
+  bowAnimator: {fileID: 9100000, guid: 627f04eb1a3194c67a8d148afbff7fbe, type: 2}
   hasSword: 0
+  hasBow: 0
+  isDead: 0
+  platformVelocity: {x: 0, y: 0}
   animator: {fileID: 0}
+  facingRight: 1
   isRolling: 0
   isHurt: 0
 --- !u!61 &2054667115459649910
@@ -365,8 +489,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 2}
-  m_Size: {x: 1, y: 3.5}
+  m_Offset: {x: 0, y: 1.9354324}
+  m_Size: {x: 1, y: 3.6291351}
   m_Direction: 0
 --- !u!114 &7716424762460086005
 MonoBehaviour:
@@ -425,9 +549,24 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 1}
-  m_Size: {x: 1, y: 1.75}
+  m_Offset: {x: 0, y: 1.0107594}
+  m_Size: {x: 1, y: 1.7715187}
   m_Direction: 0
+--- !u!114 &5779299248859136235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382934404474534495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e053fc4f4762e4b5681597f75d1cf420, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  swordPickupObject: {fileID: 0}
+  swordEventObject: {fileID: 0}
+  bowChestObject: {fileID: 0}
 --- !u!1 &7161130431338967928
 GameObject:
   m_ObjectHideFlags: 0
@@ -657,11 +796,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3135870393843457856, guid: 4847c7d922ba149ca9ee5682b0bcd3c8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -42.987915
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3135870393843457856, guid: 4847c7d922ba149ca9ee5682b0bcd3c8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1920414
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 3135870393843457856, guid: 4847c7d922ba149ca9ee5682b0bcd3c8, type: 3}
       propertyPath: m_LocalPosition.z

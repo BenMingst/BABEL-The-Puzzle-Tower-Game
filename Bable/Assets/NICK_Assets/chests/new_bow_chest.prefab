@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4655447096261336830
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 27.78
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.72
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5291417032848722437, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: itemType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: closedSprite
+      value: 
+      objectReference: {fileID: 5972410529870052487, guid: 4d39ef2c91ef746f6870f9ae931296ab, type: 3}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: openedSprite
+      value: 
+      objectReference: {fileID: -2735126787749836328, guid: a1789d27ee13b4c658959e96034740a4, type: 3}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: playerAnimator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: selectedSprite
+      value: 
+      objectReference: {fileID: -4284403377380072665, guid: 9723957edc1154328be6f68714b42e8f, type: 3}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: dialogueLines.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: 'dialogueLines.Array.data[0]'
+      value: You got the bow!
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: 'dialogueLines.Array.data[1]'
+      value: Shoot enemies from range!
+      objectReference: {fileID: 0}
+    - target: {fileID: 5907021383716001251, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: 'dialogueLines.Array.data[2]'
+      value: Switch Items by pressing 1-5.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7277948534353198984, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_Name
+      value: new_bow_chest
+      objectReference: {fileID: 0}
+    - target: {fileID: 7277948534353198984, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7572086333192547619, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5488129
+      objectReference: {fileID: 0}
+    - target: {fileID: 7572086333192547619, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.018852234
+      objectReference: {fileID: 0}
+    - target: {fileID: 7572086333192547619, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 2.375
+      objectReference: {fileID: 0}
+    - target: {fileID: 7572086333192547619, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 2.1875
+      objectReference: {fileID: 0}
+    - target: {fileID: 9168655903021065639, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 5972410529870052487, guid: 4d39ef2c91ef746f6870f9ae931296ab, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5604147f0c5f2494cbcc9921d653d776, type: 3}

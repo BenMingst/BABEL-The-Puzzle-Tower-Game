@@ -19,14 +19,17 @@ public class ButtonHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log("Hover enter: " + gameObject.name);
-        buttonImage.sprite = hoverSprite;
-    }
+{
+    Debug.Log("Hover enter: " + gameObject.name);
+    if (hoverSprite == null) Debug.Log("hoverSprite is NULL");
+    if (buttonImage == null) Debug.Log("buttonImage is NULL");
+    buttonImage.sprite = hoverSprite;
+    Debug.Log("Sprite switched to hover");
+}
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Debug.Log("Hover exit: " + gameObject.name);
-        buttonImage.sprite = defaultSprite;
-    }
+public void OnPointerExit(PointerEventData eventData)
+{
+    Debug.Log("Hover exit: " + gameObject.name);
+    buttonImage.sprite = defaultSprite;
+}
 }

@@ -267,7 +267,8 @@ MonoBehaviour:
   heartDropPrefab: {fileID: 473149016297637182, guid: 78070332487794d7f83e2f3ed31cd1c6, type: 3}
   enemyAnimator: {fileID: 6064667835193848774}
   archerBottom: {fileID: 7059032309368544077}
-  rb: {fileID: 0}
+  rb: {fileID: 2522652290330636136}
+  arrowOnlyDamage: 0
   isHurt: 0
   isDead: 0
 --- !u!50 &2522652290330636136
@@ -464,14 +465,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   shootRange: 8
   yTolerance: 2
-  player: {fileID: 0}
+  player: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
   attackCooldown: 2
-  archerTopAnimator: {fileID: 6064667835193848774}
-  arrowPrefab: {fileID: 9121663387653764152, guid: 503e7bea23f1b45dc9e6fb5db944b206, type: 3}
   arrowSpawnPoint: {fileID: 8132626011499854390}
+  arrowPrefab: {fileID: 9121663387653764152, guid: 503e7bea23f1b45dc9e6fb5db944b206, type: 3}
   sightBlockLayers:
     serializedVersion: 2
     m_Bits: 64
+  platformVelocity: {x: 0, y: 0}
 --- !u!114 &8325953668398831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,6 +492,7 @@ MonoBehaviour:
   enemyAnimator: {fileID: 6064667835193848774}
   archerBottom: {fileID: 7059032309368544077}
   rb: {fileID: 2522652290330636136}
+  arrowOnlyDamage: 0
   isHurt: 0
   isDead: 0
 --- !u!1 &7059032309368544077

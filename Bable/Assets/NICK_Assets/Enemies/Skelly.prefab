@@ -259,11 +259,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 3
   knockbackForce: 2
-  enemyHitbox: {fileID: 0}
-  heartDropPrefab: {fileID: 0}
-  enemyAnimator: {fileID: 0}
+  enemyHitbox: {fileID: 1598112752036575456}
+  heartDropPrefab: {fileID: 473149016297637182, guid: 78070332487794d7f83e2f3ed31cd1c6, type: 3}
+  enemyAnimator: {fileID: 5191935925132361289}
   archerBottom: {fileID: 0}
-  rb: {fileID: 0}
+  rb: {fileID: 6827792808560694515}
   isHurt: 0
   isDead: 0
 --- !u!1 &1598112752036575456

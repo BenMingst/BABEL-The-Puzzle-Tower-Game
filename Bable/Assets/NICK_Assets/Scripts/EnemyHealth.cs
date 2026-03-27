@@ -17,6 +17,9 @@ public class EnemyHealth : MonoBehaviour
     [Header("Physics")]
     public Rigidbody2D rb;
 
+    [Header("Settings")]
+    public bool arrowOnlyDamage = false;
+
     public bool isHurt = false;
     public bool isDead = false;
 
@@ -33,24 +36,101 @@ public class EnemyHealth : MonoBehaviour
             enemyAnimator = GetComponent<Animator>();
     }
 
+    public bool IsInvulnerable()
+{
+    EvilEye eye = GetComponent<EvilEye>();
+    if (eye != null && eye.currentState == EvilEye.EvilEyeState.Defend) return true;
+    if (eye != null && eye.currentState == EvilEye.EvilEyeState.FrontIdle) return true;
+    return false;
+}
+
+public bool IsImmuneToArrow(Arrow.ArrowType arrowType)
+{
+    EvilEye eye = GetComponent<EvilEye>();
+    
+    Debug.Log("IsImmuneToArrow - eye null: " + (eye == null) + " arrowType: " + arrowType + (eye != null ? " eyeType: " + eye.eyeType : ""));
+
+    if (eye == null) return false;
+
+    if (eye.eyeType == EvilEye.EyeType.Ice && arrowType != Arrow.ArrowType.Fire) return true;
+    if (eye.eyeType == EvilEye.EyeType.Fire && arrowType != Arrow.ArrowType.Ice) return true;
+
+    return false;
+}
+
     public void TakeDamage(int damage)
     {
+        if (isHurt) return;
+        if (IsInvulnerable()) return;
+
         currentHealth -= damage;
 
         if (currentHealth <= 0)
         {
             Die();
         }
+        else
+        {
+            StartCoroutine(HurtNoKnockback());
+        }
     }
 
-    public void TakeDamageWithKnockback(int damage, Vector2 hitPosition)
+   public void TakeDamageWithKnockback(int damage, Vector2 hitPosition)
+{
+    if (isHurt) return;
+    if (IsInvulnerable()) return;
+
+    TakeDamage(damage);
+
+    // only apply knockback if enemy survived
+    if (!isDead)
     {
-        if (isHurt) return;
-
-        TakeDamage(damage);
-
         float knockbackDirection = transform.position.x > hitPosition.x ? 1f : -1f;
         StartCoroutine(Knockback(knockbackDirection));
+    }
+}
+
+    public void TakeDamageFromArrow(int damage, Vector2 hitPosition)
+    {
+        if (isHurt) return;
+        if (IsInvulnerable()) return;
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            StartCoroutine(HurtNoKnockback());
+        }
+    }
+
+    IEnumerator HurtNoKnockback()
+    {
+        isHurt = true;
+        enemyAnimator.SetBool("IsHurt", true);
+
+        if (archerBottom != null)
+            archerBottom.SetActive(false);
+
+        yield return new WaitForSeconds(0.15f);
+
+        if (isDead) yield break;
+
+        yield return new WaitForSeconds(0.6f);
+
+        if (isDead) yield break;
+
+        if (currentHealth > 0)
+        {
+            enemyAnimator.SetBool("IsHurt", false);
+            isHurt = false;
+
+            if (archerBottom != null)
+                archerBottom.SetActive(true);
+        }
     }
 
     IEnumerator Knockback(float direction)
@@ -87,6 +167,14 @@ public class EnemyHealth : MonoBehaviour
     {
         isDead = true;
         StopAllCoroutines();
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+
         StartCoroutine(DeathSequence());
     }
 
@@ -105,8 +193,10 @@ public class EnemyHealth : MonoBehaviour
 
         EnemyAI enemyAI = GetComponent<EnemyAI>();
         ArcherAI archerAI = GetComponent<ArcherAI>();
+        EvilEye evilEye = GetComponent<EvilEye>();
         if (enemyAI != null) enemyAI.enabled = false;
         if (archerAI != null) archerAI.enabled = false;
+        if (evilEye != null) evilEye.enabled = false;
 
         if (enemyHitbox != null)
             enemyHitbox.GetComponent<Collider2D>().enabled = false;

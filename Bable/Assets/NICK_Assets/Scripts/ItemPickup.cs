@@ -4,6 +4,9 @@ using TMPro;
 
 public class ItemPickup : MonoBehaviour
 {
+    public enum ItemType { Sword, Bow }
+    public ItemType itemType;
+
     [Header("Cutscene")]
     public GameObject cutscenePanel;
     public TextMeshProUGUI dialogueText;
@@ -50,10 +53,19 @@ public class ItemPickup : MonoBehaviour
         Time.timeScale = 0f;
 
         if (playerAnimator != null)
-        {
-            playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
-            playerAnimator.SetTrigger("ItemPickup");
-        }
+{
+    playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
+    if (itemType == ItemType.Sword)
+    {
+        Debug.Log("Firing ItemPickup trigger");
+        playerAnimator.SetTrigger("ItemPickup");
+    }
+    else if (itemType == ItemType.Bow)
+    {
+        Debug.Log("Firing BowPickup trigger");
+        playerAnimator.SetTrigger("BowPickup");
+    }
+}
 
         cutscenePanel.SetActive(true);
 
@@ -79,14 +91,20 @@ public class ItemPickup : MonoBehaviour
         promptText.enabled = true;
 
         PlayerController playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        playerController.EquipSword();
+        if (itemType == ItemType.Sword)
+            playerController.EquipSword();
+        else if (itemType == ItemType.Bow)
+            playerController.EquipBow();
 
         cutscenePanel.SetActive(false);
 
         if (playerAnimator != null)
         {
             playerAnimator.updateMode = AnimatorUpdateMode.Normal;
-            playerAnimator.SetTrigger("ItemPickupEnd");
+            if (itemType == ItemType.Sword)
+                playerAnimator.SetTrigger("ItemPickupEnd");
+            else if (itemType == ItemType.Bow)
+                playerAnimator.SetTrigger("BowPickupEnd");
         }
 
         Time.timeScale = 1f;

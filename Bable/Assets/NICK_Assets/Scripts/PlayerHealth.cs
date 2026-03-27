@@ -29,19 +29,15 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isInvincible) return;
         if (playerController.isRolling) return;
-        if (playerController.isDead) return;  // add this line
+        if (playerController.isDead) return;
 
         int heartIndex = (currentHearts - 1) / 2;
         bool isFullToHalf = currentHearts % 2 == 0;
 
         if (isFullToHalf)
-        {
             heartAnimators[heartIndex].SetTrigger("HalfBreak");
-        }
         else
-        {
             heartAnimators[heartIndex].SetTrigger("FullBreak");
-        }
 
         playerAnimator.SetTrigger("Hurt");
         StartCoroutine(HurtSequence(enemyPosition));
@@ -49,13 +45,34 @@ public class PlayerHealth : MonoBehaviour
         currentHearts -= damage;
 
         if (currentHearts <= 0)
-        {
             Die();
-        }
         else
-        {
             StartCoroutine(InvincibilityFrames());
-        }
+    }
+
+    public void TakeDamageNoKnockback(int damage)
+    {
+        if (isInvincible) return;
+        if (playerController.isRolling) return;
+        if (playerController.isDead) return;
+
+        int heartIndex = (currentHearts - 1) / 2;
+        bool isFullToHalf = currentHearts % 2 == 0;
+
+        if (isFullToHalf)
+            heartAnimators[heartIndex].SetTrigger("HalfBreak");
+        else
+            heartAnimators[heartIndex].SetTrigger("FullBreak");
+
+        playerAnimator.SetTrigger("Hurt");
+        StartCoroutine(HurtSequenceNoKnockback());
+
+        currentHearts -= damage;
+
+        if (currentHearts <= 0)
+            Die();
+        else
+            StartCoroutine(InvincibilityFrames());
     }
 
     public bool IsFullHealth()
@@ -71,13 +88,9 @@ public class PlayerHealth : MonoBehaviour
         bool isHalfToFull = currentHearts % 2 == 0;
 
         if (isHalfToFull)
-        {
             heartAnimators[heartIndex].SetTrigger("FullHeal");
-        }
         else
-        {
             heartAnimators[heartIndex].SetTrigger("HalfHeal");
-        }
     }
 
     IEnumerator HurtSequence(Vector2 enemyPosition)
@@ -96,6 +109,17 @@ public class PlayerHealth : MonoBehaviour
         playerController.isHurt = false;
     }
 
+    IEnumerator HurtSequenceNoKnockback()
+    {
+        playerController.isHurt = true;
+        
+        playerRb.linearVelocity = new Vector2(0, playerRb.linearVelocity.y);
+
+        yield return new WaitForSeconds(0.6f);
+
+        playerController.isHurt = false;
+    }
+
     IEnumerator InvincibilityFrames()
     {
         isInvincible = true;
@@ -104,19 +128,14 @@ public class PlayerHealth : MonoBehaviour
     }
 
     void Die()
-{
-    playerController.OnDeath();
-    StartCoroutine(DeathSequence());
-}
+    {
+        playerController.OnDeath();
+        StartCoroutine(DeathSequence());
+    }
 
-
-
-IEnumerator DeathSequence()
-{
-    // wait for death animation to finish
-    yield return new WaitForSeconds(1f); // match your animation length
-
-    // TODO: show game over screen here
-    Debug.Log("Game Over");
-}
+    IEnumerator DeathSequence()
+    {
+        yield return new WaitForSeconds(1f);
+        Debug.Log("Game Over");
+    }
 }

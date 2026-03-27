@@ -10,97 +10,101 @@ public class ArcherAI : MonoBehaviour
 
     [Header("Attack")]
     public float attackCooldown = 2f;
-    public Animator archerTopAnimator;
-
-    [Header("Arrow")]
-    public GameObject arrowPrefab;
     public Transform arrowSpawnPoint;
+    public GameObject arrowPrefab;
 
     [Header("Sight")]
     public LayerMask sightBlockLayers;
 
-    private bool isAttacking = false;
+    private Animator animator;
+    private bool isShooting = false;
     private bool facingRight = true;
     private EnemyHealth enemyHealth;
+    private Rigidbody2D rb;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         player = GameObject.FindWithTag("Player").transform;
         enemyHealth = GetComponent<EnemyHealth>();
+        rb = GetComponentInParent<Rigidbody2D>();
     }
 
     bool CanSeePlayer()
-{
-    if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
+    {
+        if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
 
-    Vector2 origin = new Vector2(transform.position.x, transform.position.y + 1f);
-    Vector2 target = new Vector2(player.position.x, player.position.y + 1f);
-    Vector2 direction = (target - origin).normalized;
-    float distance = Vector2.Distance(origin, target);
-    RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
+        Vector2 origin = transform.position;
+        Vector2 target = player.position;
+        Vector2 direction = (target - origin).normalized;
+        float distance = Vector2.Distance(origin, target);
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
 
-    return hit.collider == null;
-}
+        return hit.collider == null;
+    }
+
+    void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+    }
 
     void Update()
     {
-        if (player == null) return;
+        if (enemyHealth.isDead) return;
+        if (enemyHealth.isHurt) return;
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        bool canSee = CanSeePlayer();
 
-        if (!isAttacking)
+        if (canSee)
         {
-            facingRight = player.position.x > transform.position.x;
+            if (player.position.x < transform.position.x && facingRight)
+                Flip();
+            else if (player.position.x > transform.position.x && !facingRight)
+                Flip();
         }
 
-        if (distanceToPlayer <= shootRange && !isAttacking && CanSeePlayer())
-        {
+        if (rb != null)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y);
+
+        if (distanceToPlayer <= shootRange && !isShooting && canSee)
             StartCoroutine(ShootSequence());
+    }
+
+    public void SpawnArrow()
+    {
+        if (enemyHealth.isHurt || enemyHealth.isDead) return;
+        if (arrowPrefab == null || arrowSpawnPoint == null) return;
+
+        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+        Arrow arrowScript = arrow.GetComponent<Arrow>();
+        if (arrowScript != null)
+            arrowScript.SetDirection(facingRight);
+
+        if (!facingRight)
+        {
+            Vector3 scale = arrow.transform.localScale;
+            scale.x = -Mathf.Abs(scale.x);
+            arrow.transform.localScale = scale;
         }
     }
 
     IEnumerator ShootSequence()
     {
-        isAttacking = true;
+            Debug.Log("ShootSequence STARTED");
 
-        yield return null;
+        isShooting = true;
 
-        while (Vector2.Distance(transform.position, player.position) <= shootRange && CanSeePlayer())
-        {
-            if (enemyHealth.isHurt || enemyHealth.isDead) { yield return null; continue; }
+        if (facingRight)
+            animator.SetTrigger("ShootRight");
+        else
+            animator.SetTrigger("ShootLeft");
 
-            facingRight = player.position.x > transform.position.x;
+        yield return new WaitForSeconds(attackCooldown);
 
-            if (facingRight)
-                archerTopAnimator.SetTrigger("AimRight");
-            else
-                archerTopAnimator.SetTrigger("AimLeft");
-
-            // wait for aim + shoot + cooldown
-            yield return new WaitForSeconds(1f + 0.8f + attackCooldown);
-        }
-
-        isAttacking = false;
-    }
-
-    public void SpawnArrow()
-    {
-    Debug.Log("SpawnArrow called on: " + gameObject.name + " ArcherAI enabled: " + enabled);
-
-        if (enemyHealth.isHurt || enemyHealth.isDead) return;
-
-        if (arrowPrefab != null && arrowSpawnPoint != null)
-        {
-            GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-            Arrow arrowScript = arrow.GetComponent<Arrow>();
-            arrowScript.SetDirection(facingRight);
-
-            if (!facingRight)
-            {
-                Vector3 scale = arrow.transform.localScale;
-                scale.x *= -1;
-                arrow.transform.localScale = scale;
-            }
-        }
+        isShooting = false;
     }
 }

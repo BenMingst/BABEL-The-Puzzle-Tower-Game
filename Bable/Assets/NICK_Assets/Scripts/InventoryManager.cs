@@ -23,12 +23,14 @@ public class InventoryManager : MonoBehaviour
     [Header("Slot Sprites")]
     public Sprite emptySlotSprite;
     public Sprite emptySelectedSprite;
-    public Sprite filledSlotSprite;
-    public Sprite selectedSlotSprite;
 
     [Header("Per-Item Sprites (filled/selected per item)")]
     public Sprite[] filledSprites;
     public Sprite[] selectedSprites;
+
+    [Header("Bow UI")]
+    public GameObject bowCooldownUI;
+    public GameObject arrowTypeUI;
 
     private RuntimeAnimatorController[] slotAnimators = new RuntimeAnimatorController[5];
     private bool[] slotFilled = new bool[5];
@@ -44,6 +46,10 @@ public class InventoryManager : MonoBehaviour
     void Start()
     {
         playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        if (bowCooldownUI != null)
+            bowCooldownUI.SetActive(false);
+        if (arrowTypeUI != null)
+            arrowTypeUI.SetActive(false);
         RefreshUI();
     }
 
@@ -58,18 +64,36 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(int slotIndex, RuntimeAnimatorController animator)
     {
+            Debug.Log("AddItem called for slot: " + slotIndex);
+
         if (slotIndex < 0 || slotIndex >= 5) return;
 
         slotAnimators[slotIndex] = animator;
         slotFilled[slotIndex] = true;
+    Debug.Log("Slot " + slotIndex + " filled: " + slotFilled[slotIndex]);
+
+        if (slotIndex == 1)
+        {
+            if (bowCooldownUI != null)
+                bowCooldownUI.SetActive(true);
+            if (arrowTypeUI != null && ArrowTypeManager.Instance != null)
+                ArrowTypeManager.Instance.Initialize();
+        }
 
         SelectSlot(slotIndex);
         RefreshUI();
+            Debug.Log("RefreshUI called after AddItem for slot: " + slotIndex);
+
     }
 
     public bool IsSwordSelected()
     {
         return currentSlot == 0 && slotFilled[0];
+    }
+
+    public bool IsBowSelected()
+    {
+        return currentSlot == 1 && slotFilled[1];
     }
 
     void SelectSlot(int index)
@@ -85,21 +109,34 @@ public class InventoryManager : MonoBehaviour
             playerController.animator.runtimeAnimatorController = playerController.noSwordAnimator;
         }
 
+        playerController.animator.SetBool("FacingRight", playerController.facingRight);
+
+        if (!playerController.facingRight)
+            playerController.animator.Play("Idle_Left");
+        else
+            playerController.animator.Play("Idle_Right");
+
         RefreshUI();
     }
 
-    void RefreshUI()
+void RefreshUI()
+{
+    for (int i = 0; i < slotImages.Length; i++)
     {
-        for (int i = 0; i < slotImages.Length; i++)
+        if (slotImages[i] == null) continue;
+
+        if (i == currentSlot)
         {
-            if (i == currentSlot)
-            {
-                slotImages[i].sprite = slotFilled[i] ? selectedSprites[i] : emptySelectedSprite;
-            }
-            else
-            {
-                slotImages[i].sprite = slotFilled[i] ? filledSprites[i] : emptySlotSprite;
-            }
+            Sprite s = slotFilled[i] ? selectedSprites[i] : emptySelectedSprite;
+            Debug.Log("Slot " + i + " currentSlot, filled: " + slotFilled[i] + " sprite: " + (s != null ? s.name : "NULL"));
+            slotImages[i].sprite = s;
+        }
+        else
+        {
+            Sprite s = slotFilled[i] ? filledSprites[i] : emptySlotSprite;
+            Debug.Log("Slot " + i + " not currentSlot, filled: " + slotFilled[i] + " sprite: " + (s != null ? s.name : "NULL"));
+            slotImages[i].sprite = s;
         }
     }
+}
 }
