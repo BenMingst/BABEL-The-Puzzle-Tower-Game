@@ -1733,41 +1733,12 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
-<<<<<<< HEAD:Bable/Assets/NICK_Assets/Player/Sword/PlayerAnimator_Sword.controller
---- !u!1102 &597683890186612657
-AnimatorState:
-  serializedVersion: 6
-=======
 --- !u!114 &559899360381525334
 MonoBehaviour:
->>>>>>> 6482650a6eefbc7215c5b4a1fb7dfc0964440879:Bable/Assets/NICK_Assets/Player/PlayerAnimator_Sword.controller
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD:Bable/Assets/NICK_Assets/Player/Sword/PlayerAnimator_Sword.controller
-  m_Name: ExitDoor
-  m_Speed: 1
-  m_CycleOffset: 0
-  m_Transitions:
-  - {fileID: -852925440217477629}
-  - {fileID: -6567799385588232344}
-  m_StateMachineBehaviours: []
-  m_Position: {x: 50, y: 50, z: 0}
-  m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
-  m_Mirror: 0
-  m_SpeedParameterActive: 0
-  m_MirrorParameterActive: 0
-  m_CycleOffsetParameterActive: 0
-  m_TimeParameterActive: 0
-  m_Motion: {fileID: 7821880227927336327, guid: 109bb1882db354b33a14a3e02c2ca444, type: 3}
-  m_Tag: 
-  m_SpeedParameter: 
-  m_MirrorParameter: 
-  m_CycleOffsetParameter: 
-  m_TimeParameter: 
-=======
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
@@ -1780,7 +1751,6 @@ MonoBehaviour:
   playOnEnter: 1
   playOnExit: 0
   playCount: 0
->>>>>>> 6482650a6eefbc7215c5b4a1fb7dfc0964440879:Bable/Assets/NICK_Assets/Player/PlayerAnimator_Sword.controller
 --- !u!1102 &809263636845144734
 AnimatorState:
   serializedVersion: 6
