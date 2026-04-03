@@ -48,8 +48,10 @@ public class PlayerController : MonoBehaviour
     public RuntimeAnimatorController noSwordAnimator;
     public RuntimeAnimatorController swordAnimator;
     public RuntimeAnimatorController bowAnimator;
+    public RuntimeAnimatorController bombAnimator;
     public bool hasSword = false;
     public bool hasBow = false;
+    public bool hasBomb = false;
 
     [Header("Freeze Effect")]
     public float freezeEffect = 0.3f;
@@ -104,6 +106,13 @@ public class PlayerController : MonoBehaviour
         InventoryManager.Instance.AddItem(1, bowAnimator);
     }
 
+    public void EquipBomb()
+    {
+        hasBomb = true;
+        GameManager.hasBomb = true;
+        InventoryManager.Instance.AddItem(2, bombAnimator);
+    }
+
     public void SetInsideDropdown(bool value)
     {
         isInsideDropdown = value;
@@ -119,6 +128,17 @@ public class PlayerController : MonoBehaviour
         return hasBow && InventoryManager.Instance != null && InventoryManager.Instance.IsBowSelected();
     }
 
+    bool CanUseBomb()
+    {
+        return hasBomb && InventoryManager.Instance != null && InventoryManager.Instance.IsBombSelected();
+    }
+
+    public void OnBombExploded()
+    {
+        BombAttack ba = GetComponent<BombAttack>();
+        if (ba != null) ba.OnBombExploded();
+    }
+
     public void OnDeath()
     {
         isDead = true;
@@ -126,6 +146,9 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
+
+        animator.runtimeAnimatorController = swordAnimator;
+        animator.updateMode = AnimatorUpdateMode.Normal;
 
         if (facingRight)
             animator.SetTrigger("DeathRight");
@@ -266,10 +289,17 @@ public class PlayerController : MonoBehaviour
 
         isCrouching = (Input.GetKey(KeyCode.S) || (!HasRoomToStand() && isGrounded)) && isGrounded && !isAttacking && !isRolling && !isHurt;
 
+        BombAttack ba = GetComponent<BombAttack>();
+
         if (Input.GetKeyDown(KeyCode.W) && isGrounded && HasRoomToStand())
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            jumpTimer = 0f;
+            // block jump during bomb windup
+            if (ba != null && ba.isWindingUp) { }
+            else
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                jumpTimer = 0f;
+            }
         }
 
         if (!isGrounded)
@@ -329,6 +359,14 @@ public class PlayerController : MonoBehaviour
             if (bowCooldownUI != null && !bowCooldownUI.HasArrows()) return;
             isCrouching = false;
             StartCoroutine(BowAttack());
+        }
+        else if (Input.GetMouseButtonDown(0) && CanUseBomb())
+        {
+            if (ba != null && !ba.bombActive)
+            {
+                ba.isCrouchingWhenThrown = isCrouching;
+                ba.StartBombAttack();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)

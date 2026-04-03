@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class IceWall : MonoBehaviour
 {
+    public string persistentID;
+
     public enum IceWallState { Default, FirstMelt, Melted }
     public IceWallState currentState = IceWallState.Default;
 
@@ -17,25 +19,25 @@ public class IceWall : MonoBehaviour
         if (isTransitioning) return;
 
         if (currentState == IceWallState.Default)
-        {
             StartCoroutine(TransitionToFirstMelt());
-        }
         else if (currentState == IceWallState.FirstMelt)
-        {
             StartCoroutine(TransitionToMelted());
-        }
     }
+
+    public void RestoreMelted()
+{
+    currentState = IceWallState.Melted;
+    if (wallCollider != null) wallCollider.enabled = false;
+    if (wallAnimator != null)
+        wallAnimator.Play("puddle");
+}
 
     IEnumerator TransitionToFirstMelt()
     {
         isTransitioning = true;
         currentState = IceWallState.FirstMelt;
-
         wallAnimator.SetTrigger("FirstMelt");
-
-        // wait for first melt animation to finish then loop drip
-       yield return new WaitForSeconds(0.9f); // match your first melt animation length
-
+        yield return new WaitForSeconds(0.9f);
         wallAnimator.SetTrigger("Drip");
         isTransitioning = false;
     }
@@ -44,16 +46,9 @@ public class IceWall : MonoBehaviour
     {
         isTransitioning = true;
         currentState = IceWallState.Melted;
-
         wallAnimator.SetTrigger("Melt");
-
-        // wait for melt animation to finish
-        yield return new WaitForSeconds(0.4f); // match your melt animation length
-
-        // remove collider so player can pass through
-        if (wallCollider != null)
-            wallCollider.enabled = false;
-
+        yield return new WaitForSeconds(0.4f);
+        if (wallCollider != null) wallCollider.enabled = false;
         isTransitioning = false;
     }
 }

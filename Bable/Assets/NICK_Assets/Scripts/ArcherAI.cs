@@ -16,32 +16,46 @@ public class ArcherAI : MonoBehaviour
     [Header("Sight")]
     public LayerMask sightBlockLayers;
 
-    private Animator animator;
+    [Header("Components")]
+    public Animator animator;
+
+    [Header("Direction")]
+    public bool facingRight = true;
+
+    public Vector2 platformVelocity = Vector2.zero;
+
     private bool isShooting = false;
-    private bool facingRight = true;
     private EnemyHealth enemyHealth;
     private Rigidbody2D rb;
 
     void Start()
     {
-        animator = GetComponent<Animator>();
         player = GameObject.FindWithTag("Player").transform;
         enemyHealth = GetComponent<EnemyHealth>();
-        rb = GetComponentInParent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
+
+        // apply initial facing direction
+        if (!facingRight)
+        {
+            Vector3 scale = transform.localScale;
+            scale.x = -Mathf.Abs(scale.x);
+            transform.localScale = scale;
+        }
     }
 
     bool CanSeePlayer()
-    {
-        if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
+{
+    if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
 
-        Vector2 origin = transform.position;
-        Vector2 target = player.position;
-        Vector2 direction = (target - origin).normalized;
-        float distance = Vector2.Distance(origin, target);
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
+    // use a lower origin point so raycast doesn't shoot over player
+    Vector2 origin = new Vector2(transform.position.x, transform.position.y);
+    Vector2 target = new Vector2(player.position.x, player.position.y + 0.5f);
+    Vector2 direction = (target - origin).normalized;
+    float distance = Vector2.Distance(origin, target);
+    RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
 
-        return hit.collider == null;
-    }
+    return hit.collider == null;
+}
 
     void Flip()
     {
@@ -59,7 +73,8 @@ public class ArcherAI : MonoBehaviour
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         bool canSee = CanSeePlayer();
 
-        if (canSee)
+        // face player when not shooting
+        if (!isShooting && canSee)
         {
             if (player.position.x < transform.position.x && facingRight)
                 Flip();
@@ -67,11 +82,24 @@ public class ArcherAI : MonoBehaviour
                 Flip();
         }
 
-        if (rb != null)
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y);
-
         if (distanceToPlayer <= shootRange && !isShooting && canSee)
+        {
             StartCoroutine(ShootSequence());
+        }
+        else if (distanceToPlayer > shootRange || !canSee)
+        {
+            if (isShooting) return;
+            animator.SetBool("IsIdle", true);
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (rb != null)
+        {
+            rb.linearVelocity = new Vector2(platformVelocity.x, rb.linearVelocity.y);
+            platformVelocity = Vector2.zero;
+        }
     }
 
     public void SpawnArrow()
@@ -93,18 +121,16 @@ public class ArcherAI : MonoBehaviour
     }
 
     IEnumerator ShootSequence()
-    {
-            Debug.Log("ShootSequence STARTED");
+{
+    isShooting = true;
+    animator.SetBool("IsIdle", false);
 
-        isShooting = true;
+    // always use ShootRight trigger - scale flip handles visual direction
+    animator.SetTrigger("ShootRight");
 
-        if (facingRight)
-            animator.SetTrigger("ShootRight");
-        else
-            animator.SetTrigger("ShootLeft");
+    yield return new WaitForSeconds(attackCooldown);
 
-        yield return new WaitForSeconds(attackCooldown);
-
-        isShooting = false;
-    }
+    isShooting = false;
+    yield break;
+}
 }

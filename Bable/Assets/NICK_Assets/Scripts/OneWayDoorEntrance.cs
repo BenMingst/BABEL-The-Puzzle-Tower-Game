@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class OneWayDoorEntrance : MonoBehaviour
 {
+    public string persistentID;
+
     [Header("Components")]
     public Animator doorAnimator;
 
@@ -17,15 +19,30 @@ public class OneWayDoorEntrance : MonoBehaviour
     public float waitAtBlackDuration = 0.5f;
 
     private bool playerNearby = false;
-    private bool isOpened = false;
+    public bool isOpened = false;
     private bool isUsable = false;
-    private bool hasBeenOpened = false;
+    public bool hasBeenOpened = false;
     public bool inCutscene = false;
 
     void Start()
     {
         if (fadeCanvas != null)
             fadeCanvas.alpha = 0f;
+    }
+
+    public void RestoreOpened()
+    {
+        hasBeenOpened = true;
+        isOpened = true;
+        isUsable = true;
+        StartCoroutine(RestoreOpenedDelayed());
+    }
+
+    IEnumerator RestoreOpenedDelayed()
+    {
+        yield return null;
+        if (doorAnimator != null)
+            doorAnimator.Play("opened");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -89,6 +106,7 @@ public class OneWayDoorEntrance : MonoBehaviour
             yield return new WaitForSecondsRealtime(0.4f);
         }
 
+        playerAnimator.runtimeAnimatorController = pc.swordAnimator;
         playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
         playerAnimator.SetTrigger("EnterDoor");
 
@@ -123,6 +141,9 @@ public class OneWayDoorEntrance : MonoBehaviour
 
         player.transform.position = transform.position;
         doorAnimator.SetBool("Select2", false);
+
+        playerAnimator.runtimeAnimatorController = pc.swordAnimator;
+        playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
         playerAnimator.SetBool("ExitDoor", true);
 
         yield return new WaitForSecondsRealtime(0.4f);
@@ -140,6 +161,9 @@ public class OneWayDoorEntrance : MonoBehaviour
         fadeCanvas.alpha = 0f;
 
         playerAnimator.SetBool("ExitDoor", false);
+
+        // restore animator immediately
+        InventoryManager.Instance.SelectCurrentSlot();
 
         yield return new WaitForSecondsRealtime(0.4f);
 
@@ -166,6 +190,8 @@ public class OneWayDoorEntrance : MonoBehaviour
         pc.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
 
         doorAnimator.SetBool("Select2", false);
+
+        playerAnimator.runtimeAnimatorController = pc.swordAnimator;
         playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
         playerAnimator.SetTrigger("EnterDoor");
 

@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 4752319073462794254}
   - component: {fileID: 2522652290330636136}
   - component: {fileID: 2620209816621303359}
+  - component: {fileID: 8973670816672060374}
   m_Layer: 3
   m_Name: Archer
   m_TagString: Enemy
@@ -256,7 +257,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2636756626048718034}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
@@ -335,6 +336,30 @@ CapsuleCollider2D:
   m_Offset: {x: -0.00000023841858, y: 1.5757626}
   m_Size: {x: 1.2563663, y: 3.3111184}
   m_Direction: 0
+--- !u!114 &8973670816672060374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636756626048718034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43c9ac476710541e89f33371676583a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  shootRange: 8
+  yTolerance: 5
+  player: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+  attackCooldown: 2
+  arrowSpawnPoint: {fileID: 8132626011499854390}
+  arrowPrefab: {fileID: 9121663387653764152, guid: 503e7bea23f1b45dc9e6fb5db944b206, type: 3}
+  sightBlockLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  animator: {fileID: 6064667835193848774}
+  facingRight: 1
+  platformVelocity: {x: 0, y: 0}
 --- !u!1 &3247150508916688906
 GameObject:
   m_ObjectHideFlags: 0
@@ -346,8 +371,8 @@ GameObject:
   - component: {fileID: 5367315164545133178}
   - component: {fileID: 6407056118417000856}
   - component: {fileID: 6064667835193848774}
-  - component: {fileID: 1651168671290723236}
   - component: {fileID: 8325953668398831}
+  - component: {fileID: 6796696483283194480}
   m_Layer: 3
   m_Name: archer_top
   m_TagString: Enemy
@@ -451,28 +476,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1651168671290723236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3247150508916688906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43c9ac476710541e89f33371676583a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  shootRange: 8
-  yTolerance: 2
-  player: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
-  attackCooldown: 2
-  arrowSpawnPoint: {fileID: 8132626011499854390}
-  arrowPrefab: {fileID: 9121663387653764152, guid: 503e7bea23f1b45dc9e6fb5db944b206, type: 3}
-  sightBlockLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  platformVelocity: {x: 0, y: 0}
 --- !u!114 &8325953668398831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -495,6 +498,18 @@ MonoBehaviour:
   arrowOnlyDamage: 0
   isHurt: 0
   isDead: 0
+--- !u!114 &6796696483283194480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3247150508916688906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55632d36c29e54230b56b0d1c290a943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArcherAnimationEvents
 --- !u!1 &7059032309368544077
 GameObject:
   m_ObjectHideFlags: 0

@@ -42,6 +42,14 @@ public class KeyManager : MonoBehaviour
         return keyCount;
     }
 
+    public void RestoreKeys(int count)
+    {
+        keyCount = count;
+        if (keyCount > 0)
+            keyUI.SetActive(true);
+        UpdateUI();
+    }
+
     void UpdateUI()
     {
         keyCountText.text = keyCount.ToString();

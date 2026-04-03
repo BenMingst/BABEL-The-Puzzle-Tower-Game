@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2999985151060383222
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4053740505837780353}
+  m_Layer: 0
+  m_Name: Bomb_Place_Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4053740505837780353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2999985151060383222}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.15, y: 0.52, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1530712717305027975}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6090497062261311253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5856458285818724994}
+  m_Layer: 0
+  m_Name: Lob_Up_Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5856458285818724994
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6090497062261311253}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.4696002, y: 3.68, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1530712717305027975}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6205478819579167745
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12,6 +74,10 @@ PrefabInstance:
       propertyPath: ceilingCheck
       value: 
       objectReference: {fileID: 7197804080686655205}
+    - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: noSwordAnimator
+      value: 
+      objectReference: {fileID: 9100000, guid: a330c2ca3faf74a509fd3be0fdf40539, type: 2}
     - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: rollingCollider
       value: 
@@ -60,6 +126,18 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 3.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4625953030679018251, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: m_Name
+      value: Lob_Spawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646554418653717320, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4646554418653717320, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.77
+      objectReference: {fileID: 0}
     - target: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.31
@@ -104,6 +182,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6847775717163442883, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: normalLobSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6847775717163442883, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: upwardLobSpeed
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8901306041131791240, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -127,7 +213,13 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 2054667115459649910, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5856458285818724994}
+    - targetCorrespondingSourceObject: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4053740505837780353}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6382934404474534495, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       insertIndex: -1
@@ -175,6 +267,11 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.75}
   m_Size: {x: 3, y: 1.5}
   m_Direction: 1
+--- !u!4 &1530712717305027975 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+  m_PrefabInstance: {fileID: 6205478819579167745}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7197804080686655205 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3890536917851529956, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
