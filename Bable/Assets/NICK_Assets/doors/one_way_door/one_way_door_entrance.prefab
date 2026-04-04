@@ -83,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -20
   m_MaskInteraction: 0
   m_Sprite: {fileID: 3028916022781663574, guid: 56d5cc1f5955740b1899d4a6fbbab6ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -175,11 +175,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f639b1a3018e4d8d8ceb52e362a0d4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  persistentID: 
   doorAnimator: {fileID: 3724969569459322284}
   exitDoor: {fileID: 0}
   fadeCanvas: {fileID: 357490953927392082, guid: 3447a8be4b04b4c03a493c3d8ab2a2f9, type: 3}
   blackFadeDuration: 0.3
   waitAtBlackDuration: 0.3
+  isOpened: 0
+  hasBeenOpened: 0
   inCutscene: 0
 --- !u!1 &7329859817957389740
 GameObject:

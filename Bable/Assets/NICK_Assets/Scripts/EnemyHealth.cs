@@ -52,26 +52,24 @@ public class EnemyHealth : MonoBehaviour
     }
 
     public bool IsInvulnerable()
-{
-    EvilEye eye = GetComponent<EvilEye>();
-    if (eye != null && eye.currentState == EvilEye.EvilEyeState.Defend) return true;
-    if (eye != null && eye.currentState == EvilEye.EvilEyeState.FrontIdle) return true;
-    return false;
-}
+    {
+        if (enemyAnimator == null) return false;
+        EvilEye eye = GetComponent<EvilEye>();
+        if (eye != null && eye.currentState == EvilEye.EvilEyeState.Defend) return true;
+        if (eye != null && eye.currentState == EvilEye.EvilEyeState.FrontIdle) return true;
+        return false;
+    }
 
-public bool IsImmuneToArrow(Arrow.ArrowType arrowType)
-{
-    EvilEye eye = GetComponent<EvilEye>();
-    
-    Debug.Log("IsImmuneToArrow - eye null: " + (eye == null) + " arrowType: " + arrowType + (eye != null ? " eyeType: " + eye.eyeType : ""));
+    public bool IsImmuneToArrow(Arrow.ArrowType arrowType)
+    {
+        EvilEye eye = GetComponent<EvilEye>();
+        if (eye == null) return false;
 
-    if (eye == null) return false;
+        if (eye.eyeType == EvilEye.EyeType.Ice && arrowType != Arrow.ArrowType.Fire) return true;
+        if (eye.eyeType == EvilEye.EyeType.Fire && arrowType != Arrow.ArrowType.Ice) return true;
 
-    if (eye.eyeType == EvilEye.EyeType.Ice && arrowType != Arrow.ArrowType.Fire) return true;
-    if (eye.eyeType == EvilEye.EyeType.Fire && arrowType != Arrow.ArrowType.Ice) return true;
-
-    return false;
-}
+        return false;
+    }
 
     public void TakeDamage(int damage)
     {
@@ -93,20 +91,23 @@ public bool IsImmuneToArrow(Arrow.ArrowType arrowType)
         }
     }
 
-   public void TakeDamageWithKnockback(int damage, Vector2 hitPosition)
-{
-    if (isHurt) return;
-    if (IsInvulnerable()) return;
-
-    TakeDamage(damage);
-
-    // only apply knockback if enemy survived
-    if (!isDead)
+    public void TakeDamageWithKnockback(int damage, Vector2 hitPosition)
     {
-        float knockbackDirection = transform.position.x > hitPosition.x ? 1f : -1f;
-        StartCoroutine(Knockback(knockbackDirection));
+        if (isHurt) return;
+        if (IsInvulnerable()) return;
+
+        currentHealth -= damage;
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            float knockbackDirection = transform.position.x > hitPosition.x ? 1f : -1f;
+            StartCoroutine(Knockback(knockbackDirection));
+        }
     }
-}
 
     public void TakeDamageFromArrow(int damage, Vector2 hitPosition)
     {
@@ -197,42 +198,49 @@ public bool IsImmuneToArrow(Arrow.ArrowType arrowType)
             rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
+        Collider2D[] allColliders = GetComponentsInChildren<Collider2D>();
+        Debug.Log("Disabling " + allColliders.Length + " colliders on death");
+        foreach (Collider2D col in allColliders)
+        {
+            Debug.Log("Disabling: " + col.gameObject.name + " " + col.GetType().Name);
+            col.enabled = false;
+        }
+
         StartCoroutine(DeathSequence());
     }
 
     IEnumerator DeathSequence()
-    {
-        enemyAnimator.SetBool("IsHurt", true);
-        yield return new WaitForSeconds(0.6f);
+{
+    enemyAnimator.SetBool("IsHurt", true);
+    yield return new WaitForSeconds(0.6f);
 
-        enemyAnimator.SetBool("IsHurt", false);
-        enemyAnimator.SetBool("IsWalking", false);
-        yield return null;
+    enemyAnimator.SetBool("IsHurt", false);
+    enemyAnimator.SetBool("IsWalking", false);
+    yield return null;
 
-        enemyAnimator.enabled = false;
-        enemyAnimator.enabled = true;
-        enemyAnimator.Play("Death", 0, 0f);
+    enemyAnimator.enabled = false;
+    enemyAnimator.enabled = true;
+    enemyAnimator.Play("Death", 0, 0f);
 
-        EnemyAI enemyAI = GetComponent<EnemyAI>();
-        ArcherAI archerAI = GetComponent<ArcherAI>();
-        EvilEye evilEye = GetComponent<EvilEye>();
-        if (enemyAI != null) enemyAI.enabled = false;
-        if (archerAI != null) archerAI.enabled = false;
-        if (evilEye != null) evilEye.enabled = false;
+    EnemyAI enemyAI = GetComponent<EnemyAI>();
+    ArcherAI archerAI = GetComponent<ArcherAI>();
+    EvilEye evilEye = GetComponent<EvilEye>();
+    if (enemyAI != null) enemyAI.enabled = false;
+    if (archerAI != null) archerAI.enabled = false;
+    if (evilEye != null) evilEye.enabled = false;
 
-        if (enemyHitbox != null)
-            enemyHitbox.GetComponent<Collider2D>().enabled = false;
+    // mark permanent death enemy
+    PermanentDeathEnemy pde = GetComponent<PermanentDeathEnemy>();
+    if (pde != null) pde.MarkDead();
 
-        if (archerBottom != null)
-            archerBottom.SetActive(false);
+    if (archerBottom != null)
+        archerBottom.SetActive(false);
 
-        yield return new WaitForSeconds(0.5f);
+    yield return new WaitForSeconds(0.5f);
 
-        if (heartDropPrefab != null && Random.value > 0.25f)
-        {
-            Instantiate(heartDropPrefab, transform.position, Quaternion.identity);
-        }
+    if (heartDropPrefab != null && Random.value > 0.25f)
+        Instantiate(heartDropPrefab, transform.position, Quaternion.identity);
 
-        Destroy(gameObject);
-    }
+    Destroy(gameObject);
+}
 }

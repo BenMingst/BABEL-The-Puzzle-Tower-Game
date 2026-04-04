@@ -4,6 +4,8 @@ using Cinemachine;
 
 public class EnemyDoor : MonoBehaviour
 {
+    public string persistentID;
+
     [Header("Components")]
     public Animator doorAnimator;
     public Collider2D doorCollider;
@@ -18,7 +20,7 @@ public class EnemyDoor : MonoBehaviour
     public float waitAtDoorDuration = 1f;
     public float zoomSize = 3f;
 
-    private bool isOpened = false;
+    public bool isOpened = false;
     private int enemiesRemaining;
     private float defaultCameraSize;
 
@@ -46,6 +48,14 @@ public class EnemyDoor : MonoBehaviour
         }
     }
 
+    public void RestoreOpened()
+{
+    isOpened = true;
+    if (doorCollider != null) doorCollider.enabled = false;
+    if (doorAnimator != null)
+        doorAnimator.Play("Opened");
+}
+
     IEnumerator OpenDoorSequence()
     {
         isOpened = true;
@@ -65,7 +75,6 @@ public class EnemyDoor : MonoBehaviour
             transform.position.y,
             mainCamera.transform.position.z);
 
-        // pan to door and zoom in simultaneously
         float t = 0f;
         while (t < 1f)
         {
@@ -88,7 +97,6 @@ public class EnemyDoor : MonoBehaviour
         if (doorCollider != null)
             doorCollider.enabled = false;
 
-        // pan back to player and zoom out simultaneously
         t = 0f;
         while (t < 1f)
         {
