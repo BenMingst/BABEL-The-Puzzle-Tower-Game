@@ -245,6 +245,7 @@ MonoBehaviour:
   sightBlockLayers:
     serializedVersion: 2
     m_Bits: 64
+  platformVelocity: {x: 0, y: 0}
 --- !u!114 &3301889814299977434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -257,6 +258,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  jumpSounds: []
+  attackSounds:
+  - {fileID: 8300000, guid: 6f6aa2bd527e0e8469ab7c1bc818f30c, type: 3}
   hurtSounds:
   - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
   - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
@@ -269,6 +273,7 @@ MonoBehaviour:
   enemyAnimator: {fileID: 5191935925132361289}
   archerBottom: {fileID: 0}
   rb: {fileID: 6827792808560694515}
+  arrowOnlyDamage: 0
   isHurt: 0
   isDead: 0
 --- !u!1 &1598112752036575456

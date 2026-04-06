@@ -545,6 +545,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHearts: 3
+  hurtSounds:
+  - {fileID: 8300000, guid: af7125689ae71ac41ab8e7bc4e7128bc, type: 3}
+  - {fileID: 8300000, guid: 035f492011ec9b646aba4907a4cd229e, type: 3}
+  - {fileID: 8300000, guid: 7b46057ae6a89674ab15c3e6640bb93e, type: 3}
   heartAnimators:
   - {fileID: 0}
   - {fileID: 0}
@@ -621,13 +625,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BombAttack
   bombPrefab: {fileID: 0}
-  bombSpawnPoint: {fileID: 0}
+  lobSpawnPoint: {fileID: 0}
+  lobUpSpawnPoint: {fileID: 0}
+  placeSpawnPoint: {fileID: 0}
   normalLobSpeed: 8
   normalLobAngle: 45
   upwardLobSpeed: 10
   upwardLobAngle: 80
   windupDuration: 0.4
   bombActive: 0
+  isWindingUp: 0
+  isCrouchingWhenThrown: 0
 --- !u!1 &7161130431338967928
 GameObject:
   m_ObjectHideFlags: 0
