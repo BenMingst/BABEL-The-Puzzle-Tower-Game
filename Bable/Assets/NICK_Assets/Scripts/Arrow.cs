@@ -53,6 +53,16 @@ public class Arrow : MonoBehaviour
             col.enabled = false;
     }
 
+    void BounceOff()
+    {
+        rb.linearVelocity = new Vector2(-rb.linearVelocity.x * 0.3f, 2f);
+        rb.constraints = RigidbodyConstraints2D.None;
+        rb.angularVelocity = Random.Range(-300f, 300f);
+        rb.gravityScale = 1f;
+        DisableAllColliders();
+        StartCoroutine(BounceDestroy());
+    }
+
     void Update()
     {
         if (isStuck) return;
@@ -60,9 +70,7 @@ public class Arrow : MonoBehaviour
         distanceTravelled += speed * Time.deltaTime;
 
         if (distanceTravelled >= maxDistance)
-        {
             Destroy(gameObject);
-        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -83,28 +91,51 @@ public class Arrow : MonoBehaviour
                 return;
             }
 
+            // check necromancer
+            NecromancerHealth necroHealth = other.GetComponentInParent<NecromancerHealth>();
+            if (necroHealth != null)
+            {
+                NecromancerAI necroAI = necroHealth.GetComponent<NecromancerAI>();
+                if (necroAI != null && !necroAI.IsVulnerable())
+                {
+                    BounceOff();
+                    return;
+                }
+                necroHealth.TakeDamage(damage, transform.position);
+                StartCoroutine(HitAndDestroy());
+                return;
+            }
+
+            // check armored skelly
+            ArmoredSkellyHealth armoredHealth = other.GetComponentInParent<ArmoredSkellyHealth>();
+            if (armoredHealth != null)
+            {
+                ArmoredSkellyAI ai = armoredHealth.GetComponent<ArmoredSkellyAI>();
+                if (ai != null && ai.isArmored)
+                {
+                    BounceOff();
+                    return;
+                }
+                else
+                {
+                    armoredHealth.TakeDamageWithKnockback(damage, transform.position);
+                    StartCoroutine(HitAndDestroy());
+                    return;
+                }
+            }
+
             EnemyHealth enemyHealth = other.GetComponentInParent<EnemyHealth>();
             if (enemyHealth != null)
             {
                 if (enemyHealth.IsInvulnerable())
                 {
-                    rb.linearVelocity = new Vector2(-rb.linearVelocity.x * 0.3f, 2f);
-                    rb.constraints = RigidbodyConstraints2D.None;
-                    rb.angularVelocity = Random.Range(-300f, 300f);
-                    rb.gravityScale = 1f;
-                    DisableAllColliders();
-                    StartCoroutine(BounceDestroy());
+                    BounceOff();
                     return;
                 }
 
                 if (enemyHealth.IsImmuneToArrow(arrowType))
                 {
-                    rb.linearVelocity = new Vector2(-rb.linearVelocity.x * 0.3f, 2f);
-                    rb.constraints = RigidbodyConstraints2D.None;
-                    rb.angularVelocity = Random.Range(-300f, 300f);
-                    rb.gravityScale = 1f;
-                    DisableAllColliders();
-                    StartCoroutine(BounceDestroy());
+                    BounceOff();
                     return;
                 }
 

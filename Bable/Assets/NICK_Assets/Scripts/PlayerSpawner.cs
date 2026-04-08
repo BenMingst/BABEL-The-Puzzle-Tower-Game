@@ -17,8 +17,6 @@ public class PlayerSpawner : MonoBehaviour
     {
         yield return null;
 
-        Debug.Log("InitializePlayer - hasBomb: " + GameManager.hasBomb + " scene: " + UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-
         if (CheckpointManager.Instance != null)
             CheckpointManager.Instance.RestoreState();
 
@@ -52,12 +50,29 @@ public class PlayerSpawner : MonoBehaviour
             if (bowChestObject != null) bowChestObject.SetActive(false);
         }
 
-        Debug.Log("About to check hasBomb: " + GameManager.hasBomb);
         if (GameManager.hasBomb)
         {
-            Debug.Log("Calling EquipBomb");
             pc.EquipBomb();
             if (bombChestObject != null) bombChestObject.SetActive(false);
+        }
+
+        // unlock fire and ice arrows for level 3
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_3")
+        {
+            if (ArrowTypeManager.Instance != null)
+            {
+                ArrowTypeManager.Instance.UnlockFireArrows();
+                ArrowTypeManager.Instance.UnlockIceArrows();
+            }
+        }
+
+        // restore fire/ice arrows from checkpoint
+        if (CheckpointManager.Instance != null)
+        {
+            if (CheckpointManager.Instance.savedState.hasFireArrows && ArrowTypeManager.Instance != null)
+                ArrowTypeManager.Instance.UnlockFireArrows();
+            if (CheckpointManager.Instance.savedState.hasIceArrows && ArrowTypeManager.Instance != null)
+                ArrowTypeManager.Instance.UnlockIceArrows();
         }
     }
 }
