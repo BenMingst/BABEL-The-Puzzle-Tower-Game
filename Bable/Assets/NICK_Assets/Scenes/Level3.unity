@@ -175,6 +175,17 @@ RectTransform:
   m_AnchoredPosition: {x: 960, y: 540}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &131241566 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6070628462731423845, guid: eb46593b6cd6ebb4e8102648a703eac7, type: 3}
+  m_PrefabInstance: {fileID: 739489290}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &144371850
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,10 +1586,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8193082332978435, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: musicSlider
+      value: 
+      objectReference: {fileID: 131241566}
+    - target: {fileID: 8193082332978435, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: soundFXSlider
+      value: 
+      objectReference: {fileID: 1826067364}
     - target: {fileID: 2269163977221501584, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: m_Name
       value: AudioManager
       objectReference: {fileID: 0}
+    - target: {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: f63b2a0e6c879ae49b852c529b6e71dd, type: 3}
     - target: {fileID: 6321741988649851981, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: gameOverSound
       value: 
@@ -1667,6 +1690,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9041303717765630923, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: f63b2a0e6c879ae49b852c529b6e71dd, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1999,6 +2026,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1823831567}
   m_CullTransparentMesh: 1
+--- !u!114 &1826067364 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5794016069715686504, guid: eb46593b6cd6ebb4e8102648a703eac7, type: 3}
+  m_PrefabInstance: {fileID: 739489290}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!1 &1917239945 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2242184328828526132, guid: 35fbb675f95ac42748861e6a0d226fb1, type: 3}
