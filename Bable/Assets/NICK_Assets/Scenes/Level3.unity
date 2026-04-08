@@ -2443,6 +2443,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1799842937552232793, guid: 18644c85b621b41458070008bf6c5cbc, type: 3}
+      propertyPath: itemType
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1799842937552232793, guid: 18644c85b621b41458070008bf6c5cbc, type: 3}
       propertyPath: promptText
       value: 
       objectReference: {fileID: 1113948121}

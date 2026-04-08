@@ -60,21 +60,26 @@ MonoBehaviour:
   player_deathSounds:
   - {fileID: 8300000, guid: abe154774de80fb4bb3047f7a156ce65, type: 3}
   player_healSounds:
-  - {fileID: 8300000, guid: 7b180e713ce89214b8c6ff2c32e094c8, type: 3}
+  - {fileID: 8300000, guid: b7ce443e065b92c4688276983a621b04, type: 3}
   player_freezeSounds:
   - {fileID: 8300000, guid: 43d5411f374700a49bcf9ab0f610cfeb, type: 3}
   player_burnSounds:
   - {fileID: 8300000, guid: 4ef4112973440004a8479f2d7d80ee72, type: 3}
   player_swordSlashAttackSounds:
   - {fileID: 8300000, guid: 9beea215faf6cf7418b48a405ad20d48, type: 3}
-  player_swordDownAttackSounds: []
+  player_swordDownAttackSounds:
+  - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
+  - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
   player_bowAttackSounds:
   - {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  normalArrowSpawnSound: {fileID: 0}
+  iceArrowSpawnSound: {fileID: 0}
+  fireArrowSpawnSound: {fileID: 0}
   player_bombThrowSounds:
   - {fileID: 8300000, guid: 41f0899738ea94946ae04046c231c3bf, type: 3}
   player_bombExplosionSounds:
   - {fileID: 8300000, guid: 45e1b6ae94d705c4c8badd99aff8ab0c, type: 3}
-  player_WalkSounds:
+  player_walkSounds:
   - {fileID: 8300000, guid: 2e5bcd1b3303cc84ea452fe700f60f65, type: 3}
   - {fileID: 8300000, guid: 3892b70954637674e9becc4794e0719f, type: 3}
   - {fileID: 8300000, guid: ad90cb004fc8d454dbcf5394eb5d3bde, type: 3}
@@ -85,7 +90,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8e178ccd9d813e84b94dc73b9a182efa, type: 3}
   - {fileID: 8300000, guid: 16ab617c868e96d48ade2ce5c2143de4, type: 3}
   - {fileID: 8300000, guid: 8e471878c090b7a4b8598b623f4c8c2b, type: 3}
-  player_dropDownSounds: []
+  player_dropDownSounds:
+  - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
+  - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
   player_rollSounds:
   - {fileID: 8300000, guid: 25c4a084f89155c43a3ff41f38e091d7, type: 3}
   player_jumpSounds:
@@ -119,12 +126,12 @@ MonoBehaviour:
   skeletonHurtSound: {fileID: 0}
   skeletonDeathSound: {fileID: 0}
   archerAttackSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
-  archerHurtSound: {fileID: 0}
-  archerDeathSound: {fileID: 0}
+  archerHurtSound: {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  archerDeathSound: {fileID: 8300000, guid: 86316873cf9b0d44cb9772f4726cebdf, type: 3}
   evilEyeBombLaunchSound: {fileID: 0}
   evilEyeBombExplosionSound: {fileID: 0}
-  evilEyeShieldUpSound: {fileID: 0}
-  evilEyeShieldDownSound: {fileID: 0}
+  evilEyeShieldUpSound: {fileID: 8300000, guid: 7dd1ff46ed66e854d9533c0f25e78b2e, type: 3}
+  evilEyeShieldDownSound: {fileID: 8300000, guid: b9fd1374580caea4da3e86ca8c10337b, type: 3}
   evilEyeHurtSound: {fileID: 0}
   evilEyeDeathSound: {fileID: 0}
   stalkerAttackSound: {fileID: 0}

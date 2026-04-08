@@ -13,9 +13,12 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] public AudioClip[] player_swordSlashAttackSounds;
     [SerializeField] public AudioClip[] player_swordDownAttackSounds;
     [SerializeField] public AudioClip[] player_bowAttackSounds;
+    [SerializeField] public AudioClip normalArrowSpawnSound;
+    [SerializeField] public AudioClip iceArrowSpawnSound;
+    [SerializeField] public AudioClip fireArrowSpawnSound;
     [SerializeField] public AudioClip[] player_bombThrowSounds;
     [SerializeField] public AudioClip[] player_bombExplosionSounds;
-    [SerializeField] public AudioClip[] player_WalkSounds;
+    [SerializeField] public AudioClip[] player_walkSounds;
     [SerializeField] public AudioClip[] player_dropDownSounds;
     [SerializeField] public AudioClip[] player_rollSounds;
     [SerializeField] public AudioClip[] player_jumpSounds;
@@ -47,6 +50,7 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] public AudioClip chestOpenSound;
     [SerializeField] public AudioClip chestLockedSound;
     [SerializeField] public AudioClip chestUnlockSound;
+    
 
     [Header("Enemy Sounds")]
     [Header("Skeleton Sounds")]

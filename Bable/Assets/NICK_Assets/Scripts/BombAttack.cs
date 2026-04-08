@@ -124,6 +124,9 @@ public class BombAttack : MonoBehaviour
         if (type == BombType.Place) spawnPoint = placeSpawnPoint;
         if (spawnPoint == null) spawnPoint = lobSpawnPoint;
 
+        // play throw sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.player_bombThrowSounds, transform, 1f, 0f);
+
         // mirror spawn position if facing left
         Vector3 spawnPos = spawnPoint.position;
         if (!pc.facingRight)

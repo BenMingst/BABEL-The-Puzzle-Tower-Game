@@ -6,9 +6,6 @@ public class PlayerHealth : MonoBehaviour
     public int maxHearts = 3;
     private int currentHearts;
 
-    [SerializeField] private AudioClip[] hurtSounds;
-    [SerializeField] private AudioClip[] deathSounds;
-
     private AudioSource audioSource;
 
     [Header("Heart UI")]
@@ -49,10 +46,6 @@ public class PlayerHealth : MonoBehaviour
 
         currentHearts -= damage;
 
-        
-        // play hurt sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
-
         if (currentHearts <= 0)
             Die();
         else
@@ -92,7 +85,7 @@ public class PlayerHealth : MonoBehaviour
     public void HealHalfHeart()
     {
         currentHearts += 1;
-
+        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.player_healSounds, transform, 1f, 0.1f);
         int heartIndex = currentHearts / 2 - (currentHearts % 2 == 0 ? 1 : 0);
         bool isHalfToFull = currentHearts % 2 == 0;
 
@@ -105,7 +98,7 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator HurtSequence(Vector2 enemyPosition)
     {
         playerController.isHurt = true;
-
+        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.player_hurtSounds, transform, 1f, 0.1f);
         float knockbackDirection = transform.position.x > enemyPosition.x ? 1f : -1f;
         playerRb.linearVelocity = new Vector2(knockbackDirection * knockbackForce, playerRb.linearVelocity.y);
 
@@ -121,7 +114,7 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator HurtSequenceNoKnockback()
     {
         playerController.isHurt = true;
-        
+        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.player_hurtSounds, transform, 1f, 0.1f);
         playerRb.linearVelocity = new Vector2(0, playerRb.linearVelocity.y);
 
         yield return new WaitForSeconds(0.6f);

@@ -5263,9 +5263,9 @@ PrefabInstance:
       value: AudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 6321741988649851981, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: archerAttackSound
+      propertyPath: gameOverSound
       value: 
-      objectReference: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+      objectReference: {fileID: 8300000, guid: c34bccc36a2ca154489b199790d7c362, type: 3}
     - target: {fileID: 6321741988649851981, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: 'arrowSwitchTypeSounds.Array.data[3]'
       value: 

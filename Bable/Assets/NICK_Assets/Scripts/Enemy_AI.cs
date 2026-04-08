@@ -147,6 +147,8 @@ public class EnemyAI : MonoBehaviour
         {
             enemyHitbox.GetComponent<Collider2D>().enabled = false;
             isAttacking = false;
+            // delete attack sound object if attack was interrupted
+            GameObject.Destroy(SoundFXManager.instance);
             yield break;
         }
 

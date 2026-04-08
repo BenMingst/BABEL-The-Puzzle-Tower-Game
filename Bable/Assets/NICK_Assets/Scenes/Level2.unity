@@ -6955,6 +6955,10 @@ PrefabInstance:
       propertyPath: m_Volume
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6321741988649851981, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: 'player_swordDownAttackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6889544232545088443, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
