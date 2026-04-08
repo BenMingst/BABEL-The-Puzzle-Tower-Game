@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
+    public void Start()
+    {
+        LoadVolume();
+    }
     public AudioMixer audioMixer;
 
     public Slider musicSlider;

@@ -5,19 +5,19 @@ public class SceneController : MonoBehaviour
 {
     public void playLevel1()
     {
-        SceneManager.LoadSceneAsync("another_test");
+        SceneManager.LoadSceneAsync("Level1");
     }
     public void playLevel2()
     {
-        SceneManager.LoadSceneAsync("NICK");
+        SceneManager.LoadSceneAsync("Level2");
     }
     public void playLevel3()
     {
-        SceneManager.LoadSceneAsync("Level Three");
+        SceneManager.LoadSceneAsync("Level3");
     }
     public void loadTitle()
     {
-        SceneManager.LoadSceneAsync("Main Menu");
+        SceneManager.LoadSceneAsync("MainMenu");
     }
 
     public void restartLevel()

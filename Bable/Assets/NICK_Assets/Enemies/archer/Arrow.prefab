@@ -180,6 +180,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a305f23c2f464fbe9a7d53926227dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  hitWallSounds:
+  - {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
   arrowType: 0
   speed: 5
   maxDistance: 15
@@ -188,6 +190,7 @@ MonoBehaviour:
   spawnIgnoreTime: 0.1
   isPlayerArrow: 0
   hitStopDuration: 0
+  bounceDestroyDelay: 2
 --- !u!61 &5098012253307374289
 BoxCollider2D:
   m_ObjectHideFlags: 0

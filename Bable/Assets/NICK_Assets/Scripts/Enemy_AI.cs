@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
+
+
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip[] jumpSounds;
+    [SerializeField] private AudioClip[] attackSounds;
+
     [Header("Detection")]
     public float attackRange = 1.5f;
     public float sightRange = 5f;
@@ -132,6 +139,8 @@ public class EnemyAI : MonoBehaviour
 
         animator.SetTrigger("AttackRight");
 
+
+
         yield return new WaitForSeconds(hitboxDelay);
 
         if (enemyHealth.isHurt)
@@ -141,11 +150,16 @@ public class EnemyAI : MonoBehaviour
             yield break;
         }
 
+        // play attack sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(attackSounds, transform, 1f, 0f);
+
         Vector3 hitboxPos = enemyHitbox.transform.localPosition;
         hitboxPos.x = facingRight ? Mathf.Abs(hitboxPos.x) : -Mathf.Abs(hitboxPos.x);
         enemyHitbox.transform.localPosition = hitboxPos;
-
+        
         enemyHitbox.GetComponent<Collider2D>().enabled = true;
+
+         
 
         yield return new WaitForSeconds(hitboxDuration);
 

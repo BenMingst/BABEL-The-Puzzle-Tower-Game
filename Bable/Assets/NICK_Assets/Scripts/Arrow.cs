@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
+    [Header("Audio")]
+    public AudioClip[] hitWallSounds;
     public enum ArrowType { Normal, Ice, Fire }
     public ArrowType arrowType = ArrowType.Normal;
 
@@ -157,10 +159,14 @@ public class Arrow : MonoBehaviour
     IEnumerator StickToWall()
     {
         isStuck = true;
+        if(hitWallSounds != null)
+        {
+         // play sound for arrow hitting wall
+            SoundFXManager.instance.PlayRandomSoundFXClip(hitWallSounds, transform, 1f, 0f);
+        }
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
         DisableAllColliders();
-
         yield return new WaitForSeconds(stickDuration);
 
         Destroy(gameObject);

@@ -3,8 +3,6 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance;
-    public AudioClip[] buttonSounds;
-
     public float volume = 1f;
     private void Awake()
     {
@@ -13,9 +11,10 @@ public class AudioManager : MonoBehaviour
 
     public void PlayButtonSound()
     {
-        if (buttonSounds != null)
-        {
-            SoundFXManager.instance.PlayRandomSoundFXClip(buttonSounds, transform, 1f, 0f);
-        }
+        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.buttonSounds, transform, 1f, 0f);
+    }
+    public void PlayMenuEnter()
+    {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.menuEnterSound, transform, 1f, 0f);
     }
 }

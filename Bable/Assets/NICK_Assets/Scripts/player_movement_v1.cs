@@ -1,8 +1,32 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField] private AudioClip[] freezeSounds;
+    [SerializeField] private AudioClip[] burnSounds;
+    [SerializeField] private AudioClip[] swordSlashAttackSounds;
+    [SerializeField] private AudioClip[] swordDownAttackSounds;
+    [SerializeField] private AudioClip[] bowAttackSounds;
+    [SerializeField] private AudioClip[] bombThrowSounds;
+    [SerializeField] private AudioClip[] bombExplosionSounds;
+    [SerializeField] private AudioClip[] walkSounds;
+    [SerializeField] private float footstepRate = 0f;
+    private float footstepTimer = 0f;
+    [SerializeField] private AudioClip[] dropDownSounds;
+    [SerializeField] private AudioClip[] rollSounds;
+    [SerializeField] private AudioClip[] jumpSounds;
+    
+    private AudioSource audioSource;
+
+    [Header("Menus")]
+    public GameObject deathCanvas;
+    public GameObject pausePanel;
+    public GameObject optionsPanel;
+    public bool isPaused = false;
+
     [Header("Movement")]
     public float moveSpeed = 7f;
     public float jumpForce = 12f;
@@ -219,6 +243,7 @@ public class PlayerController : MonoBehaviour
             moveSpeed = moveSpeed / freezeEffect;
 
         isFrozen = true;
+        SoundFXManager.instance.PlayRandomSoundFXClip(freezeSounds, transform, 1f, 0f);
         float originalSpeed = moveSpeed;
         moveSpeed *= freezeEffect;
 
@@ -249,6 +274,7 @@ public class PlayerController : MonoBehaviour
 
         if (burnOverlayObject != null)
             burnOverlayObject.SetActive(true);
+            SoundFXManager.instance.PlayRandomSoundFXClip(burnSounds, transform, 1f, 0f);
 
         yield return new WaitForSeconds(afterBurnDuration);
 
@@ -265,6 +291,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isDead)
+                Pause();
+        }
+
         if (isDead) return;
         if (isHurt) return;
 
@@ -287,6 +319,23 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
         if (Input.GetKey(KeyCode.D)) horizontalInput = 1f;
 
+
+        // Footstep sounds
+
+        if (isGrounded && Mathf.Abs(horizontalInput) > 0.1f && !isCrouching && !isRolling && !isAttacking)
+        {
+            footstepTimer -= Time.deltaTime;
+            if (footstepTimer <= 0f)
+            {
+                SoundFXManager.instance.PlayRandomSoundFXClip(walkSounds, transform, 1f, 0f);
+                footstepTimer = footstepRate;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
+
         isCrouching = (Input.GetKey(KeyCode.S) || (!HasRoomToStand() && isGrounded)) && isGrounded && !isAttacking && !isRolling && !isHurt;
 
         BombAttack ba = GetComponent<BombAttack>();
@@ -298,6 +347,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                SoundFXManager.instance.PlayRandomSoundFXClip(jumpSounds, transform, 1f, 0f);
                 jumpTimer = 0f;
             }
         }
@@ -349,18 +399,18 @@ public class PlayerController : MonoBehaviour
             downAttackHitbox.GetComponent<Collider2D>().enabled = false;
         }
 
-        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && CanUseSword())
+        if (Input.GetMouseButtonDown(0) && !isPaused && !isAttacking && !isRolling && isGrounded && CanUseSword())
         {
             isCrouching = false;
             StartCoroutine(SlashAttack());
         }
-        else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseBow())
+        else if (Input.GetMouseButtonDown(0) && !isPaused && !isAttacking && !isRolling && CanUseBow())
         {
             if (bowCooldownUI != null && !bowCooldownUI.HasArrows()) return;
             isCrouching = false;
             StartCoroutine(BowAttack());
         }
-        else if (Input.GetMouseButtonDown(0) && CanUseBomb())
+        else if (Input.GetMouseButtonDown(0) && !isPaused && CanUseBomb())
         {
             if (ba != null && !ba.bombActive)
             {
@@ -401,6 +451,8 @@ public class PlayerController : MonoBehaviour
     {
         isDropping = true;
 
+        SoundFXManager.instance.PlayRandomSoundFXClip(dropDownSounds, transform, 1f, 0f);
+
         if (dropdownCollider != null)
         {
             Physics2D.IgnoreCollision(standingCollider, dropdownCollider, true);
@@ -424,6 +476,8 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = true;
         animator.SetBool("IsSlashing", true);
+
+        SoundFXManager.instance.PlayRandomSoundFXClip(swordSlashAttackSounds, transform, 1f, 0f);
 
         float lungeDirection = facingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
@@ -450,6 +504,8 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = true;
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+
+        SoundFXManager.instance.PlayRandomSoundFXClip(bowAttackSounds, transform, 1f, 0f);
 
         if (ArrowTypeManager.Instance != null)
             ArrowTypeManager.Instance.isShooting = true;
@@ -502,6 +558,8 @@ public class PlayerController : MonoBehaviour
         isRolling = true;
         animator.SetBool("IsRolling", true);
 
+        SoundFXManager.instance.PlayRandomSoundFXClip(rollSounds, transform, 1f, 0.1f);
+
         float rollDirection = facingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(rollDirection * 4f, rb.linearVelocity.y);
 
@@ -525,6 +583,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, downAttackBounceForce);
         animator.SetBool("DownAttack", true);
+        SoundFXManager.instance.PlayRandomSoundFXClip(swordDownAttackSounds, transform, 1f, 0f);
     }
 
     void HandleAnimations()
@@ -588,6 +647,23 @@ public class PlayerController : MonoBehaviour
         {
             Gizmos.color = HasRoomToStand() ? Color.green : Color.red;
             Gizmos.DrawWireSphere(ceilingCheck.position, ceilingCheckRadius);
+        }
+    }
+
+    public void Pause()
+    {
+        if (!isPaused)
+        {
+            pausePanel.SetActive(true);
+            Time.timeScale = 0f;
+            isPaused = true;
+        }
+        else
+        {
+            pausePanel.SetActive(false);
+            optionsPanel.SetActive(false);
+            Time.timeScale = 1f;
+            isPaused = false;
         }
     }
 }

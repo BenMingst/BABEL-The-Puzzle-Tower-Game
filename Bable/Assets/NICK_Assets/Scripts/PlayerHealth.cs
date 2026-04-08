@@ -7,7 +7,7 @@ public class PlayerHealth : MonoBehaviour
     private int currentHearts;
 
     [SerializeField] private AudioClip[] hurtSounds;
-
+    [SerializeField] private AudioClip[] deathSounds;
 
     private AudioSource audioSource;
 

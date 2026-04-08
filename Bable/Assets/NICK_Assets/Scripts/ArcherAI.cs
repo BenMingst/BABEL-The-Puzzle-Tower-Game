@@ -108,6 +108,7 @@ public class ArcherAI : MonoBehaviour
         if (arrowPrefab == null || arrowSpawnPoint == null) return;
 
         GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.archerAttackSound, transform, 1f, 0f);
         Arrow arrowScript = arrow.GetComponent<Arrow>();
         if (arrowScript != null)
             arrowScript.SetDirection(facingRight);
@@ -127,9 +128,7 @@ public class ArcherAI : MonoBehaviour
 
     // always use ShootRight trigger - scale flip handles visual direction
     animator.SetTrigger("ShootRight");
-
     yield return new WaitForSeconds(attackCooldown);
-
     isShooting = false;
     yield break;
 }

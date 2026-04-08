@@ -263,9 +263,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   jumpSounds: []
-  attackSounds: []
-  hurtSounds: []
-  deathSounds: []
+  attackSounds:
+  - {fileID: 8300000, guid: ad2105f2e0a495249a677be9e9a116b9, type: 3}
+  hurtSoundsKnockback:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: 241493ea4fd5cce4f93511012c324a87, type: 3}
   maxHealth: 3
   knockbackForce: 3
   enemyHitbox: {fileID: 2571927437160875523}
@@ -494,6 +501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   jumpSounds: []
   attackSounds: []
+  hurtSoundsKnockback: []
   hurtSounds: []
   deathSounds: []
   maxHealth: 3

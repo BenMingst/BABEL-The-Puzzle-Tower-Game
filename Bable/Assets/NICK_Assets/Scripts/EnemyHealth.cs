@@ -3,11 +3,10 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField] private AudioClip[] jumpSounds;
-    [SerializeField] private AudioClip[] attackSounds;
 
     [SerializeField] private AudioClip[] hurtSounds;
     [SerializeField] private AudioClip[] deathSounds;
+    [SerializeField] private AudioClip[] healSounds;
 
     private AudioSource audioSource;
      
@@ -78,8 +77,11 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth -= damage;
 
-        // play hurt sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
+        if(hurtSounds != null)
+        {
+         // play hurt sound
+            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
+        }
 
         if (currentHealth <= 0)
         {
@@ -97,6 +99,13 @@ public class EnemyHealth : MonoBehaviour
         if (IsInvulnerable()) return;
 
         currentHealth -= damage;
+
+        if(hurtSounds != null)
+        {
+         // play hurt sound for arrow
+            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
+        }
+        
 
         if (currentHealth <= 0)
         {
@@ -116,6 +125,12 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth -= damage;
 
+        if(hurtSounds != null && hurtSounds.Length > 0)
+        {
+         // play hurt sound
+            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
+        }
+
         if (currentHealth <= 0)
         {
             Die();
@@ -130,6 +145,12 @@ public class EnemyHealth : MonoBehaviour
     {
         isHurt = true;
         enemyAnimator.SetBool("IsHurt", true);
+
+        if(hurtSounds != null && hurtSounds.Length > 0)
+        {
+         // play hurt sound
+            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0f);
+        }
 
         if (archerBottom != null)
             archerBottom.SetActive(false);

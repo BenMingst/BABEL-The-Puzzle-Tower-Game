@@ -27,6 +27,7 @@ public class DoorHealth : MonoBehaviour
 
     public void TakeHit()
     {
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.doorHurtSound, transform, 1f, 0f);
         if (isDestroyed || isHit) return;
 
         hits++;
@@ -58,6 +59,7 @@ public class DoorHealth : MonoBehaviour
     {
         isDestroyed = true;
         animator.SetTrigger("Destroyed");
+        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.doorBreakSound, transform, 1f, 0f);
         col.enabled = false;
         rb.bodyType = RigidbodyType2D.Static;
         yield break;
