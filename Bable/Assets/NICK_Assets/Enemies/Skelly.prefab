@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 5191935925132361289}
   - component: {fileID: 7269744232961311551}
   - component: {fileID: 3301889814299977434}
+  - component: {fileID: 7539450581412492068}
   m_Layer: 3
   m_Name: Skelly
   m_TagString: Enemy
@@ -227,9 +228,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee31e1038010d4702abdccb75646461a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
-  jumpSounds: []
-  attackSounds:
-  - {fileID: 8300000, guid: 4b25c7408756555438254af4670a40f1, type: 3}
   attackRange: 0.5
   sightRange: 2
   yTolerance: 2
@@ -261,12 +259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  hurtSounds:
-  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
-  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
-  deathSounds:
-  - {fileID: 8300000, guid: 241493ea4fd5cce4f93511012c324a87, type: 3}
-  healSounds: []
   maxHealth: 3
   knockbackForce: 2
   enemyHitbox: {fileID: 1598112752036575456}
@@ -277,6 +269,24 @@ MonoBehaviour:
   arrowOnlyDamage: 0
   isHurt: 0
   isDead: 0
+--- !u!114 &7539450581412492068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509796635320564794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  attackSounds:
+  - {fileID: 8300000, guid: 4b25c7408756555438254af4670a40f1, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
+  deathSound: {fileID: 8300000, guid: 241493ea4fd5cce4f93511012c324a87, type: 3}
 --- !u!1 &1598112752036575456
 GameObject:
   m_ObjectHideFlags: 0

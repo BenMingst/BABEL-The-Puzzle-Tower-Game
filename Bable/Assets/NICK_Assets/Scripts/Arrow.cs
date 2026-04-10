@@ -162,7 +162,7 @@ public class Arrow : MonoBehaviour
         if(hitWallSounds != null)
         {
          // play sound for arrow hitting wall
-            SoundFXManager.instance.PlayRandomSoundFXClip(hitWallSounds, transform, 1f, 0f);
+            SoundFXManager.instance.PlayWorldRandom(SoundFXManager.instance.arrowHitWallSounds, transform, 1f, 0f);
         }
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;

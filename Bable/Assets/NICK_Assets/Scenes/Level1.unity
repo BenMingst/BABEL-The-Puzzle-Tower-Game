@@ -4319,8 +4319,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fd275b8cde584245b50f931b93098ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::The_Stalker_AI
-  jumpSounds: []
-  attackSounds: []
   attackRange: 0.5
   sightRange: 2
   yTolerance: 2
@@ -4777,6 +4775,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3572144422326493353, guid: 99c1efab0d2fe419d88673a95d98fdd3, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4397894141104364276, guid: 99c1efab0d2fe419d88673a95d98fdd3, type: 3}
       propertyPath: 'heartAnimators.Array.data[0]'
       value: 
@@ -4801,6 +4803,10 @@ PrefabInstance:
       propertyPath: optionsPanel
       value: 
       objectReference: {fileID: 1781377294}
+    - target: {fileID: 4624185838279632469, guid: 99c1efab0d2fe419d88673a95d98fdd3, type: 3}
+      propertyPath: noSwordAnimator
+      value: 
+      objectReference: {fileID: 9100000, guid: f4b8b340942bc40e28d11f2af7d9d6b4, type: 2}
     - target: {fileID: 4624185838279632469, guid: 99c1efab0d2fe419d88673a95d98fdd3, type: 3}
       propertyPath: dropdownCollider
       value: 
@@ -5262,14 +5268,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: AudioManager
       objectReference: {fileID: 0}
-    - target: {fileID: 6321741988649851981, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: gameOverSound
-      value: 
-      objectReference: {fileID: 8300000, guid: c34bccc36a2ca154489b199790d7c362, type: 3}
-    - target: {fileID: 6321741988649851981, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: 'arrowSwitchTypeSounds.Array.data[3]'
-      value: 
-      objectReference: {fileID: 8300000, guid: dbcd67d5cf8c87944bbe14e49b92d456, type: 3}
+    - target: {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: m_Volume
+      value: 0.699
+      objectReference: {fileID: 0}
+    - target: {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: BypassEffects
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: BypassReverbZones
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6889544232545088443, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5350,7 +5360,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 9041303717765630923, guid: 74037d431414ced448303e4834aecb41, type: 3}
+      propertyPath: m_Volume
+      value: 0.627
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

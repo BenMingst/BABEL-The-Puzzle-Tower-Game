@@ -22,9 +22,6 @@ public class PlayerSpawner : MonoBehaviour
         if (CheckpointManager.Instance != null)
             CheckpointManager.Instance.RestoreState();
 
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex >= 1)
-            GameManager.hasSword = true;
-
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_3")
         {
             GameManager.hasBow = true;

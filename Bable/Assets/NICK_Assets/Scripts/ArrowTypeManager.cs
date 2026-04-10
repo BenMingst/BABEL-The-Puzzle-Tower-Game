@@ -91,7 +91,7 @@ public class ArrowTypeManager : MonoBehaviour
                     currentArrowType = ArrowType.Normal;
                     break;
             }
-            SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.arrowSwitchTypeSounds, transform, 1f, 0f);
+            SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.arrowSwitchTypeSounds, 1f);
         }
 
         if (ArrowTypeIndicator.Instance != null)

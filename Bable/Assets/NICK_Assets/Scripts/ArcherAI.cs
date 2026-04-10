@@ -108,7 +108,7 @@ public class ArcherAI : MonoBehaviour
         if (arrowPrefab == null || arrowSpawnPoint == null) return;
 
         GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.archerAttackSound, transform, 1f, 0f);
+        SoundFXManager.instance.PlayWorldClip(SoundFXManager.instance.normalArrowSpawnSound, transform, 1f, 0f);
         Arrow arrowScript = arrow.GetComponent<Arrow>();
         if (arrowScript != null)
             arrowScript.SetDirection(facingRight);

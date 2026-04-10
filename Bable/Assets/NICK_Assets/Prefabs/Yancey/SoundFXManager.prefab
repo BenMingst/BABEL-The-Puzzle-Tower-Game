@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6853537988956456926}
   - component: {fileID: 9041303717765630923}
   m_Layer: 5
-  m_Name: AudioManager
+  m_Name: SoundFXManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -53,33 +53,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc11e8b002c3a084287b34c7dd8a87cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundFXManager
-  player_hurtSounds:
+  hurtSounds:
   - {fileID: 8300000, guid: af7125689ae71ac41ab8e7bc4e7128bc, type: 3}
   - {fileID: 8300000, guid: 035f492011ec9b646aba4907a4cd229e, type: 3}
   - {fileID: 8300000, guid: 7b46057ae6a89674ab15c3e6640bb93e, type: 3}
-  player_deathSounds:
+  deathSounds:
   - {fileID: 8300000, guid: abe154774de80fb4bb3047f7a156ce65, type: 3}
-  player_healSounds:
+  healSounds:
   - {fileID: 8300000, guid: b7ce443e065b92c4688276983a621b04, type: 3}
-  player_freezeSounds:
+  freezeSounds:
   - {fileID: 8300000, guid: 43d5411f374700a49bcf9ab0f610cfeb, type: 3}
-  player_burnSounds:
+  burnSounds:
   - {fileID: 8300000, guid: 4ef4112973440004a8479f2d7d80ee72, type: 3}
-  player_swordSlashAttackSounds:
+  swordSlashAttackSounds:
   - {fileID: 8300000, guid: 9beea215faf6cf7418b48a405ad20d48, type: 3}
-  player_swordDownAttackSounds:
-  - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
-  - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
-  player_bowAttackSounds:
-  - {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
-  normalArrowSpawnSound: {fileID: 0}
-  iceArrowSpawnSound: {fileID: 0}
-  fireArrowSpawnSound: {fileID: 0}
-  player_bombThrowSounds:
+  swordDownAttackSounds:
+  - {fileID: 8300000, guid: 70667947967f8c74eac664c35c1e3e1f, type: 3}
+  bowAttackSounds: []
+  normalArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  iceArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  fireArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  arrowHitWallSounds:
+  - {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
+  bombThrowSounds:
   - {fileID: 8300000, guid: 41f0899738ea94946ae04046c231c3bf, type: 3}
-  player_bombExplosionSounds:
+  bombExplosionSounds:
   - {fileID: 8300000, guid: 45e1b6ae94d705c4c8badd99aff8ab0c, type: 3}
-  player_walkSounds:
+  walkSounds:
   - {fileID: 8300000, guid: 2e5bcd1b3303cc84ea452fe700f60f65, type: 3}
   - {fileID: 8300000, guid: 3892b70954637674e9becc4794e0719f, type: 3}
   - {fileID: 8300000, guid: ad90cb004fc8d454dbcf5394eb5d3bde, type: 3}
@@ -90,12 +90,11 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 8e178ccd9d813e84b94dc73b9a182efa, type: 3}
   - {fileID: 8300000, guid: 16ab617c868e96d48ade2ce5c2143de4, type: 3}
   - {fileID: 8300000, guid: 8e471878c090b7a4b8598b623f4c8c2b, type: 3}
-  player_dropDownSounds:
-  - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
-  - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
-  player_rollSounds:
+  dropDownSounds:
   - {fileID: 8300000, guid: 25c4a084f89155c43a3ff41f38e091d7, type: 3}
-  player_jumpSounds:
+  rollSounds:
+  - {fileID: 8300000, guid: 25c4a084f89155c43a3ff41f38e091d7, type: 3}
+  jumpSounds:
   - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
   - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
   arrowSwitchTypeSounds:
@@ -106,7 +105,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c31b88f3fa64cae418f4d431ef47124b, type: 3}
   dialogueBlipSound: {fileID: 8300000, guid: 3fd7e481996452542bca992e0e18bbef, type: 3}
   dialogueConfirmSound: {fileID: 8300000, guid: 3fd7e481996452542bca992e0e18bbef, type: 3}
-  gameOverSound: {fileID: 0}
+  gameOverSound: {fileID: 8300000, guid: abe154774de80fb4bb3047f7a156ce65, type: 3}
   pauseSound: {fileID: 8300000, guid: f6b70aca94aa39b4cb7e6899ae77af43, type: 3}
   unpauseSound: {fileID: 8300000, guid: f6b70aca94aa39b4cb7e6899ae77af43, type: 3}
   menuEnterSound: {fileID: 0}
@@ -115,28 +114,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c31b88f3fa64cae418f4d431ef47124b, type: 3}
   doorOpenSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
   doorEnterSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
-  doorLockedSound: {fileID: 8300000, guid: 55d90ed8523c0a44bbdb0d4ca609a8bc, type: 3}
+  doorLockedSounds: []
   doorUnlockSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
-  doorHurtSound: {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  doorHurtSounds: []
   doorBreakSound: {fileID: 8300000, guid: 89048c26927674a47a07b5a8fe15ce66, type: 3}
   chestOpenSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
   chestLockedSound: {fileID: 8300000, guid: 55d90ed8523c0a44bbdb0d4ca609a8bc, type: 3}
   chestUnlockSound: {fileID: 8300000, guid: 6a9313f3487e82f4ca1a8b1f105ab314, type: 3}
-  skeletonAttackSound: {fileID: 0}
-  skeletonHurtSound: {fileID: 0}
-  skeletonDeathSound: {fileID: 0}
-  archerAttackSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
-  archerHurtSound: {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
-  archerDeathSound: {fileID: 8300000, guid: 86316873cf9b0d44cb9772f4726cebdf, type: 3}
-  evilEyeBombLaunchSound: {fileID: 0}
-  evilEyeBombExplosionSound: {fileID: 0}
-  evilEyeShieldUpSound: {fileID: 8300000, guid: 7dd1ff46ed66e854d9533c0f25e78b2e, type: 3}
-  evilEyeShieldDownSound: {fileID: 8300000, guid: b9fd1374580caea4da3e86ca8c10337b, type: 3}
-  evilEyeHurtSound: {fileID: 0}
-  evilEyeDeathSound: {fileID: 0}
-  stalkerAttackSound: {fileID: 0}
-  stalkerHurtSound: {fileID: 0}
-  stalkerDeathSound: {fileID: 0}
   stalkerVanishSound: {fileID: 0}
   stalkerAppearSound: {fileID: 0}
   soundFXObject: {fileID: 456598269487561052, guid: 850049122f3ee054bb66c9094d1c8514, type: 3}
@@ -277,7 +261,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baffb90a9ebcd53449cd28daada850e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicPlayer
-  introSource: {fileID: 6227837578085784588}
   loopSource: {fileID: 9041303717765630923}
 --- !u!82 &9041303717765630923
 AudioSource:

@@ -3,27 +3,27 @@ using UnityEngine;
 
 public class SoundFXManager : MonoBehaviour
 {
-    [Header("Player Sounds")]    
-
-    [SerializeField] public AudioClip[] player_hurtSounds;
-    [SerializeField] public AudioClip[] player_deathSounds;
-    [SerializeField] public AudioClip[] player_healSounds;
-    [SerializeField] public AudioClip[] player_freezeSounds;
-    [SerializeField] public AudioClip[] player_burnSounds;
-    [SerializeField] public AudioClip[] player_swordSlashAttackSounds;
-    [SerializeField] public AudioClip[] player_swordDownAttackSounds;
-    [SerializeField] public AudioClip[] player_bowAttackSounds;
+    [Header("Player Sounds")]
+    [SerializeField] public AudioClip[] hurtSounds;
+    [SerializeField] public AudioClip[] deathSounds;
+    [SerializeField] public AudioClip[] healSounds;
+    [SerializeField] public AudioClip[] freezeSounds;
+    [SerializeField] public AudioClip[] burnSounds;
+    [SerializeField] public AudioClip[] swordSlashAttackSounds;
+    [SerializeField] public AudioClip[] swordDownAttackSounds;
+    [SerializeField] public AudioClip[] bowAttackSounds;
     [SerializeField] public AudioClip normalArrowSpawnSound;
     [SerializeField] public AudioClip iceArrowSpawnSound;
     [SerializeField] public AudioClip fireArrowSpawnSound;
-    [SerializeField] public AudioClip[] player_bombThrowSounds;
-    [SerializeField] public AudioClip[] player_bombExplosionSounds;
-    [SerializeField] public AudioClip[] player_walkSounds;
-    [SerializeField] public AudioClip[] player_dropDownSounds;
-    [SerializeField] public AudioClip[] player_rollSounds;
-    [SerializeField] public AudioClip[] player_jumpSounds;
+    [SerializeField] public AudioClip[] arrowHitWallSounds;
+    [SerializeField] public AudioClip[] bombThrowSounds;
+    [SerializeField] public AudioClip[] bombExplosionSounds;
+    [SerializeField] public AudioClip[] walkSounds;
+    [SerializeField] public AudioClip[] dropDownSounds;
+    [SerializeField] public AudioClip[] rollSounds;
+    [SerializeField] public AudioClip[] jumpSounds;
 
-    [Header("UI Sounds")]
+    [Header("-------- UI SOUNDS --------")]
     [SerializeField] public AudioClip[] arrowSwitchTypeSounds;
     [SerializeField] public AudioClip[] hotbarSwitchSounds;
 
@@ -31,7 +31,7 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] public AudioClip dialogueBlipSound;
     [SerializeField] public AudioClip dialogueConfirmSound;
 
-    [Header("Menu Sounds")]   
+    [Header("Menu Sounds")]
     [SerializeField] public AudioClip gameOverSound;
     [SerializeField] public AudioClip pauseSound;
     [SerializeField] public AudioClip unpauseSound;
@@ -39,67 +39,43 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] public AudioClip menuExitSound;
     [SerializeField] public AudioClip[] buttonSounds;
 
-
+    [Header("-------- WORLD SOUNDS --------")]
     [Header("Prop Sounds")]
     [SerializeField] public AudioClip doorOpenSound;
     [SerializeField] public AudioClip doorEnterSound;
-    [SerializeField] public AudioClip doorLockedSound;
+    [SerializeField] public AudioClip[] doorLockedSounds;
     [SerializeField] public AudioClip doorUnlockSound;
-    [SerializeField] public AudioClip doorHurtSound;
+    [SerializeField] public AudioClip[] doorHurtSounds;
     [SerializeField] public AudioClip doorBreakSound;
     [SerializeField] public AudioClip chestOpenSound;
     [SerializeField] public AudioClip chestLockedSound;
     [SerializeField] public AudioClip chestUnlockSound;
-    
 
-    [Header("Enemy Sounds")]
-    [Header("Skeleton Sounds")]
-    [SerializeField] public AudioClip skeletonAttackSound;
-    [SerializeField] public AudioClip skeletonHurtSound;
-    [SerializeField] public AudioClip skeletonDeathSound;
-
-    [Header("Archer Sounds")]
-    [SerializeField] public AudioClip archerAttackSound;
-    [SerializeField] public AudioClip archerHurtSound;
-    [SerializeField] public AudioClip archerDeathSound;
-
-    [Header("EvilEye Sounds")]
-    [SerializeField] public AudioClip evilEyeBombLaunchSound;
-    [SerializeField] public AudioClip evilEyeBombExplosionSound;
-    [SerializeField] public AudioClip evilEyeShieldUpSound;
-    [SerializeField] public AudioClip evilEyeShieldDownSound;
-    [SerializeField] public AudioClip evilEyeHurtSound;
-    [SerializeField] public AudioClip evilEyeDeathSound;
 
     [Header("Stalker Sounds")]
-    [SerializeField] public AudioClip stalkerAttackSound;
-    [SerializeField] public AudioClip stalkerHurtSound;
-    [SerializeField] public AudioClip stalkerDeathSound;
     [SerializeField] public AudioClip stalkerVanishSound;
     [SerializeField] public AudioClip stalkerAppearSound;
 
     public static SoundFXManager instance;
 
     [Header("Sound FX Object")]
-    [SerializeField] private AudioSource soundFXObject; 
+    [SerializeField] private AudioSource soundFXObject;
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
+        instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 
     public void PlayRandomSoundFXClip(AudioClip[] audioClip, Transform spawnTransform, float volume, float delay)
     {
-        if(audioClip != null)
+        if (audioClip != null)
         {
             int rand;
             // assign a random index to select a clip from the array
-            if(audioClip.Length > 1)
+            if (audioClip.Length > 1)
             {
-            rand = Random.Range(0, audioClip.Length);
+                rand = Random.Range(0, audioClip.Length);
             }
             else
             {
@@ -110,7 +86,7 @@ public class SoundFXManager : MonoBehaviour
 
             // assign the audioClip
             audioSource.clip = audioClip[rand];
-            
+
             // assign the volume
             audioSource.volume = volume;
 
@@ -131,29 +107,48 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume, float delay)
     {
-        if(audioClip != null)
+        if (audioClip != null)
         {
-        // spawn in gameObject
-        AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+            // spawn in gameObject
+            AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
 
-        // assign the audioClip
-        audioSource.clip = audioClip;
-        
-        // assign the volume
-        audioSource.volume = volume;
+            // assign the audioClip
+            audioSource.clip = audioClip;
 
-        // play sound
-        audioSource.PlayDelayed(delay);
+            // assign the volume
+            audioSource.volume = volume;
 
-        // get length of sound FX clip
-        float clipLength = audioSource.clip.length;
+            // play sound
+            audioSource.PlayDelayed(delay);
 
-        // destroy the clip after it is done playing
-        Destroy(audioSource.gameObject, clipLength + delay);
+            // get length of sound FX clip
+            float clipLength = audioSource.clip.length;
+
+            // destroy the clip after it is done playing
+            Destroy(audioSource.gameObject, clipLength + delay);
         }
         else
         {
             Debug.LogWarning("No audio clip assigned to play.");
         }
+    }
+    public void PlayWorldClip(AudioClip clip, Transform emitter, float volume = 1f, float delay = 0f)
+    {
+        PlaySoundFXClip(clip, emitter, volume, delay);
+    }
+
+    public void PlayWorldRandom(AudioClip[] clips, Transform emitter, float volume = 1f, float delay = 0f)
+    {
+        PlayRandomSoundFXClip(clips, emitter, volume, delay);
+    }
+
+    public void PlayUIClip(AudioClip clip, float volume = 1f)
+    {
+        PlaySoundFXClip(clip, transform, volume, 0f);
+    }
+
+    public void PlayUIRandom(AudioClip[] clips, float volume = 1f)
+    {
+        PlayRandomSoundFXClip(clips, transform, volume, 0f);
     }
 }

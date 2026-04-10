@@ -4,12 +4,6 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour
 {
 
-
-
-    [Header("Audio")]
-    [SerializeField] private AudioClip[] jumpSounds;
-    [SerializeField] private AudioClip[] attackSounds;
-
     [Header("Detection")]
     public float attackRange = 1.5f;
     public float sightRange = 5f;
@@ -45,6 +39,13 @@ public class EnemyAI : MonoBehaviour
     private float distanceToPlayer;
     private bool canSee;
     private bool groundAhead;
+
+    private EnemyAudio enemyAudio;
+
+void Awake()
+{
+    enemyAudio = GetComponent<EnemyAudio>();
+}
 
     void Start()
     {
@@ -153,7 +154,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         // play attack sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(attackSounds, transform, 1f, 0f);
+        SoundFXManager.instance.PlayWorldRandom(enemyAudio.attackSounds, transform, 1f, 0f);
 
         Vector3 hitboxPos = enemyHitbox.transform.localPosition;
         hitboxPos.x = facingRight ? Mathf.Abs(hitboxPos.x) : -Mathf.Abs(hitboxPos.x);

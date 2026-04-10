@@ -3,14 +3,8 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-
-    [SerializeField] private AudioClip[] hurtSounds;
-    [SerializeField] private AudioClip[] deathSounds;
-    [SerializeField] private AudioClip[] healSounds;
-
     private AudioSource audioSource;
-     
-
+    private EnemyAudio enemyAudio;
     public int maxHealth = 3;
     private int currentHealth;
 
@@ -48,6 +42,8 @@ public class EnemyHealth : MonoBehaviour
 
         if (enemyAnimator == null)
             enemyAnimator = GetComponent<Animator>();
+
+        enemyAudio = GetComponent<EnemyAudio>();
     }
 
     public bool IsInvulnerable()
@@ -77,11 +73,8 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth -= damage;
 
-        if(hurtSounds != null)
-        {
          // play hurt sound
-            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
-        }
+        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -100,12 +93,9 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth -= damage;
 
-        if(hurtSounds != null)
-        {
+
          // play hurt sound for arrow
-            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
-        }
-        
+        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -125,11 +115,8 @@ public class EnemyHealth : MonoBehaviour
 
         currentHealth -= damage;
 
-        if(hurtSounds != null && hurtSounds.Length > 0)
-        {
-         // play hurt sound
-            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
-        }
+        // play hurt sound
+        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -146,11 +133,9 @@ public class EnemyHealth : MonoBehaviour
         isHurt = true;
         enemyAnimator.SetBool("IsHurt", true);
 
-        if(hurtSounds != null && hurtSounds.Length > 0)
-        {
+
          // play hurt sound
-            SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0f);
-        }
+        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0f);
 
         if (archerBottom != null)
             archerBottom.SetActive(false);
@@ -208,7 +193,7 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
 
         // play death sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(deathSounds, transform, 1f, 0f);
+        SoundFXManager.instance.PlayWorldClip(enemyAudio.deathSound, transform, 1f, 0f);
 
         StopAllCoroutines();
 

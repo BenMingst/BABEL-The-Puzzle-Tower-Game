@@ -165,6 +165,7 @@ GameObject:
   - component: {fileID: 2522652290330636136}
   - component: {fileID: 2620209816621303359}
   - component: {fileID: 8973670816672060374}
+  - component: {fileID: 8551907360173960094}
   m_Layer: 3
   m_Name: Archer
   m_TagString: Enemy
@@ -262,17 +263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  jumpSounds: []
-  attackSounds:
-  - {fileID: 8300000, guid: ad2105f2e0a495249a677be9e9a116b9, type: 3}
-  hurtSoundsKnockback:
-  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
-  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
-  hurtSounds:
-  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
-  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
-  deathSounds:
-  - {fileID: 8300000, guid: 241493ea4fd5cce4f93511012c324a87, type: 3}
   maxHealth: 3
   knockbackForce: 3
   enemyHitbox: {fileID: 2571927437160875523}
@@ -371,6 +361,24 @@ MonoBehaviour:
   animator: {fileID: 6064667835193848774}
   facingRight: 1
   platformVelocity: {x: 0, y: 0}
+--- !u!114 &8551907360173960094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2636756626048718034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  attackSounds:
+  - {fileID: 8300000, guid: ad2105f2e0a495249a677be9e9a116b9, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
+  deathSound: {fileID: 8300000, guid: 86316873cf9b0d44cb9772f4726cebdf, type: 3}
 --- !u!1 &3247150508916688906
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,11 +507,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  jumpSounds: []
-  attackSounds: []
-  hurtSoundsKnockback: []
-  hurtSounds: []
-  deathSounds: []
   maxHealth: 3
   knockbackForce: 2
   enemyHitbox: {fileID: 2571927437160875523}

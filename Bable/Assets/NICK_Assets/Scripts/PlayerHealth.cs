@@ -85,7 +85,7 @@ public class PlayerHealth : MonoBehaviour
     public void HealHalfHeart()
     {
         currentHearts += 1;
-        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.player_healSounds, transform, 1f, 0.1f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.healSounds, transform, 1f, 0.1f);
         int heartIndex = currentHearts / 2 - (currentHearts % 2 == 0 ? 1 : 0);
         bool isHalfToFull = currentHearts % 2 == 0;
 
@@ -98,7 +98,7 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator HurtSequence(Vector2 enemyPosition)
     {
         playerController.isHurt = true;
-        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.player_hurtSounds, transform, 1f, 0.1f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.hurtSounds, transform, 1f, 0.1f);
         float knockbackDirection = transform.position.x > enemyPosition.x ? 1f : -1f;
         playerRb.linearVelocity = new Vector2(knockbackDirection * knockbackForce, playerRb.linearVelocity.y);
 
@@ -111,10 +111,10 @@ public class PlayerHealth : MonoBehaviour
         playerController.isHurt = false;
     }
 
-    IEnumerator HurtSequenceNoKnockback()
+    IEnumerator HurtSequenceNoKnockback()       
     {
         playerController.isHurt = true;
-        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.player_hurtSounds, transform, 1f, 0.1f);
+        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.hurtSounds, 1f);
         playerRb.linearVelocity = new Vector2(0, playerRb.linearVelocity.y);
 
         yield return new WaitForSeconds(0.6f);

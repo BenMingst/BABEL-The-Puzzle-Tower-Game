@@ -40,9 +40,6 @@ public class GameManager : MonoBehaviour
             spawnPosition = Vector3.zero;
         }
 
-        if (scene.buildIndex >= 1)
-            hasSword = true;
-
         if (scene.name == "Level_3")
         {
             hasBow = true;
