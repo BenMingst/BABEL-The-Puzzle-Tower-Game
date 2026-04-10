@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Time.timeScale = 1f;
+
         if (scene.buildIndex == 0)
         {
             hasSword = false;

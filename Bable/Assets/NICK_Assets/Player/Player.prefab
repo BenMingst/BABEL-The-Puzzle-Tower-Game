@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 3722.4, y: 2115.2}
+  m_AnchoredPosition: {x: 3844, y: 2157.2}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3286549354853226975
@@ -582,10 +582,10 @@ MonoBehaviour:
   freezeEffect: 0.3
   freezeDuration: 1.5
   afterFreezeDuration: 1
-  freezeOverlayObject: {fileID: 0}
+  freezeOverlayObject: {fileID: 4061250185770819285}
   afterBurnDuration: 1
   afterBurnDamage: 1
-  burnOverlayObject: {fileID: 0}
+  burnOverlayObject: {fileID: 6641222428131495064}
   isDead: 0
   platformVelocity: {x: 0, y: 0}
   animator: {fileID: 0}
@@ -1244,6 +1244,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 04645d32b82bb45ecad9f5cf86acf9ea, type: 3}
+--- !u!1 &4061250185770819285 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6584766135824335296, guid: 04645d32b82bb45ecad9f5cf86acf9ea, type: 3}
+  m_PrefabInstance: {fileID: 7151078970342973205}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4788936901415000081 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2398172102916491012, guid: 04645d32b82bb45ecad9f5cf86acf9ea, type: 3}

@@ -71,9 +71,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: pausePanel
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: deathCanvas
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: ceilingCheck
       value: 
       objectReference: {fileID: 7197804080686655205}
+    - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: optionsPanel
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: bowCooldownUI
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: noSwordAnimator
       value: 
@@ -86,10 +102,6 @@ PrefabInstance:
       propertyPath: dropdownCollider
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
-      propertyPath: freezeOverlayObject
-      value: 
-      objectReference: {fileID: 6584766135824335296, guid: 04645d32b82bb45ecad9f5cf86acf9ea, type: 3}
     - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: freezeOverlayAnimator
       value: 
