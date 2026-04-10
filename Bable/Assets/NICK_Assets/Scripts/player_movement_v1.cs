@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float footstepRate = 0f;
     private float footstepTimer = 0f;
     private AudioSource audioSource;
+    private PlayerAudio playerAudio;
 
     [Header("Menus")]
     public GameObject deathCanvas;
@@ -97,6 +98,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         animator.runtimeAnimatorController = noSwordAnimator;
+        playerAudio = GetComponent<PlayerAudio>();
+        if (playerAudio == null) playerAudio = gameObject.AddComponent<PlayerAudio>();
 
         if (freezeOverlayObject != null)
             freezeOverlayObject.SetActive(false);
@@ -182,7 +185,7 @@ public class PlayerController : MonoBehaviour
             bowCooldownUI.UseArrow();
         SpawnArrowOfType(Arrow.ArrowType.Normal, playerArrowPrefab);
         // play arrow shoot sound
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.normalArrowSpawnSound, transform, 1f, 0f);
+        SoundFXManager.instance.PlaySoundFXClip(playerAudio.normalArrowSpawnSound, transform, 1f, 0f);
     }
 
     public void SpawnIceArrow()
@@ -192,7 +195,7 @@ public class PlayerController : MonoBehaviour
             bowCooldownUI.UseArrow();
         SpawnArrowOfType(Arrow.ArrowType.Ice, iceArrowPrefab);
         // play ice arrow shoot sound
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.iceArrowSpawnSound, transform, 1f, 0f);
+        SoundFXManager.instance.PlaySoundFXClip(playerAudio.iceArrowSpawnSound, transform, 1f, 0f);
     }
 
     public void SpawnFireArrow()
@@ -202,7 +205,7 @@ public class PlayerController : MonoBehaviour
             bowCooldownUI.UseArrow();
         SpawnArrowOfType(Arrow.ArrowType.Fire, fireArrowPrefab);
         // play fire arrow shoot sound
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.fireArrowSpawnSound, transform, 1f, 0f);
+        SoundFXManager.instance.PlaySoundFXClip(playerAudio.fireArrowSpawnSound, transform, 1f, 0f);
     }
 
     void SpawnArrowOfType(Arrow.ArrowType type, GameObject prefab)
@@ -239,7 +242,7 @@ public class PlayerController : MonoBehaviour
             moveSpeed = moveSpeed / freezeEffect;
 
         isFrozen = true;
-        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.freezeSounds, 1f);
+        SoundFXManager.instance.PlayWorldRandom(playerAudio.freezeSounds, transform, 1f);
         float originalSpeed = moveSpeed;
         moveSpeed *= freezeEffect;
 
@@ -270,7 +273,7 @@ public class PlayerController : MonoBehaviour
 
         if (burnOverlayObject != null)
             burnOverlayObject.SetActive(true);
-            SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.burnSounds, 1f);
+            SoundFXManager.instance.PlayWorldRandom(playerAudio.burnSounds, transform, 1f);
 
         yield return new WaitForSeconds(afterBurnDuration);
 
@@ -323,7 +326,7 @@ public class PlayerController : MonoBehaviour
             footstepTimer -= Time.deltaTime;
             if (footstepTimer <= 0f)
             {
-                SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.walkSounds, 1f);
+                SoundFXManager.instance.PlayWorldRandom(playerAudio.walkSounds, transform, 1f);
                 footstepTimer = footstepRate;
             }
         }
@@ -343,7 +346,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-                SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.jumpSounds, 1f);
+                SoundFXManager.instance.PlayWorldRandom(playerAudio.jumpSounds, transform, 1f);
                 jumpTimer = 0f;
             }
         }
@@ -447,7 +450,7 @@ public class PlayerController : MonoBehaviour
     {
         isDropping = true;
 
-        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.dropDownSounds, 1f);
+        SoundFXManager.instance.PlayWorldRandom(playerAudio.dropDownSounds, transform, 1f);
 
         if (dropdownCollider != null)
         {
@@ -473,7 +476,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = true;
         animator.SetBool("IsSlashing", true);
 
-        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.swordSlashAttackSounds, 1f);
+        SoundFXManager.instance.PlayWorldRandom(playerAudio.swordSlashAttackSounds, transform, 1f);
 
         float lungeDirection = facingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
@@ -501,7 +504,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = true;
         rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
-        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.bowAttackSounds, 1f);
+        SoundFXManager.instance.PlayWorldRandom(playerAudio.bowAttackSounds, transform, 1f);
 
         if (ArrowTypeManager.Instance != null)
             ArrowTypeManager.Instance.isShooting = true;
@@ -554,7 +557,7 @@ public class PlayerController : MonoBehaviour
         isRolling = true;
         animator.SetBool("IsRolling", true);
 
-        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.rollSounds, 1f);
+        SoundFXManager.instance.PlayWorldRandom(playerAudio.rollSounds, transform, 1f);
 
         float rollDirection = facingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(rollDirection * 4f, rb.linearVelocity.y);
@@ -579,7 +582,7 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, downAttackBounceForce);
         animator.SetBool("DownAttack", true);
-        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.swordDownAttackSounds, 1f);
+        SoundFXManager.instance.PlayWorldRandom(playerAudio.swordDownAttackSounds, transform, 1f);
     }
 
     void HandleAnimations()

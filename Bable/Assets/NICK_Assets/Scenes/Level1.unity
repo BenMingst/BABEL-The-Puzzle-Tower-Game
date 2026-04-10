@@ -5266,19 +5266,7 @@ PrefabInstance:
       objectReference: {fileID: 890072519}
     - target: {fileID: 2269163977221501584, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: m_Name
-      value: AudioManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: m_Volume
-      value: 0.699
-      objectReference: {fileID: 0}
-    - target: {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: BypassEffects
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: BypassReverbZones
-      value: 0
+      value: SoundManager
       objectReference: {fileID: 0}
     - target: {fileID: 6889544232545088443, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: m_Pivot.x
@@ -5360,12 +5348,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9041303717765630923, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: m_Volume
-      value: 0.627
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 6227837578085784588, guid: 74037d431414ced448303e4834aecb41, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

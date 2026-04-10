@@ -122,6 +122,15 @@ void Awake()
         platformVelocity = Vector2.zero;
     }
 
+    public void InterruptAttack()
+    {
+        if (!isAttacking) return;
+        StopAllCoroutines();
+        isAttacking = false;
+        if (enemyHitbox != null)
+            enemyHitbox.GetComponent<Collider2D>().enabled = false;
+    }
+
     void Flip()
     {
         facingRight = !facingRight;
@@ -148,8 +157,6 @@ void Awake()
         {
             enemyHitbox.GetComponent<Collider2D>().enabled = false;
             isAttacking = false;
-            // delete attack sound object if attack was interrupted
-            GameObject.Destroy(SoundFXManager.instance);
             yield break;
         }
 

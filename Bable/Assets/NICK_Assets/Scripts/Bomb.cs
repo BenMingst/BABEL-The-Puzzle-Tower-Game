@@ -67,7 +67,7 @@ public class Bomb : MonoBehaviour
     IEnumerator ExplosionSequence()
 {
     // play explosion sound
-    SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.bombExplosionSounds, transform, 1f, 0f);
+    SoundFXManager.instance.PlayRandomSoundFXClip(PlayerAudio.instance.bombExplosionSounds, transform, 1f, 0f);
 
     // detach from bomb so it doesn't move with it
     explosionChild.transform.SetParent(null);

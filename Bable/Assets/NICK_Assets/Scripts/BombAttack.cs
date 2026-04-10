@@ -25,6 +25,7 @@ public class BombAttack : MonoBehaviour
     public bool isCrouchingWhenThrown = false;
     private PlayerController pc;
     private Animator animator;
+    private PlayerAudio playerAudio;
 
     void Awake()
     {
@@ -35,6 +36,8 @@ public class BombAttack : MonoBehaviour
     {
         pc = GetComponent<PlayerController>();
         animator = GetComponent<Animator>();
+        playerAudio = GetComponent<PlayerAudio>();
+        if (playerAudio == null) playerAudio = gameObject.AddComponent<PlayerAudio>();
     }
 
     public void StartBombAttack()
@@ -125,7 +128,7 @@ public class BombAttack : MonoBehaviour
         if (spawnPoint == null) spawnPoint = lobSpawnPoint;
 
         // play throw sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.bombThrowSounds, transform, 1f, 0f);
+        SoundFXManager.instance.PlayRandomSoundFXClip(playerAudio.bombThrowSounds, transform, 1f, 0f);
 
         // mirror spawn position if facing left
         Vector3 spawnPos = spawnPoint.position;

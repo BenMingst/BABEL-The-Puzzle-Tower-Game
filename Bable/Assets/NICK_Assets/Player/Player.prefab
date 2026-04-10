@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 1822848614964258274}
   - component: {fileID: 5779299248859136235}
   - component: {fileID: 6847775717163442883}
+  - component: {fileID: -3816343959332907706}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -508,41 +509,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc19eecba5aef4fb285b9472817b21db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  freezeSounds:
-  - {fileID: 8300000, guid: 43d5411f374700a49bcf9ab0f610cfeb, type: 3}
-  burnSounds:
-  - {fileID: 8300000, guid: 4ef4112973440004a8479f2d7d80ee72, type: 3}
-  swordSlashAttackSounds:
-  - {fileID: 8300000, guid: 9beea215faf6cf7418b48a405ad20d48, type: 3}
-  swordDownAttackSounds:
-  - {fileID: 8300000, guid: eebfba4e454bd4442a96942fe33dcd0d, type: 3}
-  bowAttackSounds:
-  - {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
-  bombThrowSounds:
-  - {fileID: 8300000, guid: 41f0899738ea94946ae04046c231c3bf, type: 3}
-  bombExplosionSounds:
-  - {fileID: 8300000, guid: 45e1b6ae94d705c4c8badd99aff8ab0c, type: 3}
-  walkSounds:
-  - {fileID: 8300000, guid: 2e5bcd1b3303cc84ea452fe700f60f65, type: 3}
-  - {fileID: 8300000, guid: 3892b70954637674e9becc4794e0719f, type: 3}
-  - {fileID: 8300000, guid: ad90cb004fc8d454dbcf5394eb5d3bde, type: 3}
-  - {fileID: 8300000, guid: 70667947967f8c74eac664c35c1e3e1f, type: 3}
-  - {fileID: 8300000, guid: ea0e9c19cb7dc794b84aa6fa3849160a, type: 3}
-  - {fileID: 8300000, guid: eebfba4e454bd4442a96942fe33dcd0d, type: 3}
-  - {fileID: 8300000, guid: 6f6aa2bd527e0e8469ab7c1bc818f30c, type: 3}
-  - {fileID: 8300000, guid: 8e178ccd9d813e84b94dc73b9a182efa, type: 3}
-  - {fileID: 8300000, guid: 16ab617c868e96d48ade2ce5c2143de4, type: 3}
-  - {fileID: 8300000, guid: 8e471878c090b7a4b8598b623f4c8c2b, type: 3}
   footstepRate: 0.25
-  dropDownSounds:
-  - {fileID: 8300000, guid: 70667947967f8c74eac664c35c1e3e1f, type: 3}
-  rollSounds:
-  - {fileID: 8300000, guid: 25c4a084f89155c43a3ff41f38e091d7, type: 3}
-  jumpSounds:
-  - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
-  - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
   deathCanvas: {fileID: 0}
   pausePanel: {fileID: 0}
+  optionsPanel: {fileID: 0}
   isPaused: 0
   moveSpeed: 2
   jumpForce: 5
@@ -688,11 +658,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHearts: 3
-  hurtSounds:
-  - {fileID: 8300000, guid: af7125689ae71ac41ab8e7bc4e7128bc, type: 3}
-  - {fileID: 8300000, guid: 035f492011ec9b646aba4907a4cd229e, type: 3}
-  - {fileID: 8300000, guid: 7b46057ae6a89674ab15c3e6640bb93e, type: 3}
-  deathSounds: []
   heartAnimators:
   - {fileID: 0}
   - {fileID: 0}
@@ -780,6 +745,63 @@ MonoBehaviour:
   bombActive: 0
   isWindingUp: 0
   isCrouchingWhenThrown: 0
+--- !u!114 &-3816343959332907706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382934404474534495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8b5956c381cff349bae622d83c6abe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAudio
+  hurtSounds:
+  - {fileID: 8300000, guid: af7125689ae71ac41ab8e7bc4e7128bc, type: 3}
+  - {fileID: 8300000, guid: 035f492011ec9b646aba4907a4cd229e, type: 3}
+  - {fileID: 8300000, guid: 7b46057ae6a89674ab15c3e6640bb93e, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: abe154774de80fb4bb3047f7a156ce65, type: 3}
+  healSounds:
+  - {fileID: 8300000, guid: b7ce443e065b92c4688276983a621b04, type: 3}
+  freezeSounds:
+  - {fileID: 8300000, guid: 43d5411f374700a49bcf9ab0f610cfeb, type: 3}
+  burnSounds:
+  - {fileID: 8300000, guid: 4ef4112973440004a8479f2d7d80ee72, type: 3}
+  swordSlashAttackSounds:
+  - {fileID: 8300000, guid: 9beea215faf6cf7418b48a405ad20d48, type: 3}
+  swordDownAttackSounds:
+  - {fileID: 8300000, guid: eebfba4e454bd4442a96942fe33dcd0d, type: 3}
+  bowAttackSounds:
+  - {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  normalArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  iceArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  fireArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  arrowHitWallSounds:
+  - {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
+  bombThrowSounds:
+  - {fileID: 8300000, guid: 41f0899738ea94946ae04046c231c3bf, type: 3}
+  bombExplosionSounds:
+  - {fileID: 8300000, guid: 45e1b6ae94d705c4c8badd99aff8ab0c, type: 3}
+  walkSounds:
+  - {fileID: 8300000, guid: 2e5bcd1b3303cc84ea452fe700f60f65, type: 3}
+  - {fileID: 8300000, guid: 3892b70954637674e9becc4794e0719f, type: 3}
+  - {fileID: 8300000, guid: ad90cb004fc8d454dbcf5394eb5d3bde, type: 3}
+  - {fileID: 8300000, guid: 70667947967f8c74eac664c35c1e3e1f, type: 3}
+  - {fileID: 8300000, guid: ea0e9c19cb7dc794b84aa6fa3849160a, type: 3}
+  - {fileID: 8300000, guid: eebfba4e454bd4442a96942fe33dcd0d, type: 3}
+  - {fileID: 8300000, guid: 6f6aa2bd527e0e8469ab7c1bc818f30c, type: 3}
+  - {fileID: 8300000, guid: 8e178ccd9d813e84b94dc73b9a182efa, type: 3}
+  - {fileID: 8300000, guid: 16ab617c868e96d48ade2ce5c2143de4, type: 3}
+  - {fileID: 8300000, guid: 8e471878c090b7a4b8598b623f4c8c2b, type: 3}
+  dropDownSounds:
+  - {fileID: 8300000, guid: eebfba4e454bd4442a96942fe33dcd0d, type: 3}
+  rollSounds:
+  - {fileID: 8300000, guid: 25c4a084f89155c43a3ff41f38e091d7, type: 3}
+  jumpSounds:
+  - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
+  - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
 --- !u!1 &6641222428131495064
 GameObject:
   m_ObjectHideFlags: 0

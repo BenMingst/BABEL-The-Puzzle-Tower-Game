@@ -66,11 +66,18 @@ public class EnemyHealth : MonoBehaviour
         return false;
     }
 
+    void CancelAttack()
+    {
+        EnemyAI ai = GetComponent<EnemyAI>();
+        if (ai != null) ai.InterruptAttack();
+    }
+
     public void TakeDamage(int damage)
     {
         if (isHurt) return;
         if (IsInvulnerable()) return;
 
+        CancelAttack();
         currentHealth -= damage;
 
          // play hurt sound
@@ -91,6 +98,7 @@ public class EnemyHealth : MonoBehaviour
         if (isHurt) return;
         if (IsInvulnerable()) return;
 
+        CancelAttack();
         currentHealth -= damage;
 
 
@@ -113,6 +121,7 @@ public class EnemyHealth : MonoBehaviour
         if (isHurt) return;
         if (IsInvulnerable()) return;
 
+        CancelAttack();
         currentHealth -= damage;
 
         // play hurt sound
