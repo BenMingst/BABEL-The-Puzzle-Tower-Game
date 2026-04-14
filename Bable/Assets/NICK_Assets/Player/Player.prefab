@@ -510,9 +510,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   footstepRate: 0.25
-  deathCanvas: {fileID: 0}
-  pausePanel: {fileID: 0}
-  optionsPanel: {fileID: 0}
+  deathCanvas: {fileID: 5248002497257819859, guid: 8b762d4f77c4d894fa1c18a4de09ebbb, type: 3}
+  pausePanel: {fileID: 7964353206513682092, guid: 37be0fd953f378045bc28e724ae4a60b, type: 3}
+  optionsPanel: {fileID: 2469513643874604947, guid: 7ca00c62193e4e149b32069caa6117a2, type: 3}
   isPaused: 0
   moveSpeed: 2
   jumpForce: 5
@@ -530,7 +530,7 @@ MonoBehaviour:
   ceilingLayer:
     serializedVersion: 2
     m_Bits: 64
-  dropdownCollider: {fileID: 0}
+  dropdownCollider: {fileID: 2850864575264532610}
   dropdownCooldown: 0.5
   slashDuration: 0.5
   slashHitbox: {fileID: 4218304765587284175}
