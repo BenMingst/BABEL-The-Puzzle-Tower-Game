@@ -201,6 +201,8 @@ MonoBehaviour:
   - {fileID: 2636756626048718034, guid: ee928d87469784976ad5ec4a2701cb74, type: 3}
   - {fileID: 931650629627962251, guid: 220ca1d644c614152aa94255292ccbac, type: 3}
   - {fileID: 509796635320564794, guid: fc888a5e3925643ed85522022a22684b, type: 3}
+  archerPrefab: {fileID: 2636756626048718034, guid: ee928d87469784976ad5ec4a2701cb74, type: 3}
+  maxArcherCount: 1
   normalEvilEyePrefab: {fileID: 2446464754789755977, guid: 1876e38a99b724fd09eb203b5c3b339b, type: 3}
   iceEvilEyePrefab: {fileID: 2273691956520072108, guid: 3c68be62198f64ded83ac25967a58f26, type: 3}
   fireEvilEyePrefab: {fileID: 7423117235930434874, guid: 944f9cb3ae081482a9b5214dc11e3f0e, type: 3}

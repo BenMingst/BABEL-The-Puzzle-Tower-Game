@@ -106,6 +106,15 @@ public class Arrow : MonoBehaviour
                 return;
             }
 
+            // check serpent
+            SerpentHealth serpentHealth = other.GetComponentInParent<SerpentHealth>();
+            if (serpentHealth != null)
+            {
+                serpentHealth.TakeDamage(damage);
+                StartCoroutine(HitAndDestroy());
+                return;
+            }
+
             // check armored skelly
             ArmoredSkellyHealth armoredHealth = other.GetComponentInParent<ArmoredSkellyHealth>();
             if (armoredHealth != null)

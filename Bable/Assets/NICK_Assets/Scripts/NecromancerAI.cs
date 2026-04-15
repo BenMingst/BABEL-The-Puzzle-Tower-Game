@@ -9,6 +9,8 @@ public class NecromancerAI : MonoBehaviour
 
     [Header("Enemy Prefabs")]
     public GameObject[] regularEnemyPrefabs;
+    public GameObject archerPrefab;
+    public int maxArcherCount = 1;
     public GameObject normalEvilEyePrefab;
     public GameObject iceEvilEyePrefab;
     public GameObject fireEvilEyePrefab;
@@ -37,9 +39,9 @@ public class NecromancerAI : MonoBehaviour
     public GameObject teleportOutPrefab;
     public GameObject teleportInPrefab;
     public float teleportMinDistance = 5f;
-    public float teleportMaxDistance = 15f;
-    public float groundCheckWidth = 5f;
     public float teleportDisappearDuration = 0.5f;
+    public float groundCheckWidth = 5f;
+    public BoxCollider2D teleportZone;
 
     [Header("Animation")]
     public Animator animator;
@@ -51,6 +53,7 @@ public class NecromancerAI : MonoBehaviour
     private Coroutine staggerCoroutine = null;
     public List<GameObject> spawnedEnemies = new List<GameObject>();
     private List<GameObject> spawnedEvilEyes = new List<GameObject>();
+    private List<GameObject> spawnedArchers = new List<GameObject>();
     private GameObject indicatorEnemy = null;
     private EnemyHealth necroHealth;
     private GameObject player;
@@ -81,6 +84,7 @@ public class NecromancerAI : MonoBehaviour
 
         spawnedEnemies.RemoveAll(e => e == null);
         spawnedEvilEyes.RemoveAll(e => e == null);
+        spawnedArchers.RemoveAll(e => e == null);
 
         if (spawnedEnemies.Count < spawnCap)
         {
@@ -117,10 +121,8 @@ public class NecromancerAI : MonoBehaviour
         while (elapsed < staggerDuration)
         {
             elapsed += Time.deltaTime;
-
             if (staggerHitCount >= 2)
                 break;
-
             yield return null;
         }
 
@@ -148,83 +150,83 @@ public class NecromancerAI : MonoBehaviour
         staggerCoroutine = null;
         StartCoroutine(EndStaggerSequence());
     }
+
     IEnumerator EndStaggerSequence()
-{
-    // wait for hurt animation to finish
-    yield return new WaitForSeconds(0.75f);
-    StartCoroutine(TeleportSequence());
-}
+    {
+        yield return new WaitForSeconds(0.75f);
+        StartCoroutine(TeleportSequence());
+    }
 
     IEnumerator TeleportSequence()
-{
-    if (teleportOutPrefab != null)
-        Instantiate(teleportOutPrefab, transform.position, Quaternion.identity);
-
-    SpriteRenderer sr = GetComponent<SpriteRenderer>();
-    CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
-    Rigidbody2D rb = GetComponent<Rigidbody2D>();
-
-    if (sr != null) sr.enabled = false;
-    if (col != null) col.enabled = false;
-
-    // freeze position so gravity doesn't pull it down while invisible
-    if (rb != null)
     {
-        rb.linearVelocity = Vector2.zero;
-        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        if (teleportOutPrefab != null)
+            Instantiate(teleportOutPrefab, transform.position, Quaternion.identity);
+
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+        if (sr != null) sr.enabled = false;
+        if (col != null) col.enabled = false;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        }
+
+        yield return new WaitForSeconds(teleportDisappearDuration);
+
+        Vector2? newPos = GetTeleportPosition();
+        if (newPos != null)
+            transform.position = newPos.Value;
+
+        if (teleportInPrefab != null)
+            Instantiate(teleportInPrefab, transform.position, Quaternion.identity);
+
+        yield return new WaitForSeconds(teleportDisappearDuration);
+
+        if (rb != null)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            rb.linearVelocity = Vector2.zero;
+        }
+
+        if (sr != null) sr.enabled = true;
+        if (col != null) col.enabled = true;
+
+        if (necroBarrier != null)
+            necroBarrier.SetActive(true);
+
+        animator.SetTrigger("StaggerEnd");
     }
-
-    yield return new WaitForSeconds(teleportDisappearDuration);
-
-    Vector2? newPos = GetTeleportPosition();
-    if (newPos != null)
-        transform.position = newPos.Value;
-
-    if (teleportInPrefab != null)
-        Instantiate(teleportInPrefab, transform.position, Quaternion.identity);
-
-    yield return new WaitForSeconds(teleportDisappearDuration);
-
-    // restore constraints
-    if (rb != null)
-    {
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        rb.linearVelocity = Vector2.zero;
-    }
-
-    if (sr != null) sr.enabled = true;
-    if (col != null) col.enabled = true;
-
-    if (necroBarrier != null)
-        necroBarrier.SetActive(true);
-
-    animator.SetTrigger("StaggerEnd");
-}
 
     Vector2? GetTeleportPosition()
     {
         if (player == null) return null;
 
+        Bounds bounds = teleportZone != null ?
+            teleportZone.bounds :
+            new Bounds(transform.position, new Vector3(20f, 10f, 0f));
+
         int maxAttempts = 20;
 
         for (int i = 0; i < maxAttempts; i++)
         {
-            float angle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            float distance = Random.Range(teleportMinDistance, teleportMaxDistance);
+            float randomX = Random.Range(bounds.min.x, bounds.max.x);
+            float randomY = Random.Range(bounds.min.y, bounds.max.y);
 
-            Vector2 candidatePos = new Vector2(
-                transform.position.x + Mathf.Cos(angle) * distance,
-                transform.position.y + Mathf.Sin(angle) * distance);
+            Vector2 candidatePos = new Vector2(randomX, randomY);
 
-            RaycastHit2D hit = Physics2D.Raycast(candidatePos, Vector2.down, 20f, groundLayer);
+            float distToPlayer = Vector2.Distance(candidatePos, player.transform.position);
+            if (distToPlayer < teleportMinDistance) continue;
+
+            RaycastHit2D hit = Physics2D.Raycast(candidatePos, Vector2.down, bounds.size.y, groundLayer);
             if (hit.collider == null) continue;
 
-            Vector2 groundPos = new Vector2(candidatePos.x, hit.point.y + 1f);
+            Vector2 groundPos = new Vector2(randomX, hit.point.y + 1.5f);
 
             if (!IsGroundWideEnough(groundPos)) continue;
-
-            float distToPlayer = Vector2.Distance(groundPos, player.transform.position);
-            if (distToPlayer < teleportMinDistance) continue;
 
             return groundPos;
         }
@@ -252,6 +254,7 @@ public class NecromancerAI : MonoBehaviour
     {
         spawnedEnemies.RemoveAll(e => e == null);
         spawnedEvilEyes.RemoveAll(e => e == null);
+        spawnedArchers.RemoveAll(e => e == null);
         int currentCount = spawnedEnemies.Count;
 
         int spawnCount;
@@ -330,6 +333,7 @@ public class NecromancerAI : MonoBehaviour
     GameObject SpawnEnemy(Vector2 position)
     {
         spawnedEvilEyes.RemoveAll(e => e == null);
+        spawnedArchers.RemoveAll(e => e == null);
 
         GameObject prefabToSpawn = null;
 
@@ -346,8 +350,13 @@ public class NecromancerAI : MonoBehaviour
 
         if (prefabToSpawn == null)
         {
-            if (regularEnemyPrefabs.Length == 0) return null;
-            prefabToSpawn = regularEnemyPrefabs[Random.Range(0, regularEnemyPrefabs.Length)];
+            List<GameObject> availablePrefabs = new List<GameObject>(regularEnemyPrefabs);
+
+            if (spawnedArchers.Count >= maxArcherCount && archerPrefab != null)
+                availablePrefabs.Remove(archerPrefab);
+
+            if (availablePrefabs.Count == 0) return null;
+            prefabToSpawn = availablePrefabs[Random.Range(0, availablePrefabs.Count)];
         }
 
         GameObject enemy = Instantiate(prefabToSpawn, position, Quaternion.identity);
@@ -357,6 +366,9 @@ public class NecromancerAI : MonoBehaviour
             prefabToSpawn == iceEvilEyePrefab ||
             prefabToSpawn == fireEvilEyePrefab)
             spawnedEvilEyes.Add(enemy);
+
+        if (prefabToSpawn == archerPrefab)
+            spawnedArchers.Add(enemy);
 
         return enemy;
     }
@@ -439,6 +451,18 @@ public class NecromancerAI : MonoBehaviour
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, minSpawnDistance + capsuleCollider.size.x * 0.5f);
+        }
+
+        if (teleportZone != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(teleportZone.bounds.center, teleportZone.bounds.size);
+        }
+
+        if (spawnZone != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(spawnZone.bounds.center, spawnZone.bounds.size);
         }
     }
 }

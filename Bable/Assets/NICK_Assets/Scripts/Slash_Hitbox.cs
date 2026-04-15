@@ -35,6 +35,14 @@ public class SlashHitbox : MonoBehaviour
                 }
             }
 
+            // check serpent
+            SerpentHealth serpentHealth = other.GetComponentInParent<SerpentHealth>();
+            if (serpentHealth != null)
+            {
+                serpentHealth.TakeDamage(damage);
+                return;
+            }
+
             // normal enemy
             other.GetComponentInParent<EnemyHealth>()?.TakeDamageWithKnockback(damage, transform.position);
         }

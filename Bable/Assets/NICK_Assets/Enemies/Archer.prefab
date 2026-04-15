@@ -262,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 3
+  maxHealth: 2
   knockbackForce: 3
   enemyHitbox: {fileID: 2571927437160875523}
   heartDropPrefab: {fileID: 473149016297637182, guid: 78070332487794d7f83e2f3ed31cd1c6, type: 3}
@@ -488,7 +488,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 3
+  maxHealth: 2
   knockbackForce: 2
   enemyHitbox: {fileID: 2571927437160875523}
   heartDropPrefab: {fileID: 473149016297637182, guid: 78070332487794d7f83e2f3ed31cd1c6, type: 3}

@@ -82,6 +82,14 @@ public class Bomb : MonoBehaviour
                 continue;
             }
 
+            // check serpent
+            SerpentHealth serpentHealth = hit.GetComponentInParent<SerpentHealth>();
+            if (serpentHealth != null)
+            {
+                serpentHealth.TakeDamage(damage);
+                continue;
+            }
+
             // check armored skelly
             ArmoredSkellyHealth armoredHealth = hit.GetComponentInParent<ArmoredSkellyHealth>();
             if (armoredHealth != null)

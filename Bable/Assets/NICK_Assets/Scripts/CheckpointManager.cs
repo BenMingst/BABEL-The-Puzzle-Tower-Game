@@ -13,6 +13,8 @@ public class CheckpointState
     public List<string> openedChests = new List<string>();
     public List<string> deadEnemies = new List<string>();
     public List<string> openedEnemyDoors = new List<string>();
+    public List<string> bombledSkulls = new List<string>();
+    public List<string> permanentlyOpenedDoors = new List<string>();
     public bool hasBow;
     public bool hasBomb;
     public bool hasFireArrows;
@@ -77,6 +79,16 @@ public class CheckpointManager : MonoBehaviour
             if (door.isOpened)
                 savedState.openedEnemyDoors.Add(door.persistentID);
 
+        // save bombed skulls
+        foreach (var skull in FindObjectsOfType<BombableSkull>())
+            if (skull.hasBeenBombed && !string.IsNullOrEmpty(skull.persistentID))
+                savedState.bombledSkulls.Add(skull.persistentID);
+
+        // save permanently opened doors via skull manager
+        foreach (var manager in FindObjectsOfType<BombableSkullManager>())
+            if (manager.doorOpened && !string.IsNullOrEmpty(manager.persistentID))
+                savedState.permanentlyOpenedDoors.Add(manager.persistentID);
+
         savedState.hasBow = GameManager.hasBow;
         savedState.hasBomb = GameManager.hasBomb;
         savedState.hasFireArrows = ArrowTypeManager.Instance != null && ArrowTypeManager.Instance.hasFireArrows;
@@ -128,6 +140,24 @@ public class CheckpointManager : MonoBehaviour
         foreach (var door in FindObjectsOfType<EnemyDoor>())
             if (savedState.openedEnemyDoors.Contains(door.persistentID))
                 door.RestoreOpened();
+
+        // restore bombed skulls
+        foreach (var skull in FindObjectsOfType<BombableSkull>())
+            if (!string.IsNullOrEmpty(skull.persistentID) &&
+                savedState.bombledSkulls.Contains(skull.persistentID))
+                skull.RestoreBombed();
+
+        // restore permanently opened doors
+        foreach (var manager in FindObjectsOfType<BombableSkullManager>())
+        {
+            if (!string.IsNullOrEmpty(manager.persistentID) &&
+                savedState.permanentlyOpenedDoors.Contains(manager.persistentID))
+            {
+                manager.doorOpened = true;
+                if (manager.linkedDoor != null)
+                    manager.linkedDoor.RestorePermanentlyOpened();
+            }
+        }
 
         GameManager.hasBow = savedState.hasBow;
         GameManager.hasBomb = savedState.hasBomb;

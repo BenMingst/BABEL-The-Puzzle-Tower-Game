@@ -42,6 +42,15 @@ public class DownAttackHitbox : MonoBehaviour
                 }
             }
 
+            // check serpent
+            SerpentHealth serpentHealth = other.GetComponentInParent<SerpentHealth>();
+            if (serpentHealth != null)
+            {
+                serpentHealth.TakeDamage(damage);
+                playerController.DownAttackBounce();
+                return;
+            }
+
             // normal enemy
             EnemyHealth enemyHealth = other.GetComponentInParent<EnemyHealth>();
             if (enemyHealth != null)

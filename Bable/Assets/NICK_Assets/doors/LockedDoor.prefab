@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38e71a90abfa4c5db13e83753996444, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LockedDoor
+  persistentID: 
   doorAnimator: {fileID: 7621574052186171359}
   doorCollider: {fileID: 3757439379524234900}
   cutscenePanel: {fileID: 0}
@@ -115,6 +116,7 @@ MonoBehaviour:
   noKeyDialogue:
   - Looks like this door needs a key...
   - Go find one!
+  isUnlocked: 0
   inCutscene: 0
 --- !u!95 &7621574052186171359
 Animator:
@@ -172,10 +174,10 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 2}
+  m_Offset: {x: 0, y: 3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
+    pivot: {x: 0.5, y: -0.25}
     oldSize: {x: 1.125, y: 4}
     newSize: {x: 1.125, y: 4}
     adaptiveTilingThreshold: 0.5
@@ -218,10 +220,10 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 2}
+  m_Offset: {x: 0, y: 3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
+    pivot: {x: 0.5, y: -0.25}
     oldSize: {x: 1.125, y: 4}
     newSize: {x: 1.125, y: 4}
     adaptiveTilingThreshold: 0.5
