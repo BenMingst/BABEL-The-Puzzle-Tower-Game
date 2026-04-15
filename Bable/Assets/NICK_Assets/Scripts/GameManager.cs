@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public static int furthestCheckpoint = 0;
     public static bool hasSword = false;
     public static bool hasBow = false;
+    public static bool hasBomb = false;
 
     public Transform defaultSpawnPoint;
 
@@ -28,12 +29,11 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("OnSceneLoaded fired, scene index: " + scene.buildIndex);
-
         if (scene.buildIndex == 0)
         {
             hasSword = false;
             hasBow = false;
+            hasBomb = false;
             furthestCheckpoint = 0;
             hasCustomSpawn = false;
             respawnWithSword = false;
@@ -42,7 +42,13 @@ public class GameManager : MonoBehaviour
 
         if (scene.buildIndex >= 1)
             hasSword = true;
-        // bow is never auto equipped - only from chest
+
+        if (scene.name == "Level_3")
+        {
+            hasBow = true;
+            hasBomb = true;
+        }
+
     }
 
     void OnDestroy()
@@ -54,12 +60,13 @@ public class GameManager : MonoBehaviour
     {
         hasSword = false;
         hasBow = false;
+        hasBomb = false;
         furthestCheckpoint = 0;
         hasCustomSpawn = false;
         respawnWithSword = false;
     }
 
-    public void ReachedCheckpoint(int checkpointIndex, Vector3 position, bool sword)
+    public bool ReachedCheckpoint(int checkpointIndex, Vector3 position, bool sword)
     {
         if (checkpointIndex > furthestCheckpoint)
         {
@@ -67,7 +74,9 @@ public class GameManager : MonoBehaviour
             spawnPosition = position;
             hasCustomSpawn = true;
             if (sword) respawnWithSword = true;
+            return true;
         }
+        return false;
     }
 
     public void TryAgain()

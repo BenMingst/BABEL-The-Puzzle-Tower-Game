@@ -4,6 +4,8 @@ using TMPro;
 
 public class LockedDoor : MonoBehaviour
 {
+    public string persistentID;
+
     [Header("Animator")]
     public Animator doorAnimator;
 
@@ -17,7 +19,7 @@ public class LockedDoor : MonoBehaviour
     [TextArea] public string[] noKeyDialogue;
 
     private bool playerNearby = false;
-    private bool isUnlocked = false;
+    public bool isUnlocked = false;
     public bool inCutscene = false;
 
     void Start()
@@ -50,15 +52,20 @@ public class LockedDoor : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (KeyManager.Instance.GetKeyCount() <= 0)
-            {
                 StartCoroutine(NoKeySequence());
-            }
             else
-            {
                 StartCoroutine(UnlockDoor());
-            }
         }
     }
+
+   public void RestoreUnlocked()
+{
+    isUnlocked = true;
+    if (doorAnimator != null)
+        doorAnimator.Play("Opened");
+    if (doorCollider != null)
+        doorCollider.enabled = false;
+}
 
     IEnumerator NoKeySequence()
     {
@@ -109,7 +116,6 @@ public class LockedDoor : MonoBehaviour
             doorAnimator.SetTrigger("Unlock");
         }
 
-        // wait for unlock animation to finish
         yield return new WaitForSeconds(1f);
 
         if (doorCollider != null)

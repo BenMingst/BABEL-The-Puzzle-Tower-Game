@@ -4,7 +4,9 @@ using TMPro;
 
 public class Chest : MonoBehaviour
 {
-    public enum ChestItemType { Sword, Bow, SmallKey, FireArrows, IceArrows }
+    public enum ChestItemType { Sword, Bow, SmallKey, FireArrows, IceArrows, Bomb }
+
+    public string persistentID;
 
     [Header("Sprites")]
     public SpriteRenderer chestRenderer;
@@ -23,12 +25,18 @@ public class Chest : MonoBehaviour
     [TextArea] public string[] dialogueLines;
 
     private bool playerNearby = false;
-    private bool isOpened = false;
+    public bool isOpened = false;
     public bool inCutscene = false;
 
     void Start()
     {
         cutscenePanel.SetActive(false);
+    }
+
+    public void RestoreOpened()
+    {
+        isOpened = true;
+        chestRenderer.sprite = openedSprite;
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -65,7 +73,19 @@ public class Chest : MonoBehaviour
 
         if (playerAnimator != null)
         {
-            Debug.Log("runtimeAnimatorController null: " + (playerAnimator.runtimeAnimatorController == null));
+            PlayerController pc = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+
+            playerAnimator.ResetTrigger("ChestOpen");
+            playerAnimator.ResetTrigger("GotKey");
+            playerAnimator.ResetTrigger("GotFireArrows");
+            playerAnimator.ResetTrigger("GotIceArrows");
+            playerAnimator.ResetTrigger("BowPickup");
+            playerAnimator.ResetTrigger("BowPickupEnd");
+            playerAnimator.ResetTrigger("ItemPickup");
+            playerAnimator.ResetTrigger("ItemPickupEnd");
+            playerAnimator.ResetTrigger("ChestOpenEnd");
+
+            playerAnimator.runtimeAnimatorController = pc.noSwordAnimator;
             playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
 
             if (itemType == ChestItemType.SmallKey ||
@@ -74,18 +94,11 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("ChestOpen");
             else if (itemType == ChestItemType.Sword)
                 playerAnimator.SetTrigger("ItemPickup");
-            else if (itemType == ChestItemType.Bow)
+            else if (itemType == ChestItemType.Bow || itemType == ChestItemType.Bomb)
                 playerAnimator.SetTrigger("ChestOpen");
-        }
-        else
-        {
-            Debug.Log("playerAnimator is NULL");
-        }
 
-        yield return new WaitForSecondsRealtime(1.4f);
+            yield return new WaitForSecondsRealtime(1.4f);
 
-        if (playerAnimator != null)
-        {
             if (itemType == ChestItemType.SmallKey)
                 playerAnimator.SetTrigger("GotKey");
             else if (itemType == ChestItemType.FireArrows)
@@ -94,56 +107,59 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("GotIceArrows");
             else if (itemType == ChestItemType.Sword)
                 playerAnimator.SetTrigger("ItemPickup");
-            else if (itemType == ChestItemType.Bow)
+            else if (itemType == ChestItemType.Bow || itemType == ChestItemType.Bomb)
                 playerAnimator.SetTrigger("BowPickup");
-        }
 
-        cutscenePanel.SetActive(true);
-        int currentLine = 0;
-        dialogueText.text = dialogueLines[currentLine];
+            cutscenePanel.SetActive(true);
+            int currentLine = 0;
+            dialogueText.text = dialogueLines[currentLine];
 
-        Coroutine flashCoroutine = StartCoroutine(FlashPrompt());
+            Coroutine flashCoroutine = StartCoroutine(FlashPrompt());
 
-        while (currentLine < dialogueLines.Length)
-        {
-            yield return null;
-            if (Input.GetKeyDown(KeyCode.E))
+            while (currentLine < dialogueLines.Length)
             {
-                currentLine++;
-                if (currentLine < dialogueLines.Length)
-                    dialogueText.text = dialogueLines[currentLine];
-                else
-                    break;
+                yield return null;
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    currentLine++;
+                    if (currentLine < dialogueLines.Length)
+                        dialogueText.text = dialogueLines[currentLine];
+                    else
+                        break;
+                }
             }
-        }
 
-        StopCoroutine(flashCoroutine);
-        promptText.enabled = true;
-        cutscenePanel.SetActive(false);
+            StopCoroutine(flashCoroutine);
+            promptText.enabled = true;
+            cutscenePanel.SetActive(false);
 
-        PlayerController pc = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
-        if (itemType == ChestItemType.Sword)
-            pc.EquipSword();
-        else if (itemType == ChestItemType.Bow)
-            pc.EquipBow();
-        else if (itemType == ChestItemType.SmallKey)
-            KeyManager.Instance.AddKey();
-        else if (itemType == ChestItemType.FireArrows)
-            ArrowTypeManager.Instance.UnlockFireArrows();
-        else if (itemType == ChestItemType.IceArrows)
-            ArrowTypeManager.Instance.UnlockIceArrows();
+            PlayerController pcEquip = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+            if (itemType == ChestItemType.Sword)
+                pcEquip.EquipSword();
+            else if (itemType == ChestItemType.Bow)
+                pcEquip.EquipBow();
+            else if (itemType == ChestItemType.Bomb)
+                pcEquip.EquipBomb();
+            else if (itemType == ChestItemType.SmallKey)
+                KeyManager.Instance.AddKey();
+            else if (itemType == ChestItemType.FireArrows)
+                ArrowTypeManager.Instance.UnlockFireArrows();
+            else if (itemType == ChestItemType.IceArrows)
+                ArrowTypeManager.Instance.UnlockIceArrows();
 
-        if (playerAnimator != null)
-        {
-            playerAnimator.updateMode = AnimatorUpdateMode.Normal;
             if (itemType == ChestItemType.Sword)
                 playerAnimator.SetTrigger("ItemPickupEnd");
-            else if (itemType == ChestItemType.Bow)
+            else if (itemType == ChestItemType.Bow || itemType == ChestItemType.Bomb)
                 playerAnimator.SetTrigger("BowPickupEnd");
             else if (itemType == ChestItemType.SmallKey ||
                      itemType == ChestItemType.FireArrows ||
                      itemType == ChestItemType.IceArrows)
                 playerAnimator.SetTrigger("ChestOpenEnd");
+
+            playerAnimator.updateMode = AnimatorUpdateMode.Normal;
+
+            if (itemType != ChestItemType.Sword && itemType != ChestItemType.Bow && itemType != ChestItemType.Bomb)
+                InventoryManager.Instance.SelectCurrentSlot();
         }
 
         Time.timeScale = 1f;

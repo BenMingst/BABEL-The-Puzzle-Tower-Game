@@ -33,6 +33,10 @@ public class PlayerController : MonoBehaviour
     public GameObject downAttackHitbox;
     public float downAttackBounceForce = 8f;
 
+    [Header("Doink")]
+    public float doinkDuration = 0.575f;
+    public float doinkKnockbackForce = 1.5f;
+
     [Header("Down Attack")]
     public float downAttackDelay = 0.15f;
     private float jumpTimer = 0f;
@@ -48,8 +52,10 @@ public class PlayerController : MonoBehaviour
     public RuntimeAnimatorController noSwordAnimator;
     public RuntimeAnimatorController swordAnimator;
     public RuntimeAnimatorController bowAnimator;
+    public RuntimeAnimatorController bombAnimator;
     public bool hasSword = false;
     public bool hasBow = false;
+    public bool hasBomb = false;
 
     [Header("Freeze Effect")]
     public float freezeEffect = 0.3f;
@@ -104,6 +110,13 @@ public class PlayerController : MonoBehaviour
         InventoryManager.Instance.AddItem(1, bowAnimator);
     }
 
+    public void EquipBomb()
+    {
+        hasBomb = true;
+        GameManager.hasBomb = true;
+        InventoryManager.Instance.AddItem(2, bombAnimator);
+    }
+
     public void SetInsideDropdown(bool value)
     {
         isInsideDropdown = value;
@@ -119,6 +132,17 @@ public class PlayerController : MonoBehaviour
         return hasBow && InventoryManager.Instance != null && InventoryManager.Instance.IsBowSelected();
     }
 
+    bool CanUseBomb()
+    {
+        return hasBomb && InventoryManager.Instance != null && InventoryManager.Instance.IsBombSelected();
+    }
+
+    public void OnBombExploded()
+    {
+        BombAttack ba = GetComponent<BombAttack>();
+        if (ba != null) ba.OnBombExploded();
+    }
+
     public void OnDeath()
     {
         isDead = true;
@@ -126,6 +150,9 @@ public class PlayerController : MonoBehaviour
         rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         transform.position = new Vector3(transform.position.x, transform.position.y - 0.1f, transform.position.z);
+
+        animator.runtimeAnimatorController = swordAnimator;
+        animator.updateMode = AnimatorUpdateMode.Normal;
 
         if (facingRight)
             animator.SetTrigger("DeathRight");
@@ -240,6 +267,79 @@ public class PlayerController : MonoBehaviour
         burnCoroutine = null;
     }
 
+    bool IsHittingInvulnerableEnemy()
+    {
+        if (slashHitbox == null) return false;
+
+        Collider2D hitboxCol = slashHitbox.GetComponent<Collider2D>();
+        if (hitboxCol == null) return false;
+
+        bool wasActive = slashHitbox.activeSelf;
+        slashHitbox.SetActive(true);
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            slashHitbox.transform.position,
+            hitboxCol.bounds.size,
+            0f);
+
+        if (!wasActive) slashHitbox.SetActive(false);
+
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.CompareTag("Player")) continue;
+            if (hit.isTrigger) continue;
+
+            // check necromancer
+            NecromancerHealth necroHealth = hit.GetComponentInParent<NecromancerHealth>();
+            if (necroHealth != null)
+            {
+                NecromancerAI necroAI = necroHealth.GetComponent<NecromancerAI>();
+                if (necroAI != null && !necroAI.IsVulnerable()) return true;
+            }
+
+            // check normal enemy invulnerability
+            EnemyHealth enemyHealth = hit.GetComponentInParent<EnemyHealth>();
+            if (enemyHealth != null && enemyHealth.IsInvulnerable()) return true;
+
+            // check armored skelly
+            ArmoredSkellyHealth armoredHealth = hit.GetComponentInParent<ArmoredSkellyHealth>();
+            if (armoredHealth != null)
+            {
+                ArmoredSkellyAI ai = armoredHealth.GetComponent<ArmoredSkellyAI>();
+                if (ai != null && ai.isArmored) return true;
+            }
+
+            // check ground layer
+            if (((1 << hit.gameObject.layer) & groundLayer) != 0) return true;
+        }
+
+        return false;
+    }
+
+    IEnumerator DoinkAttack()
+    {
+        isAttacking = true;
+
+        if (facingRight)
+            animator.SetTrigger("DoinkRight");
+        else
+            animator.SetTrigger("DoinkLeft");
+
+        float knockbackDirection = facingRight ? -1f : 1f;
+        rb.linearVelocity = new Vector2(knockbackDirection * doinkKnockbackForce, rb.linearVelocity.y);
+
+        slashHitbox.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        slashHitbox.SetActive(false);
+
+        rb.linearVelocity = new Vector2(knockbackDirection * 0.5f, rb.linearVelocity.y);
+
+        yield return new WaitForSeconds(doinkDuration - 0.1f);
+
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        isAttacking = false;
+    }
+
     void Update()
     {
         if (isDead) return;
@@ -260,16 +360,25 @@ public class PlayerController : MonoBehaviour
         OneWayDoorExit exitDoor = FindObjectOfType<OneWayDoorExit>();
         if (exitDoor != null && exitDoor.inCutscene) return;
 
+        Sign sign = FindObjectOfType<Sign>();
+        if (sign != null && sign.inCutscene) return;
+
         horizontalInput = 0f;
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
         if (Input.GetKey(KeyCode.D)) horizontalInput = 1f;
 
         isCrouching = (Input.GetKey(KeyCode.S) || (!HasRoomToStand() && isGrounded)) && isGrounded && !isAttacking && !isRolling && !isHurt;
 
+        BombAttack ba = GetComponent<BombAttack>();
+
         if (Input.GetKeyDown(KeyCode.W) && isGrounded && HasRoomToStand())
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            jumpTimer = 0f;
+            if (ba != null && ba.isWindingUp) { }
+            else
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                jumpTimer = 0f;
+            }
         }
 
         if (!isGrounded)
@@ -322,13 +431,24 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && CanUseSword())
         {
             isCrouching = false;
-            StartCoroutine(SlashAttack());
+            if (IsHittingInvulnerableEnemy())
+                StartCoroutine(DoinkAttack());
+            else
+                StartCoroutine(SlashAttack());
         }
         else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseBow())
         {
             if (bowCooldownUI != null && !bowCooldownUI.HasArrows()) return;
             isCrouching = false;
             StartCoroutine(BowAttack());
+        }
+        else if (Input.GetMouseButtonDown(0) && CanUseBomb())
+        {
+            if (ba != null && !ba.bombActive)
+            {
+                ba.isCrouchingWhenThrown = isCrouching;
+                ba.StartBombAttack();
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)

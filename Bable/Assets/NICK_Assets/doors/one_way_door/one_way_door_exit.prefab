@@ -83,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -20
   m_MaskInteraction: 0
   m_Sprite: {fileID: 823577641305585350, guid: 56d5cc1f5955740b1899d4a6fbbab6ca, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e66dba4605c24ed4bf509a95d1d236e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  persistentID: 
   doorAnimator: {fileID: 3599121273360125564}
   exitSpawnPoint: {fileID: 3762836747438581793}
   fadeInDuration: 0.3
@@ -188,6 +189,7 @@ MonoBehaviour:
   dialogue:
   - The door won't open from this side...
   isUsable: 0
+  hasBeenOpened: 0
   inCutscene: 0
 --- !u!1 &5561829571825219294
 GameObject:

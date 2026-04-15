@@ -52,17 +52,17 @@ MonoBehaviour:
   - {fileID: 0}
   emptySlotSprite: {fileID: -2501554147737214483, guid: d06697008ce7745c390507ce644c2db1, type: 3}
   emptySelectedSprite: {fileID: 7123197266621231680, guid: 391ff85ae373a4048a0c291c836af7b5, type: 3}
-  filledSlotSprite: {fileID: 0}
-  selectedSlotSprite: {fileID: 0}
   filledSprites:
   - {fileID: -2597233540798659046, guid: 7802d0bf926a740b7aa669f14be6acbe, type: 3}
   - {fileID: -3140404603435687710, guid: 334c85ee368a84bc7b0f53256506f2cd, type: 3}
-  - {fileID: -2501554147737214483, guid: d06697008ce7745c390507ce644c2db1, type: 3}
+  - {fileID: -6927148144639863956, guid: 4031e62473a6042c09795caf611d62f9, type: 3}
   - {fileID: -2501554147737214483, guid: d06697008ce7745c390507ce644c2db1, type: 3}
   - {fileID: -2501554147737214483, guid: d06697008ce7745c390507ce644c2db1, type: 3}
   selectedSprites:
   - {fileID: 4167742136747631937, guid: a44e6a461915e4362affdcbe7ca42c1a, type: 3}
   - {fileID: 133002916663664879, guid: 3d409ab5abcb54c8a862c6a650d4011f, type: 3}
+  - {fileID: 5233034671677314077, guid: 835a79f66ecdb4b7dbcb6d9940e4f528, type: 3}
   - {fileID: 7123197266621231680, guid: 391ff85ae373a4048a0c291c836af7b5, type: 3}
   - {fileID: 7123197266621231680, guid: 391ff85ae373a4048a0c291c836af7b5, type: 3}
-  - {fileID: 7123197266621231680, guid: 391ff85ae373a4048a0c291c836af7b5, type: 3}
+  bowCooldownUI: {fileID: 0}
+  arrowTypeUI: {fileID: 0}

@@ -5,20 +5,22 @@ public class Checkpoint : MonoBehaviour
     public int checkpointIndex;
     public Transform spawnPoint;
 
-    private bool triggered = false;
-
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (triggered) return;
         if (!other.CompareTag("Player")) return;
-
-        triggered = true;
+    Debug.Log("Checkpoint triggered: " + checkpointIndex + " furthestCheckpoint: " + GameManager.furthestCheckpoint + " CheckpointManager null: " + (CheckpointManager.Instance == null));
 
         PlayerController pc = other.GetComponent<PlayerController>();
         bool hasSword = pc != null && pc.hasSword;
 
         GameManager.Instance.ReachedCheckpoint(checkpointIndex, spawnPoint.position, hasSword);
 
-        Debug.Log("Checkpoint " + checkpointIndex + " reached");
+        if (GameManager.furthestCheckpoint == checkpointIndex && CheckpointManager.Instance != null)
+        {
+                Debug.Log("Checkpoint triggered: " + checkpointIndex + " furthestCheckpoint: " + GameManager.furthestCheckpoint + " CheckpointManager null: " + (CheckpointManager.Instance == null));
+
+            CheckpointManager.Instance.SaveState(checkpointIndex);
+            Debug.Log("Checkpoint " + checkpointIndex + " state saved");
+        }
     }
 }

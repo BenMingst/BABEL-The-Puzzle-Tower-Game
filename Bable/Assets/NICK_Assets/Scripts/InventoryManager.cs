@@ -64,13 +64,10 @@ public class InventoryManager : MonoBehaviour
 
     public void AddItem(int slotIndex, RuntimeAnimatorController animator)
     {
-            Debug.Log("AddItem called for slot: " + slotIndex);
-
         if (slotIndex < 0 || slotIndex >= 5) return;
 
         slotAnimators[slotIndex] = animator;
         slotFilled[slotIndex] = true;
-    Debug.Log("Slot " + slotIndex + " filled: " + slotFilled[slotIndex]);
 
         if (slotIndex == 1)
         {
@@ -82,8 +79,6 @@ public class InventoryManager : MonoBehaviour
 
         SelectSlot(slotIndex);
         RefreshUI();
-            Debug.Log("RefreshUI called after AddItem for slot: " + slotIndex);
-
     }
 
     public bool IsSwordSelected()
@@ -96,7 +91,17 @@ public class InventoryManager : MonoBehaviour
         return currentSlot == 1 && slotFilled[1];
     }
 
-    void SelectSlot(int index)
+    public bool IsBombSelected()
+    {
+        return currentSlot == 2 && slotFilled[2];
+    }
+
+    public void SelectCurrentSlot()
+    {
+        SelectSlot(currentSlot);
+    }
+
+    public void SelectSlot(int index)
     {
         currentSlot = index;
 
@@ -119,24 +124,16 @@ public class InventoryManager : MonoBehaviour
         RefreshUI();
     }
 
-void RefreshUI()
-{
-    for (int i = 0; i < slotImages.Length; i++)
+    void RefreshUI()
     {
-        if (slotImages[i] == null) continue;
+        for (int i = 0; i < slotImages.Length; i++)
+        {
+            if (slotImages[i] == null) continue;
 
-        if (i == currentSlot)
-        {
-            Sprite s = slotFilled[i] ? selectedSprites[i] : emptySelectedSprite;
-            Debug.Log("Slot " + i + " currentSlot, filled: " + slotFilled[i] + " sprite: " + (s != null ? s.name : "NULL"));
-            slotImages[i].sprite = s;
-        }
-        else
-        {
-            Sprite s = slotFilled[i] ? filledSprites[i] : emptySlotSprite;
-            Debug.Log("Slot " + i + " not currentSlot, filled: " + slotFilled[i] + " sprite: " + (s != null ? s.name : "NULL"));
-            slotImages[i].sprite = s;
+            if (i == currentSlot)
+                slotImages[i].sprite = slotFilled[i] ? selectedSprites[i] : emptySelectedSprite;
+            else
+                slotImages[i].sprite = slotFilled[i] ? filledSprites[i] : emptySlotSprite;
         }
     }
-}
 }

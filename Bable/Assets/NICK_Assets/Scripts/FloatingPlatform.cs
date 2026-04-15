@@ -110,7 +110,14 @@ public class FloatingPlatform : MonoBehaviour
                     continue;
                 }
 
-               
+                // archer
+                ArcherAI archerAI = hit.GetComponent<ArcherAI>();
+                if (archerAI == null) archerAI = hit.GetComponentInParent<ArcherAI>();
+                if (archerAI != null)
+                {
+                    archerAI.platformVelocity = new Vector2(delta.x / Time.fixedDeltaTime, 0f);
+                    continue;
+                }
 
                 // evil eye
                 EvilEye evilEye = hit.GetComponent<EvilEye>();
