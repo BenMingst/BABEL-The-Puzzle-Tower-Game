@@ -4,10 +4,9 @@ using UnityEngine;
 public class DoorHealth : MonoBehaviour
 {
     public string persistentID;
-
     [SerializeField] private AudioClip[] hurtSounds;
     [SerializeField] private AudioClip[] deathSounds;
-    private AudioSource audioSource;
+    private PlayerAudio playerAudio;    
     private int hits = 0;
     private Animator animator;
     private Rigidbody2D rb;
@@ -17,9 +16,8 @@ public class DoorHealth : MonoBehaviour
 
     void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        if (audioSource == null)
-            audioSource = gameObject.AddComponent<AudioSource>();
+        playerAudio = GetComponent<PlayerAudio>();
+        if (playerAudio == null) playerAudio = gameObject.AddComponent<PlayerAudio>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
@@ -51,6 +49,9 @@ public class DoorHealth : MonoBehaviour
     {
         isHit = true;
         animator.SetTrigger("Hit");
+
+        // play destroy sound
+        SoundFXManager.instance.PlayWorldRandom(playerAudio.deathSounds, transform, 1f, 0.1f);
         yield return new WaitForSeconds(0.3f);
         isHit = false;
     }

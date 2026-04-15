@@ -46,6 +46,10 @@ public class PlayerController : MonoBehaviour
     public GameObject downAttackHitbox;
     public float downAttackBounceForce = 8f;
 
+    [Header("Doink")]
+    public float doinkDuration = 0.575f;
+    public float doinkKnockbackForce = 1.5f;
+
     [Header("Down Attack")]
     public float downAttackDelay = 0.15f;
     private float jumpTimer = 0f;
@@ -288,6 +292,79 @@ public class PlayerController : MonoBehaviour
         burnCoroutine = null;
     }
 
+    bool IsHittingInvulnerableEnemy()
+    {
+        if (slashHitbox == null) return false;
+
+        Collider2D hitboxCol = slashHitbox.GetComponent<Collider2D>();
+        if (hitboxCol == null) return false;
+
+        bool wasActive = slashHitbox.activeSelf;
+        slashHitbox.SetActive(true);
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            slashHitbox.transform.position,
+            hitboxCol.bounds.size,
+            0f);
+
+        if (!wasActive) slashHitbox.SetActive(false);
+
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.CompareTag("Player")) continue;
+            if (hit.isTrigger) continue;
+
+            // check necromancer
+            NecromancerHealth necroHealth = hit.GetComponentInParent<NecromancerHealth>();
+            if (necroHealth != null)
+            {
+                NecromancerAI necroAI = necroHealth.GetComponent<NecromancerAI>();
+                if (necroAI != null && !necroAI.IsVulnerable()) return true;
+            }
+
+            // check normal enemy invulnerability
+            EnemyHealth enemyHealth = hit.GetComponentInParent<EnemyHealth>();
+            if (enemyHealth != null && enemyHealth.IsInvulnerable()) return true;
+
+            // check armored skelly
+            ArmoredSkellyHealth armoredHealth = hit.GetComponentInParent<ArmoredSkellyHealth>();
+            if (armoredHealth != null)
+            {
+                ArmoredSkellyAI ai = armoredHealth.GetComponent<ArmoredSkellyAI>();
+                if (ai != null && ai.isArmored) return true;
+            }
+
+            // check ground layer
+            if (((1 << hit.gameObject.layer) & groundLayer) != 0) return true;
+        }
+
+        return false;
+    }
+
+    IEnumerator DoinkAttack()
+    {
+        isAttacking = true;
+
+        if (facingRight)
+            animator.SetTrigger("DoinkRight");
+        else
+            animator.SetTrigger("DoinkLeft");
+
+        float knockbackDirection = facingRight ? -1f : 1f;
+        rb.linearVelocity = new Vector2(knockbackDirection * doinkKnockbackForce, rb.linearVelocity.y);
+
+        slashHitbox.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        slashHitbox.SetActive(false);
+
+        rb.linearVelocity = new Vector2(knockbackDirection * 0.5f, rb.linearVelocity.y);
+
+        yield return new WaitForSeconds(doinkDuration - 0.1f);
+
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        isAttacking = false;
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -313,6 +390,9 @@ public class PlayerController : MonoBehaviour
 
         OneWayDoorExit exitDoor = FindObjectOfType<OneWayDoorExit>();
         if (exitDoor != null && exitDoor.inCutscene) return;
+
+        Sign sign = FindObjectOfType<Sign>();
+        if (sign != null && sign.inCutscene) return;
 
         horizontalInput = 0f;
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
@@ -341,7 +421,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.W) && isGrounded && HasRoomToStand())
         {
-            // block jump during bomb windup
             if (ba != null && ba.isWindingUp) { }
             else
             {
@@ -401,7 +480,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !isPaused && !isAttacking && !isRolling && isGrounded && CanUseSword())
         {
             isCrouching = false;
-            StartCoroutine(SlashAttack());
+            if (IsHittingInvulnerableEnemy())
+                StartCoroutine(DoinkAttack());
+            else
+                StartCoroutine(SlashAttack());
         }
         else if (Input.GetMouseButtonDown(0) && !isPaused && !isAttacking && !isRolling && CanUseBow())
         {

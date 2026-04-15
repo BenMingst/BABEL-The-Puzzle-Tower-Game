@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7801164354851775952}
   - component: {fileID: 8901212198803264295}
   - component: {fileID: 8461908957702494119}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 813589229095487933}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.5, y: 2.5, z: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 468170770638727725}
@@ -48,10 +48,10 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2039
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -70,7 +70,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.6}
-  m_Radius: 2
+  m_Radius: 1
 --- !u!212 &7801164354851775952
 SpriteRenderer:
   serializedVersion: 2
@@ -215,8 +215,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bomb
   fuseTime: 2
+  damage: 2
+  explosionRadius: 1
   explosionChild: {fileID: 813589229095487933}
   explosionDuration: 0.3
+  damageableLayers:
+    serializedVersion: 2
+    m_Bits: 8
   rb: {fileID: 6963215086169874740}
 --- !u!212 &7334031029152243146
 SpriteRenderer:
@@ -291,7 +296,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 1.5
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:

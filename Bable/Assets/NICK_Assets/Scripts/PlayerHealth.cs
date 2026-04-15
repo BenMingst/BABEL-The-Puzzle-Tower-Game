@@ -6,8 +6,10 @@ public class PlayerHealth : MonoBehaviour
     public int maxHearts = 3;
     private int currentHearts;
 
+    [SerializeField] private AudioClip[] hurtSounds;
+
+
     private AudioSource audioSource;
-    private PlayerAudio playerAudio;
 
     [Header("Heart UI")]
     public Animator[] heartAnimators;
@@ -24,10 +26,56 @@ public class PlayerHealth : MonoBehaviour
     public float invincibilityDuration = 1f;
 
     void Start()
+{
+    // set max hearts based on scene
+    string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+    int buildIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+
+    if (sceneName == "Level_3")
+        maxHearts = 5;
+    else if (buildIndex >= 1)
+        maxHearts = 4;
+    else
+        maxHearts = 3;
+
+    currentHearts = maxHearts * 2;
+
+    // activate correct heart UI slots
+    for (int i = 0; i < heartAnimators.Length; i++)
     {
-        currentHearts = maxHearts * 2;
-        playerAudio = GetComponent<PlayerAudio>();
-        if (playerAudio == null) playerAudio = gameObject.AddComponent<PlayerAudio>();
+        if (heartAnimators[i] != null)
+            heartAnimators[i].gameObject.SetActive(i < maxHearts);
+    }
+}
+
+    void UpdateHeartUI(int previousHearts, int damage)
+    {
+        if (damage > 1)
+        {
+            // jump directly to correct state for each heart
+            for (int i = 0; i < heartAnimators.Length; i++)
+            {
+                int ticksForSlot = Mathf.Clamp(currentHearts - (i * 2), 0, 2);
+
+                if (ticksForSlot >= 2)
+                    heartAnimators[i].Play("Full", 0, 0f);
+                else if (ticksForSlot == 1)
+                    heartAnimators[i].Play("half_heart_UI", 0, 0f);
+                else
+                    heartAnimators[i].Play("empty_heart_UI", 0, 0f);
+            }
+        }
+        else
+        {
+            // normal single tick animation
+            int heartIndex = (previousHearts - 1) / 2;
+            bool isFullToHalf = previousHearts % 2 == 0;
+
+            if (isFullToHalf)
+                heartAnimators[heartIndex].SetTrigger("HalfBreak");
+            else
+                heartAnimators[heartIndex].SetTrigger("FullBreak");
+        }
     }
 
     public void TakeDamage(int damage, Vector2 enemyPosition)
@@ -35,20 +83,27 @@ public class PlayerHealth : MonoBehaviour
         if (isInvincible) return;
         if (playerController.isRolling) return;
         if (playerController.isDead) return;
+            Debug.Log("TakeDamage called - damage: " + damage + " from position: " + enemyPosition + " caller: " + new System.Diagnostics.StackTrace().ToString());
 
-        int heartIndex = (currentHearts - 1) / 2;
-        bool isFullToHalf = currentHearts % 2 == 0;
 
-        if (isFullToHalf)
-            heartAnimators[heartIndex].SetTrigger("HalfBreak");
-        else
-            heartAnimators[heartIndex].SetTrigger("FullBreak");
+        int previousHearts = currentHearts;
+        currentHearts -= damage;
+        currentHearts = Mathf.Max(0, currentHearts);
+
+        UpdateHeartUI(previousHearts, damage);
 
         playerAnimator.SetTrigger("Hurt");
         StartCoroutine(HurtSequence(enemyPosition));
 
+<<<<<<< HEAD
         currentHearts -= damage;
 
+        
+        // play hurt sound
+        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
+
+=======
+>>>>>>> bd3c9aba7b4cd087c1b0889cfc11d03d329e0a8f
         if (currentHearts <= 0)
             Die();
         else
@@ -60,19 +115,17 @@ public class PlayerHealth : MonoBehaviour
         if (isInvincible) return;
         if (playerController.isRolling) return;
         if (playerController.isDead) return;
+            Debug.Log("TakeDamageNoKnockback called - damage: " + damage + " caller: " + new System.Diagnostics.StackTrace().ToString());
 
-        int heartIndex = (currentHearts - 1) / 2;
-        bool isFullToHalf = currentHearts % 2 == 0;
 
-        if (isFullToHalf)
-            heartAnimators[heartIndex].SetTrigger("HalfBreak");
-        else
-            heartAnimators[heartIndex].SetTrigger("FullBreak");
+        int previousHearts = currentHearts;
+        currentHearts -= damage;
+        currentHearts = Mathf.Max(0, currentHearts);
+
+        UpdateHeartUI(previousHearts, damage);
 
         playerAnimator.SetTrigger("Hurt");
         StartCoroutine(HurtSequenceNoKnockback());
-
-        currentHearts -= damage;
 
         if (currentHearts <= 0)
             Die();
@@ -87,9 +140,10 @@ public class PlayerHealth : MonoBehaviour
 
     public void HealHalfHeart()
     {
-        currentHearts += 1;
-        SoundFXManager.instance.PlayRandomSoundFXClip(playerAudio.healSounds, transform, 1f, 0.1f);
-        int heartIndex = currentHearts / 2 - (currentHearts % 2 == 0 ? 1 : 0);
+        int previousHearts = currentHearts;
+        currentHearts = Mathf.Min(maxHearts * 2, currentHearts + 1);
+
+        int heartIndex = (currentHearts - 1) / 2;
         bool isHalfToFull = currentHearts % 2 == 0;
 
         if (isHalfToFull)
@@ -101,7 +155,7 @@ public class PlayerHealth : MonoBehaviour
     IEnumerator HurtSequence(Vector2 enemyPosition)
     {
         playerController.isHurt = true;
-        SoundFXManager.instance.PlayRandomSoundFXClip(playerAudio.hurtSounds, transform, 1f, 0.1f);
+
         float knockbackDirection = transform.position.x > enemyPosition.x ? 1f : -1f;
         playerRb.linearVelocity = new Vector2(knockbackDirection * knockbackForce, playerRb.linearVelocity.y);
 
@@ -114,10 +168,10 @@ public class PlayerHealth : MonoBehaviour
         playerController.isHurt = false;
     }
 
-    IEnumerator HurtSequenceNoKnockback()       
+    IEnumerator HurtSequenceNoKnockback()
     {
         playerController.isHurt = true;
-        SoundFXManager.instance.PlayWorldRandom(playerAudio.hurtSounds, transform, 1f);
+
         playerRb.linearVelocity = new Vector2(0, playerRb.linearVelocity.y);
 
         yield return new WaitForSeconds(0.6f);
