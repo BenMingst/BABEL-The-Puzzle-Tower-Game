@@ -11,10 +11,10 @@ public class AudioManager : MonoBehaviour
 
     public void PlayButtonSound()
     {
-        SoundFXManager.instance.PlayRandomSoundFXClip(SoundFXManager.instance.buttonSounds, transform, 1f, 0f);
+        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.buttonSounds, 1f);
     }
     public void PlayMenuEnter()
     {
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.menuEnterSound, transform, 1f, 0f);
+        SoundFXManager.instance.PlayUIClip(SoundFXManager.instance.menuEnterSound, 1f);
     }
 }
