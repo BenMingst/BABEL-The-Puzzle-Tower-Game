@@ -74,26 +74,29 @@ public class SwitchDoor : MonoBehaviour
     IEnumerator OpenSequence()
     {
         isOpen = true;
-        if (doorCollider != null) doorCollider.enabled = false;
         doorAnimator.SetTrigger("Open");
-        yield return null;
+
+        yield return new WaitForSeconds(GetAnimationLength("opening"));
+        if (doorCollider != null) doorCollider.enabled = false;
     }
 
     IEnumerator CloseSequence()
     {
         isOpen = false;
+        if (doorCollider != null) doorCollider.enabled = false;
         doorAnimator.SetTrigger("Close");
-        yield return new WaitForSeconds(GetAnimationLength("Closing"));
+
+        yield return new WaitForSeconds(GetAnimationLength("closing"));
         if (doorCollider != null) doorCollider.enabled = true;
     }
 
-    float GetAnimationLength(string stateName)
+    float GetAnimationLength(string clipName)
     {
         if (doorAnimator == null) return 0.5f;
         RuntimeAnimatorController ac = doorAnimator.runtimeAnimatorController;
         foreach (AnimationClip clip in ac.animationClips)
         {
-            if (clip.name == stateName)
+            if (clip.name == clipName)
                 return clip.length;
         }
         return 0.5f;
