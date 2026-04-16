@@ -505,6 +505,7 @@ GameObject:
   - component: {fileID: 6847775717163442883}
   - component: {fileID: -3816343959332907706}
   - component: {fileID: 323205935401486383}
+  - component: {fileID: 4353818201469024801}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -949,6 +950,18 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0.75}
   m_Size: {x: 3, y: 1.5}
   m_Direction: 1
+--- !u!114 &4353818201469024801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382934404474534495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167fd239531c2114d8b137e195496d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsTracker
 --- !u!1 &7161130431338967928
 GameObject:
   m_ObjectHideFlags: 0

@@ -81,7 +81,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
 
          // play hurt sound
-        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.universal.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -101,9 +101,8 @@ public class EnemyHealth : MonoBehaviour
         CancelAttack();
         currentHealth -= damage;
 
-
          // play hurt sound for arrow
-        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.universal.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -125,7 +124,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
 
         // play hurt sound
-        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.universal.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -144,7 +143,7 @@ public class EnemyHealth : MonoBehaviour
 
 
          // play hurt sound
-        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.universal.hurtSounds, transform, 1f, 0f);
 
         if (archerBottom != null)
             archerBottom.SetActive(false);
@@ -202,7 +201,7 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
 
         // play death sound
-        SoundManager.instance.PlayWorldClip(enemyAudio.deathSound, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldClip(enemyAudio.universal.deathSound, transform, 1f, 0f);
 
         StopAllCoroutines();
 
@@ -222,6 +221,13 @@ public class EnemyHealth : MonoBehaviour
         }
 
         StartCoroutine(DeathSequence());
+
+        // add +1 to enemiesDefeated stat
+        if(GameManager.Instance != null)
+            {
+                GameManager.Instance.enemiesDefeated++;
+            }
+
     }
 
     IEnumerator DeathSequence()

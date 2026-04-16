@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 887657346182471360}
   - component: {fileID: 8219890233299770078}
   - component: {fileID: 5252675767328577989}
+  - component: {fileID: 5369609906938642987}
   m_Layer: 3
   m_Name: serpent
   m_TagString: Enemy
@@ -320,6 +321,9 @@ MonoBehaviour:
   sightRange: 8
   attackRange: 1.7
   yTolerance: 2
+  sightBlockLayers:
+    serializedVersion: 2
+    m_Bits: 0
   crawlSpeed: 1
   idleHurtbox: {fileID: 4010010067628556003}
   crawlHurtbox: {fileID: 180248594917078853}
@@ -338,6 +342,8 @@ MonoBehaviour:
   upwardFireBreathHitbox: {fileID: 2114774447964848635}
   upwardRangeOffset: {x: 0, y: 2.2}
   upwardAttackRange: 1
+  normalAttackDuration: 2
+  upwardAttackDuration: 2
   platformVelocity: {x: 0, y: 0}
   isInSequence: 0
   stateBeforeHurt: Idle
@@ -362,6 +368,24 @@ MonoBehaviour:
   rb: {fileID: 4039423078512600257}
   isHurt: 0
   isDead: 0
+--- !u!114 &5369609906938642987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2503178802898919249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  attackSounds: []
+  hurtSounds: []
+  deathSound: {fileID: 0}
+  bombLaunchSound: {fileID: 0}
+  shieldUpSound: {fileID: 0}
+  shieldDownSound: {fileID: 0}
 --- !u!1 &2926428067086069855
 GameObject:
   m_ObjectHideFlags: 0

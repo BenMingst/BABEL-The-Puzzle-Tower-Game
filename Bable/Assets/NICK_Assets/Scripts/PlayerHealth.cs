@@ -204,6 +204,11 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
         playerController.OnDeath();
+        if(GameManager.Instance != null)
+            {
+                GameManager.Instance.deaths++;
+            }
+
         StartCoroutine(DeathSequence());
     }
 

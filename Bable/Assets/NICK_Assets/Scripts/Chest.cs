@@ -167,6 +167,12 @@ public class Chest : MonoBehaviour
         }
 
         Time.timeScale = 1f;
+        
+        // update chestsFound tally
+        if(GameManager.Instance != null)
+            {
+                GameManager.Instance.chestsFound++;
+            }
 
         yield return null;
         yield return null;

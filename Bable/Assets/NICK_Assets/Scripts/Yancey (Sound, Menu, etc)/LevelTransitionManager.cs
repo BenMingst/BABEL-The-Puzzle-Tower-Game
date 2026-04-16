@@ -18,6 +18,7 @@ public class LevelTransitionManager : MonoBehaviour
     public Animator playerAnimator; 
 
     public string nextLevelName;
+    public List<string> realStats;
 
     public void StartTransition(List<string> levelStats, string nextSceneName)
     {
@@ -68,34 +69,41 @@ public class LevelTransitionManager : MonoBehaviour
         SceneManager.LoadScene(nextSceneName);
     }
 
-    void Start()
+    public void Start()
     {
         nextLevelName = SceneManager.GetSceneByBuildIndex(GameManager.Instance.currentLevelIndex + 1).name;
         // Example stats to show on the transition screen
         List<string> fakeStats = new List<string>()
         {
-            "Enemies Defeated: 10",
-            "Weapons Found: 3",
-            "Chests Found: 2",
-            "Time: 120s",
-            "Distance Traveled: 500m",
-            "Deaths: 1"
+            "Enemies Defeated: " + Random.Range(0,10),
+            "Weapons Found: " + Random.Range(0,1),
+            "Chests Found: " + Random.Range(0,4),
+            "Time: " + Random.Range(0,3000),
+            "Distance Traveled: " + Random.Range(0,2000),
+            "Deaths: " + Random.Range(0,20)
         };
 
         if(GameManager.Instance != null)
             {
                 List<string> realStats = new List<string>()
                 {
+                    "Time: " + Mathf.FloorToInt(GameManager.Instance.levelTimer) + "s",
                     "Enemies Defeated: " + GameManager.Instance.enemiesDefeated,
                     "Weapons Found: " + GameManager.Instance.weaponsFound,
                     "Chests Found: " + GameManager.Instance.chestsFound,
-                    "Time: " + Mathf.FloorToInt(GameManager.Instance.levelTimer) + "s",
                     "Distance Traveled: " + GameManager.Instance.distanceTraveled + "m",
-                    "Deaths: " + GameManager.Instance.deaths
+                    "Deaths: " + GameManager.Instance.deaths,
                 };
+                    // Start sequence with previous level stats
+                    StartTransition(realStats, nextLevelName); 
             }
+        else
+        {
+            // Start the sequence (with random fake stats)
+             StartTransition(fakeStats, nextLevelName); 
+        }
 
-        // Start the sequence
-        StartTransition(fakeStats, nextLevelName); 
+        
+
     }
 }
