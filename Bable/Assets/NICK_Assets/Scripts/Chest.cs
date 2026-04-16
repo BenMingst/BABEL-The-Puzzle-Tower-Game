@@ -69,7 +69,7 @@ public class Chest : MonoBehaviour
         inCutscene = true;
 
         chestRenderer.sprite = openedSprite;
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.chestOpenSound, transform, 1f, 0f);
+        SoundManager.instance.PlayUIClip(SoundManager.instance.chestOpenSound, 1f);
         Time.timeScale = 0f;
 
         if (playerAnimator != null)
@@ -115,7 +115,7 @@ public class Chest : MonoBehaviour
             int currentLine = 0;
             dialogueText.text = dialogueLines[currentLine];
 
-            SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dialogueBlipSound, transform, 1f, 0f);
+            SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueBlipSound, 1f);
 
             Coroutine flashCoroutine = StartCoroutine(FlashPrompt());
 
@@ -125,7 +125,7 @@ public class Chest : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     currentLine++;
-                    SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dialogueBlipSound, transform, 1f, 0f);
+                    SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueBlipSound, 1f);
                     if (currentLine < dialogueLines.Length)
                         dialogueText.text = dialogueLines[currentLine];
                     else

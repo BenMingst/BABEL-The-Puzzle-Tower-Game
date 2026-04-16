@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class SoundFXManager : MonoBehaviour
+public class SoundManager : MonoBehaviour
 {
     [Header("-------- UI SOUNDS --------")]
     [SerializeField] public AudioClip[] arrowSwitchTypeSounds;
@@ -36,7 +36,7 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] public AudioClip stalkerVanishSound;
     [SerializeField] public AudioClip stalkerAppearSound;
 
-    public static SoundFXManager instance;
+    public static SoundManager instance;
 
     [Header("Sound FX Object")]
     [SerializeField] private AudioSource soundFXObject;
@@ -124,11 +124,15 @@ public class SoundFXManager : MonoBehaviour
 
     public void PlayUIClip(AudioClip clip, float volume = 1f)
     {
-        PlaySoundFXClip(clip, transform, volume, 0f);
+        GameObject player = GameObject.FindWithTag("Player");
+        Transform targetTransform = player != null ? player.transform : transform;
+        PlaySoundFXClip(clip, targetTransform, volume, 0f);
     }
 
     public void PlayUIRandom(AudioClip[] clips, float volume = 1f)
     {
-        PlayRandomSoundFXClip(clips, transform, volume, 0f);
+        GameObject player = GameObject.FindWithTag("Player");
+        Transform targetTransform = player != null ? player.transform : transform;
+        PlayRandomSoundFXClip(clips, targetTransform, volume, 0f);
     }
 }

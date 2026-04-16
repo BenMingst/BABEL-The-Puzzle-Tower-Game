@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class EnemyHitbox : MonoBehaviour
 {
+    PlayerHealth health;
     public int damage = 1;
 
     void OnTriggerEnter2D(Collider2D other)
@@ -17,7 +18,7 @@ public class EnemyHitbox : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerHealth health = other.GetComponentInParent<PlayerHealth>();
-            health?.TakeDamage(damage, transform.position);
+            health.TakeDamage(damage, transform.position);
         }
     }
 }

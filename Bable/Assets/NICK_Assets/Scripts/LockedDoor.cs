@@ -69,7 +69,7 @@ public class LockedDoor : MonoBehaviour
 
     IEnumerator NoKeySequence()
     {
-        SoundFXManager.instance.PlayWorldRandom(SoundFXManager.instance.doorLockedSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldRandom(SoundManager.instance.doorLockedSounds, transform, 1f, 0f);
 
         inCutscene = true;
         Time.timeScale = 0f;
@@ -77,7 +77,7 @@ public class LockedDoor : MonoBehaviour
         cutscenePanel.SetActive(true);
         int currentLine = 0;
         dialogueText.text = noKeyDialogue[currentLine];
-        SoundFXManager.instance.PlayUIClip(SoundFXManager.instance.dialogueBlipSound, 1f);
+        SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueBlipSound, 1f);
 
         Coroutine flashCoroutine = StartCoroutine(FlashPrompt());
 
@@ -86,7 +86,7 @@ public class LockedDoor : MonoBehaviour
             yield return null;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                SoundFXManager.instance.PlayUIClip(SoundFXManager.instance.dialogueConfirmSound, 1f);
+                SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueConfirmSound, 1f);
                 currentLine++;
                 if (currentLine < noKeyDialogue.Length)
                     dialogueText.text = noKeyDialogue[currentLine];
@@ -120,7 +120,7 @@ public class LockedDoor : MonoBehaviour
             doorAnimator.SetTrigger("Unlock");
         }
 
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.doorUnlockSound, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorUnlockSound, transform, 1f, 0f);
 
         yield return new WaitForSeconds(1f);
 

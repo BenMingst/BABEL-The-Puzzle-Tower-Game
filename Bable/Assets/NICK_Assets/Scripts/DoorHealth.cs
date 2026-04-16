@@ -25,7 +25,7 @@ public class DoorHealth : MonoBehaviour
 
     public void TakeHit()
     {
-        SoundFXManager.instance.PlayWorldRandom(SoundFXManager.instance.doorHurtSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldRandom(SoundManager.instance.doorHurtSounds, transform, 1f, 0f);
         if (isDestroyed || isHit) return;
 
         hits++;
@@ -51,7 +51,7 @@ public class DoorHealth : MonoBehaviour
         animator.SetTrigger("Hit");
 
         // play destroy sound
-        SoundFXManager.instance.PlayWorldRandom(playerAudio.deathSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(playerAudio.deathSounds, transform, 1f, 0.1f);
         yield return new WaitForSeconds(0.3f);
         isHit = false;
     }
@@ -60,7 +60,7 @@ public class DoorHealth : MonoBehaviour
     {
         isDestroyed = true;
         animator.SetTrigger("Destroyed");
-        SoundFXManager.instance.PlayWorldClip(SoundFXManager.instance.doorBreakSound, transform, 1f);
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorBreakSound, transform, 1f);
         col.enabled = false;
         rb.bodyType = RigidbodyType2D.Static;
         yield break;

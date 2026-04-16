@@ -4,7 +4,9 @@ using UnityEngine;
 public class Arrow : MonoBehaviour
 {
     [Header("Audio")]
-    public AudioClip[] hitWallSounds;
+    public AudioClip[] stickToWallSounds;
+    public AudioClip[] bounceSounds;
+    
     public enum ArrowType { Normal, Ice, Fire }
     public ArrowType arrowType = ArrowType.Normal;
 
@@ -199,10 +201,10 @@ public class Arrow : MonoBehaviour
     IEnumerator StickToWall()
     {
         isStuck = true;
-        if(hitWallSounds != null)
+        if(stickToWallSounds != null)
         {
          // play sound for arrow hitting wall
-            SoundFXManager.instance.PlayWorldRandom(PlayerAudio.instance.arrowHitWallSounds, transform, 1f, 0f);
+            SoundManager.instance.PlayWorldRandom(stickToWallSounds, transform, 1f, 0f);
         }
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;

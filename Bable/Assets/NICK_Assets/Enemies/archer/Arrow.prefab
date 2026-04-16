@@ -180,8 +180,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a305f23c2f464fbe9a7d53926227dac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  hitWallSounds:
+  stickToWallSounds:
   - {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
+  bounceSounds: []
   arrowType: 0
   speed: 5
   maxDistance: 15

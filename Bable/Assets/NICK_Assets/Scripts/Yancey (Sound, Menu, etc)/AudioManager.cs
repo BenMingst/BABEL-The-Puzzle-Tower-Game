@@ -2,19 +2,22 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public static AudioManager Instance;
+    public static SoundManager soundManager;
     public float volume = 1f;
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (soundManager == null)
+        {
+            soundManager = GetComponent<SoundManager>();
+        }
     }
 
     public void PlayButtonSound()
     {
-        SoundFXManager.instance.PlayUIRandom(SoundFXManager.instance.buttonSounds, 1f);
+        SoundManager.instance.PlayUIRandom(SoundManager.instance.buttonSounds, 1f);
     }
     public void PlayMenuEnter()
     {
-        SoundFXManager.instance.PlayUIClip(SoundFXManager.instance.menuEnterSound, 1f);
+        SoundManager.instance.PlayUIClip(SoundManager.instance.menuEnterSound, 1f);
     }
 }

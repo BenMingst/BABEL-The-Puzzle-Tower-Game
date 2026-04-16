@@ -81,7 +81,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
 
          // play hurt sound
-        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -103,7 +103,7 @@ public class EnemyHealth : MonoBehaviour
 
 
          // play hurt sound for arrow
-        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -125,7 +125,7 @@ public class EnemyHealth : MonoBehaviour
         currentHealth -= damage;
 
         // play hurt sound
-        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0.1f);
 
         if (currentHealth <= 0)
         {
@@ -144,7 +144,7 @@ public class EnemyHealth : MonoBehaviour
 
 
          // play hurt sound
-        SoundFXManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.hurtSounds, transform, 1f, 0f);
 
         if (archerBottom != null)
             archerBottom.SetActive(false);
@@ -202,7 +202,7 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
 
         // play death sound
-        SoundFXManager.instance.PlayWorldClip(enemyAudio.deathSound, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldClip(enemyAudio.deathSound, transform, 1f, 0f);
 
         StopAllCoroutines();
 

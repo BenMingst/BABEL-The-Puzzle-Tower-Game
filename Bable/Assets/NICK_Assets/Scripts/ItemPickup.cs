@@ -72,7 +72,7 @@ public class ItemPickup : MonoBehaviour
         currentLine = 0;
         dialogueText.text = dialogueLines[currentLine];
 
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dialogueBlipSound, transform, 1f, 0f);
+        SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueBlipSound, 1f);
 
         Coroutine flashCoroutine = StartCoroutine(FlashPrompt());
 
@@ -81,7 +81,7 @@ public class ItemPickup : MonoBehaviour
             yield return null;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.dialogueConfirmSound, transform, 1f, 0f);
+                SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueConfirmSound, 1f);
                 currentLine++;
                 if (currentLine < dialogueLines.Length)
                     dialogueText.text = dialogueLines[currentLine];

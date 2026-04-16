@@ -23,6 +23,8 @@ public class Bomb : MonoBehaviour
 
     void Start()
     {
+        playerAudio = GetComponent<PlayerAudio>();
+        if (playerAudio == null) playerAudio = gameObject.AddComponent<PlayerAudio>();
         StartCoroutine(FuseSequence());
     }
 
@@ -119,7 +121,7 @@ public class Bomb : MonoBehaviour
         explosionChild.transform.SetParent(null);
         explosionChild.transform.rotation = Quaternion.identity;
         explosionChild.SetActive(true);
-        SoundFXManager.instance.PlayWorldRandom(playerAudio.bombExplosionSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldRandom(playerAudio.bombExplosionSounds, transform, 1f, 0f);
 
         yield return new WaitForSeconds(explosionDuration);
 

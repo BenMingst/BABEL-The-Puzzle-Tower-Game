@@ -6,11 +6,6 @@ public class PlayerHealth : MonoBehaviour
     public int maxHearts = 3;
     private int currentHearts;
 
-    [SerializeField] private AudioClip[] hurtSounds;
-
-
-    private AudioSource audioSource;
-
     [Header("Heart UI")]
     public Animator[] heartAnimators;
 
@@ -24,34 +19,39 @@ public class PlayerHealth : MonoBehaviour
 
     private bool isInvincible = false;
     public float invincibilityDuration = 1f;
-
+    public PlayerAudio playerAudio;
     void Start()
-{
-    // set max hearts based on scene
-    string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-    int buildIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-
-    if (sceneName == "Level_3")
-        maxHearts = 5;
-    else if (buildIndex >= 1)
-        maxHearts = 4;
-    else
-        maxHearts = 3;
-
-    currentHearts = maxHearts * 2;
-
-    // activate correct heart UI slots
-    for (int i = 0; i < heartAnimators.Length; i++)
     {
-        if (heartAnimators[i] != null)
-            heartAnimators[i].gameObject.SetActive(i < maxHearts);
+        playerAudio = GetComponent<PlayerAudio>();
+        if (playerAudio == null) playerAudio = gameObject.AddComponent<PlayerAudio>();
+
+        // set max hearts based on scene
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        int buildIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+
+        if (sceneName == "Level3")
+            maxHearts = 3;
+        else if (buildIndex >= 1)
+            maxHearts = 3;
+        else
+            maxHearts = 3;
+
+        currentHearts = maxHearts * 2;
+
+        // activate correct heart UI slots
+        for (int i = 0; i < heartAnimators.Length; i++)
+        {
+            if (heartAnimators[i] != null)
+                heartAnimators[i].gameObject.SetActive(i < maxHearts);
+        }
     }
-}
 
     void UpdateHeartUI(int previousHearts, int damage)
     {
+        Debug.Log("UpdateHeartUI called - previousHearts: " + previousHearts + " damage: " + damage + " currentHearts: " + currentHearts + " caller: " + new System.Diagnostics.StackTrace().ToString() + ". Triggered by object: " + gameObject.name);
         if (damage > 1)
         {
+                Debug.Log("UpdateHeartUI - multi-heart damage detected, refreshing entire UI. previousHearts: " + previousHearts + " damage: " + damage + " currentHearts: " + currentHearts);
             // jump directly to correct state for each heart
             for (int i = 0; i < heartAnimators.Length; i++)
             {
@@ -67,14 +67,23 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
+            Debug.Log("UpdateHeartUI called - previousHearts: " + previousHearts + " damage: " + damage + " currentHearts: " + currentHearts + " caller: " + new System.Diagnostics.StackTrace().ToString());
             // normal single tick animation
             int heartIndex = (previousHearts - 1) / 2;
+            Debug.Log("UpdateHeartUI - single heart damage, animating heart index: " + heartIndex);
             bool isFullToHalf = previousHearts % 2 == 0;
+            Debug.Log("UpdateHeartUI - isFullToHalf: " + isFullToHalf);
 
             if (isFullToHalf)
+            {
+                Debug.Log("UpdateHeartUI - animating full to half break");
                 heartAnimators[heartIndex].SetTrigger("HalfBreak");
+            }
             else
+            {
                 heartAnimators[heartIndex].SetTrigger("FullBreak");
+                Debug.Log("UpdateHeartUI - animating full to empty break");
+            }
         }
     }
 
@@ -83,27 +92,30 @@ public class PlayerHealth : MonoBehaviour
         if (isInvincible) return;
         if (playerController.isRolling) return;
         if (playerController.isDead) return;
-            Debug.Log("TakeDamage called - damage: " + damage + " from position: " + enemyPosition + " caller: " + new System.Diagnostics.StackTrace().ToString());
+
+        Debug.Log("TakeDamage called - damage: " + damage + " from position: " + enemyPosition + " caller: " + new System.Diagnostics.StackTrace().ToString());
 
 
         int previousHearts = currentHearts;
-        currentHearts -= damage;
-        currentHearts = Mathf.Max(0, currentHearts);
+        Debug.Log("TakeDamage - previousHearts: " + previousHearts + " damage: " + damage);
 
+        currentHearts -= damage;
+        Debug.Log("TakeDamage - currentHearts after damage: " + currentHearts);
+        currentHearts = Mathf.Max(0, currentHearts);
+        Debug.Log("TakeDamage - currentHearts after Mathf.Max: " + currentHearts);
+
+        Debug.Log("TakeDamage - updating heart UI. previousHearts: " + previousHearts + " damage: " + damage + " currentHearts: " + currentHearts);
         UpdateHeartUI(previousHearts, damage);
 
+
+        Debug.Log("TakeDamage - playing hurt animation and starting hurt sequence");
         playerAnimator.SetTrigger("Hurt");
+        Debug.Log("TakeDamage - starting HurtSequence coroutine with enemyPosition: " + enemyPosition);
         StartCoroutine(HurtSequence(enemyPosition));
 
-<<<<<<< HEAD
-        currentHearts -= damage;
-
-        
         // play hurt sound
-        SoundFXManager.instance.PlayRandomSoundFXClip(hurtSounds, transform, 1f, 0.1f);
+        SoundManager.instance.PlayWorldRandom(playerAudio.hurtSounds, transform, 1f, 0.1f);
 
-=======
->>>>>>> bd3c9aba7b4cd087c1b0889cfc11d03d329e0a8f
         if (currentHearts <= 0)
             Die();
         else
@@ -123,6 +135,9 @@ public class PlayerHealth : MonoBehaviour
         currentHearts = Mathf.Max(0, currentHearts);
 
         UpdateHeartUI(previousHearts, damage);
+
+        // play hurt sound
+        SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.hurtSounds, transform, 1f, 0.1f);
 
         playerAnimator.SetTrigger("Hurt");
         StartCoroutine(HurtSequenceNoKnockback());

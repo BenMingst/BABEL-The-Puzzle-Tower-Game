@@ -161,7 +161,7 @@ void Awake()
         }
 
         // play attack sound
-        SoundFXManager.instance.PlayWorldRandom(enemyAudio.attackSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldRandom(enemyAudio.attackSounds, transform, 1f, 0f);
 
         Vector3 hitboxPos = enemyHitbox.transform.localPosition;
         hitboxPos.x = facingRight ? Mathf.Abs(hitboxPos.x) : -Mathf.Abs(hitboxPos.x);

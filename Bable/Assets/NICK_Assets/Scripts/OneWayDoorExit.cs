@@ -35,6 +35,7 @@ public class OneWayDoorExit : MonoBehaviour
 
     void Start()
     {
+        
         cutscenePanel.SetActive(false);
     }
 
@@ -183,7 +184,7 @@ public class OneWayDoorExit : MonoBehaviour
     IEnumerator ShowPrompt()
     {
         //play dialogue blip sound
-        SoundFXManager.instance.PlayUIClip(SoundFXManager.instance.dialogueBlipSound, 1f);
+        SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueBlipSound, 1f);
 
         inCutscene = true;
         Time.timeScale = 0f;
@@ -199,7 +200,7 @@ public class OneWayDoorExit : MonoBehaviour
             yield return null;
             if (Input.GetKeyDown(KeyCode.E))
             {
-                SoundFXManager.instance.PlayUIClip(SoundFXManager.instance.dialogueConfirmSound, 1f);
+                SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueConfirmSound, 1f);
                 currentLine++;
                 if (currentLine < dialogue.Length)
                     dialogueText.text = dialogue[currentLine];

@@ -51,7 +51,7 @@ public class EndDoor : MonoBehaviour
         playerController.isDead = true;
 
         // play door enter sound
-        SoundFXManager.instance.PlaySoundFXClip(SoundFXManager.instance.doorEnterSound, transform, 1f, 0f);
+        SoundManager.instance.PlayUIClip(SoundManager.instance.doorEnterSound, 1f);
 
         yield return new WaitForSeconds(walkDuration);
 
