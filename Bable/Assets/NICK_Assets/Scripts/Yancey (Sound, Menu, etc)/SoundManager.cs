@@ -47,70 +47,36 @@ public class SoundManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void PlayRandomSoundFXClip(AudioClip[] audioClip, Transform spawnTransform, float volume, float delay)
+    private Transform GetPlayerTransform()
+{
+    GameObject player = GameObject.FindWithTag("Player");
+    return player != null ? player.transform : transform;
+}
+
+    public void PlayRandomSoundFXClip(AudioClip[] clips, Transform spawnTransform, float volume, float delay)
     {
-        if (audioClip != null)
-        {
-            int rand;
-            // assign a random index to select a clip from the array
-            if (audioClip.Length > 1)
-            {
-                rand = Random.Range(0, audioClip.Length);
-            }
-            else
-            {
-                rand = 0;
-            }
-            // spawn in gameObject
-            AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+        if (clips == null || clips.Length == 0 || soundFXObject == null) return;
 
-            // assign the audioClip
-            audioSource.clip = audioClip[rand];
+        int rand = Random.Range(0, clips.Length);
 
-            // assign the volume
-            audioSource.volume = volume;
+        AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+        audioSource.clip = clips[rand];
+        audioSource.volume = volume;
+        audioSource.PlayDelayed(delay);
 
-            // play sound
-            audioSource.PlayDelayed(delay);
-
-            // get length of sound FX clip
-            float clipLength = audioSource.clip.length;
-
-            // destroy the clip after it is done playing
-            Destroy(audioSource.gameObject, clipLength + delay);
-        }
-        else
-        {
-            Debug.LogWarning("No audio clips assigned to play.");
-        }
+        Destroy(audioSource.gameObject, audioSource.clip.length + delay);
     }
 
-    public void PlaySoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume, float delay)
+    public void PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume, float delay)
     {
-        if (audioClip != null)
-        {
-            // spawn in gameObject
-            AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+        if (clip == null || soundFXObject == null) return;
 
-            // assign the audioClip
-            audioSource.clip = audioClip;
+        AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+        audioSource.clip = clip;
+        audioSource.volume = volume;
+        audioSource.PlayDelayed(delay);
 
-            // assign the volume
-            audioSource.volume = volume;
-
-            // play sound
-            audioSource.PlayDelayed(delay);
-
-            // get length of sound FX clip
-            float clipLength = audioSource.clip.length;
-
-            // destroy the clip after it is done playing
-            Destroy(audioSource.gameObject, clipLength + delay);
-        }
-        else
-        {
-            Debug.LogWarning("No audio clip assigned to play.");
-        }
+        Destroy(audioSource.gameObject, clip.length + delay);
     }
     public void PlayWorldClip(AudioClip clip, Transform emitter, float volume = 1f, float delay = 0f)
     {
@@ -124,15 +90,13 @@ public class SoundManager : MonoBehaviour
 
     public void PlayUIClip(AudioClip clip, float volume = 1f)
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        Transform targetTransform = player != null ? player.transform : transform;
+        Transform targetTransform = GetPlayerTransform();
         PlaySoundFXClip(clip, targetTransform, volume, 0f);
     }
 
     public void PlayUIRandom(AudioClip[] clips, float volume = 1f)
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        Transform targetTransform = player != null ? player.transform : transform;
+        Transform targetTransform = GetPlayerTransform();
         PlayRandomSoundFXClip(clips, targetTransform, volume, 0f);
     }
 }

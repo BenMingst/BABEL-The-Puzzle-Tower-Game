@@ -884,8 +884,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9beea215faf6cf7418b48a405ad20d48, type: 3}
   swordDownAttackSounds:
   - {fileID: 8300000, guid: eebfba4e454bd4442a96942fe33dcd0d, type: 3}
-  bowAttackSounds:
-  - {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  bowAttackSounds: []
   normalArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
   iceArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
   fireArrowSpawnSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}

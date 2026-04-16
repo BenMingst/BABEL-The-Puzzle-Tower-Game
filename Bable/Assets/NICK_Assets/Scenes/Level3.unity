@@ -4969,6 +4969,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -0.08019304
       objectReference: {fileID: 0}
+    - target: {fileID: 2096378863834304839, guid: 99c1efab0d2fe419d88673a95d98fdd3, type: 3}
+      propertyPath: bowAttackSounds.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3280356445412846074, guid: 99c1efab0d2fe419d88673a95d98fdd3, type: 3}
       propertyPath: m_SortingOrder
       value: 100
@@ -6427,11 +6431,11 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4053597831861591262, guid: 9191cae7a7aef5e458cdf59b13d53c31, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: a7fe5103a72f256479c2a6f2e45e9fda, type: 3}
+  m_Resource: {fileID: 8300000, guid: f63b2a0e6c879ae49b852c529b6e71dd, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -8890,10 +8894,10 @@ MonoBehaviour:
     openedEnemyDoors: []
     bombledSkulls: []
     permanentlyOpenedDoors: []
-    hasBow: 0
-    hasBomb: 0
-    hasFireArrows: 0
-    hasIceArrows: 0
+    hasBow: 1
+    hasBomb: 1
+    hasFireArrows: 1
+    hasIceArrows: 1
     keyCount: 0
 --- !u!4 &1641259156
 Transform:

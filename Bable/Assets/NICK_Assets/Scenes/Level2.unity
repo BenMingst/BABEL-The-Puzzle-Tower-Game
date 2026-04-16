@@ -524,54 +524,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.12770271, y: 1.607898}
   m_EdgeRadius: 0
---- !u!1 &118000785
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 118000787}
-  - component: {fileID: 118000786}
-  m_Layer: 5
-  m_Name: SceneManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &118000786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 118000785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8ef863de36478342a1548340a250266, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneController
---- !u!224 &118000787
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 118000785}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 960, y: 540}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &154833473
 GameObject:
   m_ObjectHideFlags: 0
@@ -2239,7 +2191,7 @@ PrefabInstance:
     - target: {fileID: 5056319032668768761, guid: eb46593b6cd6ebb4e8102648a703eac7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 118000786}
+      objectReference: {fileID: 0}
     - target: {fileID: 5056319032668768761, guid: eb46593b6cd6ebb4e8102648a703eac7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -3035,9 +2987,9 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: f63b2a0e6c879ae49b852c529b6e71dd, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.8
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -5337,7 +5289,7 @@ PrefabInstance:
     - target: {fileID: 3554529033973543101, guid: 8b762d4f77c4d894fa1c18a4de09ebbb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 118000786}
+      objectReference: {fileID: 0}
     - target: {fileID: 3554529033973543101, guid: 8b762d4f77c4d894fa1c18a4de09ebbb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -5349,7 +5301,7 @@ PrefabInstance:
     - target: {fileID: 4491700973404292089, guid: 8b762d4f77c4d894fa1c18a4de09ebbb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 118000786}
+      objectReference: {fileID: 0}
     - target: {fileID: 4491700973404292089, guid: 8b762d4f77c4d894fa1c18a4de09ebbb, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -8387,7 +8339,7 @@ PrefabInstance:
     - target: {fileID: 5420859664507296747, guid: 35fbb675f95ac42748861e6a0d226fb1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 118000786}
+      objectReference: {fileID: 0}
     - target: {fileID: 5420859664507296747, guid: 35fbb675f95ac42748861e6a0d226fb1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -9495,7 +9447,6 @@ SceneRoots:
   - {fileID: 56699684}
   - {fileID: 1017475467}
   - {fileID: 1146912381}
-  - {fileID: 118000787}
   - {fileID: 1453054625}
   - {fileID: 538608339}
   - {fileID: 1292758024}

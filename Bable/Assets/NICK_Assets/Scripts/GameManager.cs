@@ -17,10 +17,9 @@ public class GameManager : MonoBehaviour
     public int enemiesDefeated;
     public int weaponsFound;
     public int chestsFound;
-    public float levelTimer;
+    public float levelTime;
     public float distanceTraveled;
     public int deaths;
-    public float levelTime;
 
     public Transform defaultSpawnPoint;
 
@@ -101,7 +100,7 @@ public class GameManager : MonoBehaviour
         enemiesDefeated = 0;
         weaponsFound = 0;
         chestsFound = 0;
-        levelTimer = 0f;
+        levelTime = 0f;
         distanceTraveled = 0;
         deaths = 0;
         currentLevelIndex = SceneManager.GetActiveScene().buildIndex;

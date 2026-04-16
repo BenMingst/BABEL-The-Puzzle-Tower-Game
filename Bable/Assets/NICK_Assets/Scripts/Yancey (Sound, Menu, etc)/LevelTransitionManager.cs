@@ -9,15 +9,15 @@ public class LevelTransitionManager : MonoBehaviour
     [Header("UI References")]
     public TextMeshProUGUI completeTextDisplay;
     public TextMeshProUGUI statsTextDisplay;
-    public TextMeshProUGUI continueTextDisplay; 
+    public TextMeshProUGUI continueTextDisplay;
 
     [Header("Timing Settings")]
     public float delayBetweenStats = 1.0f;
 
     [Header("Animation Hooks")]
-    public Animator playerAnimator; 
+    public Animator playerAnimator;
 
-    public string nextLevelName;
+    public string nextLevelName = "MainMenu";
     public List<string> realStats;
 
     public void StartTransition(List<string> levelStats, string nextSceneName)
@@ -37,13 +37,13 @@ public class LevelTransitionManager : MonoBehaviour
             playerAnimator.SetFloat("Speed", 1.0f);
             playerAnimator.SetFloat("Horizontal_Velocity", 1.0f);
         }
-        
+
         StartCoroutine(DisplayStatsSequence(levelStats, nextSceneName));
     }
 
     private IEnumerator DisplayStatsSequence(List<string> stats, string nextSceneName)
     {
-        
+
         completeTextDisplay.gameObject.SetActive(true);
         yield return new WaitForSeconds(delayBetweenStats);
 
@@ -59,13 +59,14 @@ public class LevelTransitionManager : MonoBehaviour
         }
 
 
-        yield return new WaitUntil(() => 
-            Input.GetMouseButtonDown(0) || 
-            Input.GetKeyDown(KeyCode.Space) || 
-            Input.GetKeyDown(KeyCode.E) || 
+        yield return new WaitUntil(() =>
+            Input.GetMouseButtonDown(0) ||
+            Input.GetKeyDown(KeyCode.Space) ||
+            Input.GetKeyDown(KeyCode.E) ||
             Input.GetKeyDown(KeyCode.Return)
         );
 
+        GameManager.Instance.ResetLevelStats();
         SceneManager.LoadScene(nextSceneName);
     }
 
@@ -83,27 +84,27 @@ public class LevelTransitionManager : MonoBehaviour
             "Deaths: " + Random.Range(0,20)
         };
 
-        if(GameManager.Instance != null)
-            {
-                List<string> realStats = new List<string>()
+        if (GameManager.Instance != null)
+        {
+            List<string> realStats = new List<string>()
                 {
-                    "Time: " + Mathf.FloorToInt(GameManager.Instance.levelTimer) + "s",
+                    "Time: " + Mathf.FloorToInt(GameManager.Instance.levelTime) + "s",
                     "Enemies Defeated: " + GameManager.Instance.enemiesDefeated,
                     "Weapons Found: " + GameManager.Instance.weaponsFound,
                     "Chests Found: " + GameManager.Instance.chestsFound,
                     "Distance Traveled: " + GameManager.Instance.distanceTraveled + "m",
                     "Deaths: " + GameManager.Instance.deaths,
                 };
-                    // Start sequence with previous level stats
-                    StartTransition(realStats, nextLevelName); 
-            }
+            // Start sequence with previous level stats
+            StartTransition(realStats, nextLevelName);
+        }
         else
         {
             // Start the sequence (with random fake stats)
-             StartTransition(fakeStats, nextLevelName); 
+            StartTransition(fakeStats, nextLevelName);
         }
 
-        
+
 
     }
 }

@@ -222,6 +222,8 @@ MonoBehaviour:
   damageableLayers:
     serializedVersion: 2
     m_Bits: 8
+  bombExplosionSound: {fileID: 8300000, guid: 45e1b6ae94d705c4c8badd99aff8ab0c, type: 3}
+  playerAudio: {fileID: -3816343959332907706, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
   rb: {fileID: 6963215086169874740}
 --- !u!212 &7334031029152243146
 SpriteRenderer:

@@ -59,11 +59,15 @@ public class ItemPickup : MonoBehaviour
     {
         Debug.Log("Firing ItemPickup trigger");
         playerAnimator.SetTrigger("ItemPickup");
+                // update weaponsFound stat
+        GameManager.Instance.weaponsFound++;
     }
     else if (itemType == ItemType.Bow)
     {
         Debug.Log("Firing BowPickup trigger");
         playerAnimator.SetTrigger("BowPickup");
+                // update weaponsFound stat
+        GameManager.Instance.weaponsFound++;
     }
 }
 

@@ -9,7 +9,7 @@ public class Bomb : MonoBehaviour
     public GameObject explosionChild;
     public float explosionDuration = 0.3f;
     public LayerMask damageableLayers;
-
+    public AudioClip bombExplosionSound;
     public PlayerAudio playerAudio;
     public Rigidbody2D rb;
     private bool hasExploded = false;
@@ -121,7 +121,7 @@ public class Bomb : MonoBehaviour
         explosionChild.transform.SetParent(null);
         explosionChild.transform.rotation = Quaternion.identity;
         explosionChild.SetActive(true);
-        SoundManager.instance.PlayWorldRandom(playerAudio.bombExplosionSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldClip(bombExplosionSound, transform, 1f, 0f);
 
         yield return new WaitForSeconds(explosionDuration);
 
