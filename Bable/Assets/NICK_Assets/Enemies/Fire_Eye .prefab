@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 8917847684059195519}
   - component: {fileID: 3743355874267230047}
   - component: {fileID: 5639930715315873341}
+  - component: {fileID: -4872324766059507901}
   m_Layer: 3
   m_Name: 'Fire_Eye '
   m_TagString: Untagged
@@ -316,6 +317,25 @@ CapsuleCollider2D:
   m_Offset: {x: 1, y: 3}
   m_Size: {x: 1, y: 2.5}
   m_Direction: 0
+--- !u!114 &-4872324766059507901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7423117235930434874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  attackSounds: []
+  hurtSounds: []
+  deathSound: {fileID: 8300000, guid: fb818cc35d7e1da479335ee0281db6a9, type: 3}
+  bombLaunchSound: {fileID: 8300000, guid: 41f0899738ea94946ae04046c231c3bf, type: 3}
+  bombExplosionSound: {fileID: 0}
+  shieldUpSound: {fileID: 8300000, guid: 7dd1ff46ed66e854d9533c0f25e78b2e, type: 3}
+  shieldDownSound: {fileID: 8300000, guid: b9fd1374580caea4da3e86ca8c10337b, type: 3}
 --- !u!1 &9060559215617373247
 GameObject:
   m_ObjectHideFlags: 0

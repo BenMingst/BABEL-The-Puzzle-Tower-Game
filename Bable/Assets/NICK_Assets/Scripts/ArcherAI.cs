@@ -27,12 +27,13 @@ public class ArcherAI : MonoBehaviour
     private bool isShooting = false;
     private EnemyHealth enemyHealth;
     private Rigidbody2D rb;
-
+    private EnemyAudio enemyAudio;
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
         enemyHealth = GetComponent<EnemyHealth>();
         rb = GetComponent<Rigidbody2D>();
+        enemyAudio = GetComponent<EnemyAudio>();
 
         // apply initial facing direction
         if (!facingRight)
@@ -108,7 +109,6 @@ public class ArcherAI : MonoBehaviour
         if (arrowPrefab == null || arrowSpawnPoint == null) return;
 
         GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-        SoundManager.instance.PlayWorldClip(PlayerAudio.instance.normalArrowSpawnSound, transform, 1f, 0f);
         Arrow arrowScript = arrow.GetComponent<Arrow>();
         if (arrowScript != null)
             arrowScript.SetDirection(facingRight);
@@ -125,9 +125,9 @@ public class ArcherAI : MonoBehaviour
 {
     isShooting = true;
     animator.SetBool("IsIdle", false);
-
     // always use ShootRight trigger - scale flip handles visual direction
     animator.SetTrigger("ShootRight");
+    SoundManager.instance.PlayWorldRandom(enemyAudio.attackSounds, transform, 1f, 0.7f);
     yield return new WaitForSeconds(attackCooldown);
     isShooting = false;
     yield break;

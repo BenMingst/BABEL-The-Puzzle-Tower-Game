@@ -213,6 +213,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4836977052720142726}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3598199511739261354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8037027287886656211}
+  - component: {fileID: 20512823274783345}
+  m_Layer: 3
+  m_Name: AudioListener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8037027287886656211
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3598199511739261354}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4836977052720142726}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!81 &20512823274783345
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3598199511739261354}
+  m_Enabled: 1
 --- !u!1 &4218304765587284175
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,6 +427,7 @@ Transform:
   - {fileID: 1164332041952598659}
   - {fileID: 4788936901415000081}
   - {fileID: 1978243467532047267}
+  - {fileID: 8037027287886656211}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8905974731728285179
@@ -536,6 +577,8 @@ MonoBehaviour:
   slashHitbox: {fileID: 4218304765587284175}
   downAttackHitbox: {fileID: 7297578529870111843}
   downAttackBounceForce: 4
+  doinkDuration: 0.575
+  doinkKnockbackForce: 1.5
   downAttackDelay: 0.15
   playerArrowPrefab: {fileID: 6203211016278968772, guid: bae41982e360041d4b80d31257f76d01, type: 3}
   iceArrowPrefab: {fileID: 1442446161805661606, guid: c21b11f0e4dd6477d9fea3292a1abfc7, type: 3}
@@ -668,6 +711,7 @@ MonoBehaviour:
   knockbackForce: 3
   hurtDuration: 0.6
   invincibilityDuration: 1
+  playerAudio: {fileID: 0}
 --- !u!70 &1822848614964258274
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
