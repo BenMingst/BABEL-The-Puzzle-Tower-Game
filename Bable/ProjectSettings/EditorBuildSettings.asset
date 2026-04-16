@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/NICK_Assets/Scenes/MainMenu.unity
     guid: b10cf113659ab4e449610577a51ed4b1
   - enabled: 1
+    path: Assets/NICK_Assets/Scenes/TransitionScene.unity
+    guid: 89af446e2a56fc04e90a4d7a98932004
+  - enabled: 1
     path: Assets/NICK_Assets/Scenes/Level1.unity
     guid: 8c48e6918fd01430992fc6e7b594fd7f
   - enabled: 1

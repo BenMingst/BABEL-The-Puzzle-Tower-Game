@@ -19,6 +19,12 @@ public class EndDoor : MonoBehaviour
     private bool isTransitioning = false;
     private PlayerController playerController;
 
+    private SceneController sceneController;
+
+    void Start()
+    {
+        sceneController = FindFirstObjectByType<SceneController>(); 
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
@@ -61,6 +67,6 @@ public class EndDoor : MonoBehaviour
         GameManager.spawnPosition = Vector3.zero;
 
         Time.timeScale = 1f;
-        SceneManager.LoadScene(nextSceneName);
+        sceneController.loadTransitionScene(nextSceneName);
     }
 }

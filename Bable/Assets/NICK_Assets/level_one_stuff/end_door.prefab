@@ -112,7 +112,7 @@ MonoBehaviour:
   doorRenderer: {fileID: 4978975079416214471}
   normalSprite: {fileID: 8899443327318570775, guid: 022ef1de7739a41a1a010d36d20231af, type: 3}
   interactableSprite: {fileID: 3123810661045436092, guid: b06eecde22b6946d8815d16eb34fcfa3, type: 3}
-  nextSceneName: Level_2
+  nextSceneName: Level2
   walkDuration: 0.5
 --- !u!61 &95036517236610771
 BoxCollider2D:

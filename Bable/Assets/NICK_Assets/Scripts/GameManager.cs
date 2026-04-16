@@ -12,6 +12,15 @@ public class GameManager : MonoBehaviour
     public static bool hasBow = false;
     public static bool hasBomb = false;
 
+    [Header("Current Level Stats")]
+    public int currentLevelIndex;
+    public int enemiesDefeated;
+    public int weaponsFound;
+    public int chestsFound;
+    public float levelTimer;
+    public int distanceTraveled;
+    public int deaths;
+
     public Transform defaultSpawnPoint;
 
     void Awake()
@@ -82,5 +91,16 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void ResetLevelStats()
+    {
+        enemiesDefeated = 0;
+        weaponsFound = 0;
+        chestsFound = 0;
+        levelTimer = 0f;
+        distanceTraveled = 0;
+        deaths = 0;
+        currentLevelIndex = SceneManager.GetActiveScene().buildIndex;
     }
 }

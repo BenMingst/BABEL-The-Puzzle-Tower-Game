@@ -3,6 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    void Start()
+    {
+        // dont destory on load so we can call these functions from anywhere
+        DontDestroyOnLoad(gameObject);
+    }
     public void playLevel1()
     {
         SceneManager.LoadSceneAsync("Level1");
@@ -58,9 +63,9 @@ public class SceneController : MonoBehaviour
     {
         Application.Quit();
     }
-    
-    public void resumeGame()
+    public void loadTransitionScene(string nextSceneName)
     {
         Time.timeScale = 1f;
+        SceneManager.LoadScene("TransitionScene");
     }
 }
