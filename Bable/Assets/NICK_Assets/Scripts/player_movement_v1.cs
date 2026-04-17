@@ -444,10 +444,18 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(0) && CanUseBomb())
         {
-            if (ba != null && !ba.bombActive)
+            if (ba != null)
             {
-                ba.isCrouchingWhenThrown = isCrouching;
-                ba.StartBombAttack();
+                // if remote bomb active detonate it
+                if (ba.activeRemoteBomb != null)
+                {
+                    ba.StartBombAttack();
+                }
+                else if (!ba.bombActive)
+                {
+                    ba.isCrouchingWhenThrown = isCrouching;
+                    ba.StartBombAttack();
+                }
             }
         }
 

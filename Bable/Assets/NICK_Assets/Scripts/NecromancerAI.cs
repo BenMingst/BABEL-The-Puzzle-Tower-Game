@@ -406,7 +406,25 @@ public class NecromancerAI : MonoBehaviour
     {
         if (spawnZone == null) return null;
 
-        Bounds bounds = spawnZone.bounds;
+        Bounds spawnBounds = spawnZone.bounds;
+        Bounds searchBounds = spawnBounds;
+
+        if (teleportZone != null)
+        {
+            Bounds teleportBounds = teleportZone.bounds;
+
+            float minX = Mathf.Max(spawnBounds.min.x, teleportBounds.min.x);
+            float maxX = Mathf.Min(spawnBounds.max.x, teleportBounds.max.x);
+            float minY = Mathf.Max(spawnBounds.min.y, teleportBounds.min.y);
+            float maxY = Mathf.Min(spawnBounds.max.y, teleportBounds.max.y);
+
+            if (minX >= maxX || minY >= maxY) return null;
+
+            searchBounds = new Bounds(
+                new Vector3((minX + maxX) / 2f, (minY + maxY) / 2f, 0f),
+                new Vector3(maxX - minX, maxY - minY, 0f));
+        }
+
         int maxAttempts = 20;
 
         float minDist = minSpawnDistance;
@@ -415,13 +433,13 @@ public class NecromancerAI : MonoBehaviour
 
         for (int i = 0; i < maxAttempts; i++)
         {
-            float randomX = Random.Range(bounds.min.x, bounds.max.x);
+            float randomX = Random.Range(searchBounds.min.x, searchBounds.max.x);
 
             float distFromNecro = Mathf.Abs(randomX - transform.position.x);
             if (distFromNecro < minDist) continue;
 
-            Vector2 rayOrigin = new Vector2(randomX, bounds.max.y);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, bounds.size.y, groundLayer);
+            Vector2 rayOrigin = new Vector2(randomX, searchBounds.max.y);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, searchBounds.size.y, groundLayer);
 
             if (hit.collider != null)
                 return new Vector2(randomX, hit.point.y + spawnHeightOffset);
@@ -463,6 +481,25 @@ public class NecromancerAI : MonoBehaviour
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireCube(spawnZone.bounds.center, spawnZone.bounds.size);
+        }
+
+        // draw intersection in white
+        if (spawnZone != null && teleportZone != null)
+        {
+            Bounds sb = spawnZone.bounds;
+            Bounds tb = teleportZone.bounds;
+            float minX = Mathf.Max(sb.min.x, tb.min.x);
+            float maxX = Mathf.Min(sb.max.x, tb.max.x);
+            float minY = Mathf.Max(sb.min.y, tb.min.y);
+            float maxY = Mathf.Min(sb.max.y, tb.max.y);
+
+            if (minX < maxX && minY < maxY)
+            {
+                Gizmos.color = Color.white;
+                Vector3 center = new Vector3((minX + maxX) / 2f, (minY + maxY) / 2f, 0f);
+                Vector3 size = new Vector3(maxX - minX, maxY - minY, 0f);
+                Gizmos.DrawWireCube(center, size);
+            }
         }
     }
 }

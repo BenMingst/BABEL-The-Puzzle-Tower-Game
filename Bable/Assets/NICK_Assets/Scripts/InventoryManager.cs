@@ -32,6 +32,9 @@ public class InventoryManager : MonoBehaviour
     public GameObject bowCooldownUI;
     public GameObject arrowTypeUI;
 
+    [Header("Bomb UI")]
+    public GameObject bombTypeUI;
+
     private RuntimeAnimatorController[] slotAnimators = new RuntimeAnimatorController[5];
     private bool[] slotFilled = new bool[5];
     private int currentSlot = -1;
@@ -50,6 +53,8 @@ public class InventoryManager : MonoBehaviour
             bowCooldownUI.SetActive(false);
         if (arrowTypeUI != null)
             arrowTypeUI.SetActive(false);
+        if (bombTypeUI != null)
+            bombTypeUI.SetActive(false);
         RefreshUI();
     }
 
@@ -75,6 +80,12 @@ public class InventoryManager : MonoBehaviour
                 bowCooldownUI.SetActive(true);
             if (arrowTypeUI != null && ArrowTypeManager.Instance != null)
                 ArrowTypeManager.Instance.Initialize();
+        }
+
+        if (slotIndex == 2)
+        {
+            if (BombTypeManager.Instance != null)
+                BombTypeManager.Instance.Initialize();
         }
 
         SelectSlot(slotIndex);
@@ -120,6 +131,12 @@ public class InventoryManager : MonoBehaviour
             playerController.animator.Play("Idle_Left");
         else
             playerController.animator.Play("Idle_Right");
+
+        // show/hide bomb type UI
+        if (bombTypeUI != null)
+            bombTypeUI.SetActive(index == 2 && slotFilled[2] &&
+                BombTypeManager.Instance != null &&
+                BombTypeManager.Instance.hasRemoteBomb);
 
         RefreshUI();
     }

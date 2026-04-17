@@ -213,7 +213,7 @@ MonoBehaviour:
     m_Bits: 64
   sightBlockLayers:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 64
   isArmored: 1
   normalSkellyAnimator: {fileID: 9100000, guid: bdabe77e688d748c7ba86900f13b3480, type: 2}
   armorBreakEffect: {fileID: 5961581933523542170, guid: 92d40af498c8d40f191032ccd0f46a10, type: 3}

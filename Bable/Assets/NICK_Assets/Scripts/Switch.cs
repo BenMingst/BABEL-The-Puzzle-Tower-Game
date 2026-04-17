@@ -7,8 +7,8 @@ public class Switch : MonoBehaviour
     [Header("Animation")]
     public Animator switchAnimator;
 
-    [Header("Linked Door")]
-    public SwitchDoor linkedDoor;
+    [Header("Linked Doors")]
+    public SwitchDoor[] linkedDoors;
 
     [Header("Settings")]
     public float unpressDelay = 0f;
@@ -19,7 +19,7 @@ public class Switch : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Enemy") || other.GetComponent<Bomb>() != null)
+        if (other.CompareTag("Player") || other.CompareTag("Enemy") || IsBombObject(other))
         {
             objectsOnSwitch.Add(other);
 
@@ -36,7 +36,7 @@ public class Switch : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Enemy") || other.GetComponent<Bomb>() != null)
+        if (other.CompareTag("Player") || other.CompareTag("Enemy") || IsBombObject(other))
         {
             objectsOnSwitch.Remove(other);
             objectsOnSwitch.RemoveAll(o => o == null);
@@ -51,13 +51,18 @@ public class Switch : MonoBehaviour
         }
     }
 
+    bool IsBombObject(Collider2D col)
+    {
+        return col.GetComponent<Bomb>() != null || col.GetComponent<RemoteBomb>() != null;
+    }
+
     void Press()
     {
         isPressed = true;
         if (switchAnimator != null)
             switchAnimator.SetTrigger("Pressed");
-        if (linkedDoor != null)
-            linkedDoor.OnSwitchPressed();
+        foreach (SwitchDoor door in linkedDoors)
+            if (door != null) door.OnSwitchPressed();
     }
 
     void Unpress()
@@ -65,8 +70,8 @@ public class Switch : MonoBehaviour
         isPressed = false;
         if (switchAnimator != null)
             switchAnimator.SetTrigger("Unpressed");
-        if (linkedDoor != null)
-            linkedDoor.OnSwitchUnpressed();
+        foreach (SwitchDoor door in linkedDoors)
+            if (door != null) door.OnSwitchUnpressed();
     }
 
     IEnumerator UnpressAfterDelay()

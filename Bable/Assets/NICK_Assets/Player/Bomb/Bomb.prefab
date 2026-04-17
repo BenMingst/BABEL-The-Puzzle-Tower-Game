@@ -221,7 +221,7 @@ MonoBehaviour:
   explosionDuration: 0.3
   damageableLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 72
   rb: {fileID: 6963215086169874740}
 --- !u!212 &7334031029152243146
 SpriteRenderer:

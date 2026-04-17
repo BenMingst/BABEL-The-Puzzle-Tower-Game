@@ -72,6 +72,14 @@ public class Bomb : MonoBehaviour
         {
             if (hit.CompareTag("Necro")) continue;
 
+            // check destructible block
+            DestructibleBlock block = hit.GetComponentInParent<DestructibleBlock>();
+            if (block != null)
+            {
+                block.Destroy();
+                continue;
+            }
+
             // check necromancer
             NecromancerHealth necroHealth = hit.GetComponentInParent<NecromancerHealth>();
             if (necroHealth != null)

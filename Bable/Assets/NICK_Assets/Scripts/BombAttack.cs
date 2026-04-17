@@ -5,8 +5,10 @@ public class BombAttack : MonoBehaviour
 {
     public static BombAttack Instance;
 
-    [Header("Bomb")]
+    [Header("Bomb Prefabs")]
     public GameObject bombPrefab;
+    public GameObject remoteBombPrefab;
+
     public Transform lobSpawnPoint;
     public Transform lobUpSpawnPoint;
     public Transform placeSpawnPoint;
@@ -25,6 +27,7 @@ public class BombAttack : MonoBehaviour
     public bool isCrouchingWhenThrown = false;
     private PlayerController pc;
     private Animator animator;
+    public RemoteBomb activeRemoteBomb = null;
 
     void Awake()
     {
@@ -39,6 +42,14 @@ public class BombAttack : MonoBehaviour
 
     public void StartBombAttack()
     {
+        // if remote bomb is active detonate it
+        if (activeRemoteBomb != null)
+        {
+            activeRemoteBomb.Detonate();
+            activeRemoteBomb = null;
+            return;
+        }
+
         if (bombActive || isWindingUp) return;
 
         if (isCrouchingWhenThrown)
@@ -67,7 +78,7 @@ public class BombAttack : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         isWindingUp = false;
-        SpawnBomb(BombType.Place);
+        SpawnBomb(ThrowType.Place);
 
         SwitchToNoSword();
     }
@@ -103,28 +114,38 @@ public class BombAttack : MonoBehaviour
         {
             animator.SetTrigger("BombLobUp");
             yield return new WaitForSeconds(0.2f);
-            SpawnBomb(BombType.LobUp);
+            SpawnBomb(ThrowType.LobUp);
         }
         else
         {
             animator.SetTrigger("BombLob");
             yield return new WaitForSeconds(0.2f);
-            SpawnBomb(BombType.Lob);
+            SpawnBomb(ThrowType.Lob);
         }
 
         SwitchToNoSword();
     }
 
-    void SpawnBomb(BombType type)
+    void SpawnBomb(ThrowType type)
     {
-        if (bombPrefab == null) return;
+        bool isRemote = BombTypeManager.Instance != null &&
+                        BombTypeManager.Instance.currentBombType == BombTypeManager.BombType.Remote;
+                         Debug.Log("SpawnBomb - isRemote: " + isRemote + 
+              " BombTypeManager null: " + (BombTypeManager.Instance == null) +
+              " currentBombType: " + (BombTypeManager.Instance != null ? BombTypeManager.Instance.currentBombType.ToString() : "N/A") +
+              " remoteBombPrefab null: " + (remoteBombPrefab == null));
+
+        GameObject prefab = isRemote ? remoteBombPrefab : bombPrefab;
+        if (prefab == null) {
+            Debug.Log("Prefab is null - cannot spawn bomb");
+            return;
+        }
 
         Transform spawnPoint = lobSpawnPoint;
-        if (type == BombType.LobUp) spawnPoint = lobUpSpawnPoint;
-        if (type == BombType.Place) spawnPoint = placeSpawnPoint;
+        if (type == ThrowType.LobUp) spawnPoint = lobUpSpawnPoint;
+        if (type == ThrowType.Place) spawnPoint = placeSpawnPoint;
         if (spawnPoint == null) spawnPoint = lobSpawnPoint;
 
-        // mirror spawn position if facing left
         Vector3 spawnPos = spawnPoint.position;
         if (!pc.facingRight)
         {
@@ -135,41 +156,68 @@ public class BombAttack : MonoBehaviour
                 spawnPoint.position.z);
         }
 
-        GameObject bombObj = Instantiate(bombPrefab, spawnPos, Quaternion.identity);
-        Bomb bomb = bombObj.GetComponent<Bomb>();
+        GameObject bombObj = Instantiate(prefab, spawnPos, Quaternion.identity);
 
-        switch (type)
+        if (isRemote)
         {
-            case BombType.Lob:
-                float angle = normalLobAngle * Mathf.Deg2Rad;
-                float dirX = pc.facingRight ? 1f : -1f;
-                Vector2 lobVelocity = new Vector2(
-                    dirX * normalLobSpeed * Mathf.Cos(angle),
-                    normalLobSpeed * Mathf.Sin(angle));
-                bomb.Launch(lobVelocity);
-                break;
+            RemoteBomb remoteBomb = bombObj.GetComponent<RemoteBomb>();
+            activeRemoteBomb = remoteBomb;
 
-            case BombType.LobUp:
-                float upAngle = upwardLobAngle * Mathf.Deg2Rad;
-                float dirXUp = pc.facingRight ? 1f : -1f;
-                Vector2 upVelocity = new Vector2(
-                    dirXUp * upwardLobSpeed * Mathf.Cos(upAngle),
-                    upwardLobSpeed * Mathf.Sin(upAngle));
-                bomb.Launch(upVelocity);
-                break;
+            switch (type)
+            {
+                case ThrowType.Lob:
+                    float angle = normalLobAngle * Mathf.Deg2Rad;
+                    float dirX = pc.facingRight ? 1f : -1f;
+                    remoteBomb.Launch(new Vector2(
+                        dirX * normalLobSpeed * Mathf.Cos(angle),
+                        normalLobSpeed * Mathf.Sin(angle)));
+                    break;
+                case ThrowType.LobUp:
+                    float upAngle = upwardLobAngle * Mathf.Deg2Rad;
+                    float dirXUp = pc.facingRight ? 1f : -1f;
+                    remoteBomb.Launch(new Vector2(
+                        dirXUp * upwardLobSpeed * Mathf.Cos(upAngle),
+                        upwardLobSpeed * Mathf.Sin(upAngle)));
+                    break;
+                case ThrowType.Place:
+                    remoteBomb.rb.linearVelocity = Vector2.zero;
+                    break;
+            }
+        }
+        else
+        {
+            Bomb bomb = bombObj.GetComponent<Bomb>();
 
-            case BombType.Place:
-                bomb.rb.linearVelocity = Vector2.zero;
-                break;
+            switch (type)
+            {
+                case ThrowType.Lob:
+                    float angle = normalLobAngle * Mathf.Deg2Rad;
+                    float dirX = pc.facingRight ? 1f : -1f;
+                    bomb.Launch(new Vector2(
+                        dirX * normalLobSpeed * Mathf.Cos(angle),
+                        normalLobSpeed * Mathf.Sin(angle)));
+                    break;
+                case ThrowType.LobUp:
+                    float upAngle = upwardLobAngle * Mathf.Deg2Rad;
+                    float dirXUp = pc.facingRight ? 1f : -1f;
+                    bomb.Launch(new Vector2(
+                        dirXUp * upwardLobSpeed * Mathf.Cos(upAngle),
+                        upwardLobSpeed * Mathf.Sin(upAngle)));
+                    break;
+                case ThrowType.Place:
+                    bomb.rb.linearVelocity = Vector2.zero;
+                    break;
+            }
         }
     }
 
     public void OnBombExploded()
     {
         bombActive = false;
+        activeRemoteBomb = null;
         if (InventoryManager.Instance != null && InventoryManager.Instance.IsBombSelected())
             InventoryManager.Instance.SelectCurrentSlot();
     }
 
-    public enum BombType { Lob, LobUp, Place }
+    public enum ThrowType { Lob, LobUp, Place }
 }

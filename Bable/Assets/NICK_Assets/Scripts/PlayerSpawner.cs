@@ -24,10 +24,7 @@ public class PlayerSpawner : MonoBehaviour
             GameManager.hasSword = true;
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_3")
-        {
             GameManager.hasBow = true;
-            GameManager.hasBomb = true;
-        }
 
         if (GameManager.hasCustomSpawn)
         {
@@ -54,6 +51,9 @@ public class PlayerSpawner : MonoBehaviour
         {
             pc.EquipBomb();
             if (bombChestObject != null) bombChestObject.SetActive(false);
+            // unlock remote bomb for testing
+            if (BombTypeManager.Instance != null)
+                BombTypeManager.Instance.UnlockRemoteBomb();
         }
 
         // unlock fire and ice arrows for level 3

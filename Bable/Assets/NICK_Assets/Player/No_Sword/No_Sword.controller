@@ -1025,6 +1025,24 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
+  - m_Name: BombChestOpen
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: BombPickup
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: BombPickupEnd
+    m_Type: 9
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -1094,7 +1112,7 @@ AnimatorStateMachine:
     m_Position: {x: -400, y: 1220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 2680801722226268833}
-    m_Position: {x: 237.91846, y: 1046.767, z: 0}
+    m_Position: {x: 240, y: 1040, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -930937472434722754}
     m_Position: {x: 670, y: 990, z: 0}
@@ -1121,7 +1139,7 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: -340, y: 530, z: 0}
+  m_AnyStatePosition: {x: -330, y: 530, z: 0}
   m_EntryPosition: {x: -550, y: 230, z: 0}
   m_ExitPosition: {x: -340, y: -210, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}

@@ -81,6 +81,8 @@ public class Chest : MonoBehaviour
             playerAnimator.ResetTrigger("GotIceArrows");
             playerAnimator.ResetTrigger("BowPickup");
             playerAnimator.ResetTrigger("BowPickupEnd");
+            playerAnimator.ResetTrigger("BombPickup");
+            playerAnimator.ResetTrigger("BombPickupEnd");
             playerAnimator.ResetTrigger("ItemPickup");
             playerAnimator.ResetTrigger("ItemPickupEnd");
             playerAnimator.ResetTrigger("ChestOpenEnd");
@@ -94,7 +96,9 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("ChestOpen");
             else if (itemType == ChestItemType.Sword)
                 playerAnimator.SetTrigger("ItemPickup");
-            else if (itemType == ChestItemType.Bow || itemType == ChestItemType.Bomb)
+            else if (itemType == ChestItemType.Bow)
+                playerAnimator.SetTrigger("ChestOpen");
+            else if (itemType == ChestItemType.Bomb)
                 playerAnimator.SetTrigger("ChestOpen");
 
             yield return new WaitForSecondsRealtime(1.4f);
@@ -107,9 +111,14 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("GotIceArrows");
             else if (itemType == ChestItemType.Sword)
                 playerAnimator.SetTrigger("ItemPickup");
-            else if (itemType == ChestItemType.Bow || itemType == ChestItemType.Bomb)
+            else if (itemType == ChestItemType.Bow)
                 playerAnimator.SetTrigger("BowPickup");
+            else if (itemType == ChestItemType.Bomb)
+            {
+                    Debug.Log("Setting BombPickup trigger - animator controller: " + playerAnimator.runtimeAnimatorController.name);
 
+                playerAnimator.SetTrigger("BombPickup");
+            }
             cutscenePanel.SetActive(true);
             int currentLine = 0;
             dialogueText.text = dialogueLines[currentLine];
@@ -149,8 +158,10 @@ public class Chest : MonoBehaviour
 
             if (itemType == ChestItemType.Sword)
                 playerAnimator.SetTrigger("ItemPickupEnd");
-            else if (itemType == ChestItemType.Bow || itemType == ChestItemType.Bomb)
+            else if (itemType == ChestItemType.Bow)
                 playerAnimator.SetTrigger("BowPickupEnd");
+            else if (itemType == ChestItemType.Bomb)
+                playerAnimator.SetTrigger("BombPickupEnd");
             else if (itemType == ChestItemType.SmallKey ||
                      itemType == ChestItemType.FireArrows ||
                      itemType == ChestItemType.IceArrows)
@@ -158,7 +169,9 @@ public class Chest : MonoBehaviour
 
             playerAnimator.updateMode = AnimatorUpdateMode.Normal;
 
-            if (itemType != ChestItemType.Sword && itemType != ChestItemType.Bow && itemType != ChestItemType.Bomb)
+            if (itemType != ChestItemType.Sword &&
+                itemType != ChestItemType.Bow &&
+                itemType != ChestItemType.Bomb)
                 InventoryManager.Instance.SelectCurrentSlot();
         }
 
