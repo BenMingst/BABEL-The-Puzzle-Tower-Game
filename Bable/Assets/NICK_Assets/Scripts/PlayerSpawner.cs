@@ -7,6 +7,7 @@ public class PlayerSpawner : MonoBehaviour
     public GameObject swordEventObject;
     public GameObject bowChestObject;
     public GameObject bombChestObject;
+    public GameObject remoteBombChestObject;
 
     void Start()
     {
@@ -47,13 +48,16 @@ public class PlayerSpawner : MonoBehaviour
             if (bowChestObject != null) bowChestObject.SetActive(false);
         }
 
-        if (GameManager.hasBomb)
+        if (GameManager.hasRemoteBomb)
+        {
+            pc.EquipRemoteBomb();
+            if (bombChestObject != null) bombChestObject.SetActive(false);
+            if (remoteBombChestObject != null) remoteBombChestObject.SetActive(false);
+        }
+        else if (GameManager.hasBomb)
         {
             pc.EquipBomb();
             if (bombChestObject != null) bombChestObject.SetActive(false);
-            // unlock remote bomb for testing
-            if (BombTypeManager.Instance != null)
-                BombTypeManager.Instance.UnlockRemoteBomb();
         }
 
         // unlock fire and ice arrows for level 3

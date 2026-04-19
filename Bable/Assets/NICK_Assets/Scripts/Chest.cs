@@ -4,7 +4,7 @@ using TMPro;
 
 public class Chest : MonoBehaviour
 {
-    public enum ChestItemType { Sword, Bow, SmallKey, FireArrows, IceArrows, Bomb }
+   public enum ChestItemType { Sword, Bow, SmallKey, FireArrows, IceArrows, Bomb, RemoteBomb }
 
     public string persistentID;
 
@@ -83,6 +83,8 @@ public class Chest : MonoBehaviour
             playerAnimator.ResetTrigger("BowPickupEnd");
             playerAnimator.ResetTrigger("BombPickup");
             playerAnimator.ResetTrigger("BombPickupEnd");
+            playerAnimator.ResetTrigger("RemoteBombPickup");
+            playerAnimator.ResetTrigger("RemoteBombPickupEnd");
             playerAnimator.ResetTrigger("ItemPickup");
             playerAnimator.ResetTrigger("ItemPickupEnd");
             playerAnimator.ResetTrigger("ChestOpenEnd");
@@ -100,6 +102,8 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("ChestOpen");
             else if (itemType == ChestItemType.Bomb)
                 playerAnimator.SetTrigger("ChestOpen");
+            else if (itemType == ChestItemType.RemoteBomb)
+                playerAnimator.SetTrigger("ChestOpen");
 
             yield return new WaitForSecondsRealtime(1.4f);
 
@@ -115,10 +119,15 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("BowPickup");
             else if (itemType == ChestItemType.Bomb)
             {
-                    Debug.Log("Setting BombPickup trigger - animator controller: " + playerAnimator.runtimeAnimatorController.name);
-
+                Debug.Log("Setting BombPickup trigger - animator controller: " + playerAnimator.runtimeAnimatorController.name);
                 playerAnimator.SetTrigger("BombPickup");
             }
+            else if (itemType == ChestItemType.RemoteBomb)
+            {
+                Debug.Log("Setting RemoteBombPickup trigger - animator controller: " + playerAnimator.runtimeAnimatorController.name);
+                playerAnimator.SetTrigger("RemoteBombPickup");
+            }
+
             cutscenePanel.SetActive(true);
             int currentLine = 0;
             dialogueText.text = dialogueLines[currentLine];
@@ -149,6 +158,8 @@ public class Chest : MonoBehaviour
                 pcEquip.EquipBow();
             else if (itemType == ChestItemType.Bomb)
                 pcEquip.EquipBomb();
+            else if (itemType == ChestItemType.RemoteBomb)
+                pcEquip.EquipRemoteBomb();
             else if (itemType == ChestItemType.SmallKey)
                 KeyManager.Instance.AddKey();
             else if (itemType == ChestItemType.FireArrows)
@@ -162,6 +173,8 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("BowPickupEnd");
             else if (itemType == ChestItemType.Bomb)
                 playerAnimator.SetTrigger("BombPickupEnd");
+            else if (itemType == ChestItemType.RemoteBomb)
+                playerAnimator.SetTrigger("RemoteBombPickupEnd");
             else if (itemType == ChestItemType.SmallKey ||
                      itemType == ChestItemType.FireArrows ||
                      itemType == ChestItemType.IceArrows)
@@ -171,7 +184,8 @@ public class Chest : MonoBehaviour
 
             if (itemType != ChestItemType.Sword &&
                 itemType != ChestItemType.Bow &&
-                itemType != ChestItemType.Bomb)
+                itemType != ChestItemType.Bomb &&
+                itemType != ChestItemType.RemoteBomb)
                 InventoryManager.Instance.SelectCurrentSlot();
         }
 

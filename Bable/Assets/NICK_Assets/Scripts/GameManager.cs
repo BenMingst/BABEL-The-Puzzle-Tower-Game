@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public static bool hasSword = false;
     public static bool hasBow = false;
     public static bool hasBomb = false;
+    public static bool hasRemoteBomb = false;
 
     public Transform defaultSpawnPoint;
 
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
             hasSword = false;
             hasBow = false;
             hasBomb = false;
+            hasRemoteBomb = false;
             furthestCheckpoint = 0;
             hasCustomSpawn = false;
             respawnWithSword = false;
@@ -57,6 +59,7 @@ public class GameManager : MonoBehaviour
         hasSword = false;
         hasBow = false;
         hasBomb = false;
+        hasRemoteBomb = false;
         furthestCheckpoint = 0;
         hasCustomSpawn = false;
         respawnWithSword = false;

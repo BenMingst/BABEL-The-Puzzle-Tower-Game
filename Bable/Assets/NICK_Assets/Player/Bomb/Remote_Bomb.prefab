@@ -193,8 +193,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5ae033b350dc489980949c3dd6c98b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RemoteBomb
-  damage: 2
-  explosionRadius: 2
+  damage: 1
+  explosionRadius: 1
   explosionChild: {fileID: 6875268215449461130}
   explosionDuration: 0.3
   damageableLayers:

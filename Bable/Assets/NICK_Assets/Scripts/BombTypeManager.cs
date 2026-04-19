@@ -37,6 +37,13 @@ public class BombTypeManager : MonoBehaviour
         RefreshUI();
     }
 
+    public void UnlockTimedBomb()
+    {
+        // timed-only pickup: keep toggle UI hidden
+        currentBombType = BombType.Timed;
+        RefreshUI();
+    }
+
     public void UnlockRemoteBomb()
     {
         hasRemoteBomb = true;
@@ -60,8 +67,6 @@ public class BombTypeManager : MonoBehaviour
     void CycleBombType()
     {
         currentBombType = currentBombType == BombType.Timed ? BombType.Remote : BombType.Timed;
-            Debug.Log("Cycled bomb type to: " + currentBombType);
-
 
         if (BombTypeIndicator.Instance != null)
             BombTypeIndicator.Instance.ShowIndicator(currentBombType);

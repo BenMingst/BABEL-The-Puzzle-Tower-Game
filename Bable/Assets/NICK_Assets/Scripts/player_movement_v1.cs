@@ -110,12 +110,32 @@ public class PlayerController : MonoBehaviour
         InventoryManager.Instance.AddItem(1, bowAnimator);
     }
 
-    public void EquipBomb()
+   public void EquipBomb()
+{
+    hasBomb = true;
+    GameManager.hasBomb = true;
+    InventoryManager.Instance.AddItem(2, bombAnimator);
+
+    if (BombTypeManager.Instance != null)
+        BombTypeManager.Instance.UnlockTimedBomb();
+}
+
+public void EquipRemoteBomb()
+{
+    if (!hasBomb)
     {
         hasBomb = true;
         GameManager.hasBomb = true;
-        InventoryManager.Instance.AddItem(2, bombAnimator);
     }
+
+    GameManager.hasRemoteBomb = true;
+
+    // always re-add to slot 2 so inventory reselects and animator switches to bomb animator
+    InventoryManager.Instance.AddItem(2, bombAnimator);
+
+    if (BombTypeManager.Instance != null)
+        BombTypeManager.Instance.UnlockRemoteBomb();
+}
 
     public void SetInsideDropdown(bool value)
     {
