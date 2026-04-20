@@ -8,6 +8,7 @@ public class PlayerSpawner : MonoBehaviour
     public GameObject bowChestObject;
     public GameObject bombChestObject;
     public GameObject remoteBombChestObject;
+    public GameObject grappleChestObject;
 
     void Start()
     {
@@ -26,6 +27,9 @@ public class PlayerSpawner : MonoBehaviour
 
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_3")
             GameManager.hasBow = true;
+
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_4")
+            GameManager.hasGrapple = true;
 
         if (GameManager.hasCustomSpawn)
         {
@@ -58,6 +62,12 @@ public class PlayerSpawner : MonoBehaviour
         {
             pc.EquipBomb();
             if (bombChestObject != null) bombChestObject.SetActive(false);
+        }
+
+        if (GameManager.hasGrapple)
+        {
+            pc.EquipGrapple();
+            if (grappleChestObject != null) grappleChestObject.SetActive(false);
         }
 
         // unlock fire and ice arrows for level 3

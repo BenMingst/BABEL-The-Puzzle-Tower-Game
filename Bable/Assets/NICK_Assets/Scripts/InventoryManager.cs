@@ -107,6 +107,11 @@ public class InventoryManager : MonoBehaviour
         return currentSlot == 2 && slotFilled[2];
     }
 
+    public bool IsGrappleSelected()
+    {
+        return currentSlot == 3 && slotFilled[3];
+    }
+
     public void SelectCurrentSlot()
     {
         SelectSlot(currentSlot);

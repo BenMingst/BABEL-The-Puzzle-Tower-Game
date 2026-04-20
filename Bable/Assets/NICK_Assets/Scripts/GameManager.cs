@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static bool hasBow = false;
     public static bool hasBomb = false;
     public static bool hasRemoteBomb = false;
+    public static bool hasGrapple = false;
 
     public Transform defaultSpawnPoint;
 
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
             hasBow = false;
             hasBomb = false;
             hasRemoteBomb = false;
+            hasGrapple = false;
             furthestCheckpoint = 0;
             hasCustomSpawn = false;
             respawnWithSword = false;
@@ -47,6 +49,9 @@ public class GameManager : MonoBehaviour
 
         if (scene.name == "Level_3")
             hasBow = true;
+
+        if (scene.name == "Level_4")
+            hasGrapple = true;
     }
 
     void OnDestroy()
@@ -60,6 +65,7 @@ public class GameManager : MonoBehaviour
         hasBow = false;
         hasBomb = false;
         hasRemoteBomb = false;
+        hasGrapple = false;
         furthestCheckpoint = 0;
         hasCustomSpawn = false;
         respawnWithSword = false;

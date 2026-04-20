@@ -53,9 +53,11 @@ public class PlayerController : MonoBehaviour
     public RuntimeAnimatorController swordAnimator;
     public RuntimeAnimatorController bowAnimator;
     public RuntimeAnimatorController bombAnimator;
+    public RuntimeAnimatorController grappleAnimator;
     public bool hasSword = false;
     public bool hasBow = false;
     public bool hasBomb = false;
+    public bool hasGrapple = false;
 
     [Header("Freeze Effect")]
     public float freezeEffect = 0.3f;
@@ -110,32 +112,39 @@ public class PlayerController : MonoBehaviour
         InventoryManager.Instance.AddItem(1, bowAnimator);
     }
 
-   public void EquipBomb()
-{
-    hasBomb = true;
-    GameManager.hasBomb = true;
-    InventoryManager.Instance.AddItem(2, bombAnimator);
-
-    if (BombTypeManager.Instance != null)
-        BombTypeManager.Instance.UnlockTimedBomb();
-}
-
-public void EquipRemoteBomb()
-{
-    if (!hasBomb)
+    public void EquipBomb()
     {
         hasBomb = true;
         GameManager.hasBomb = true;
+        InventoryManager.Instance.AddItem(2, bombAnimator);
+
+        if (BombTypeManager.Instance != null)
+            BombTypeManager.Instance.UnlockTimedBomb();
     }
 
-    GameManager.hasRemoteBomb = true;
+    public void EquipRemoteBomb()
+    {
+        if (!hasBomb)
+        {
+            hasBomb = true;
+            GameManager.hasBomb = true;
+        }
 
-    // always re-add to slot 2 so inventory reselects and animator switches to bomb animator
-    InventoryManager.Instance.AddItem(2, bombAnimator);
+        GameManager.hasRemoteBomb = true;
 
-    if (BombTypeManager.Instance != null)
-        BombTypeManager.Instance.UnlockRemoteBomb();
-}
+        // always re-add to slot 2 so inventory reselects and animator switches to bomb animator
+        InventoryManager.Instance.AddItem(2, bombAnimator);
+
+        if (BombTypeManager.Instance != null)
+            BombTypeManager.Instance.UnlockRemoteBomb();
+    }
+
+    public void EquipGrapple()
+    {
+        hasGrapple = true;
+        GameManager.hasGrapple = true;
+        InventoryManager.Instance.AddItem(3, grappleAnimator);
+    }
 
     public void SetInsideDropdown(bool value)
     {
@@ -155,6 +164,11 @@ public void EquipRemoteBomb()
     bool CanUseBomb()
     {
         return hasBomb && InventoryManager.Instance != null && InventoryManager.Instance.IsBombSelected();
+    }
+
+    bool CanUseGrapple()
+    {
+        return hasGrapple && InventoryManager.Instance != null && InventoryManager.Instance.IsGrappleSelected();
     }
 
     public void OnBombExploded()
@@ -383,6 +397,10 @@ public void EquipRemoteBomb()
         Sign sign = FindObjectOfType<Sign>();
         if (sign != null && sign.inCutscene) return;
 
+        // lock input while grappling
+        GrappleGlove gg = GetComponent<GrappleGlove>();
+        if (gg != null && (gg.isGrappling || gg.isBeingPulled)) return;
+
         horizontalInput = 0f;
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
         if (Input.GetKey(KeyCode.D)) horizontalInput = 1f;
@@ -478,6 +496,11 @@ public void EquipRemoteBomb()
                 }
             }
         }
+        else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseGrapple())
+        {
+            if (gg != null && !gg.isGrappling && !gg.isBeingPulled)
+                gg.StartGrapple();
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)
         {
@@ -492,6 +515,10 @@ public void EquipRemoteBomb()
     void FixedUpdate()
     {
         if (isDead) return;
+
+        // skip movement during grapple
+        GrappleGlove gg = GetComponent<GrappleGlove>();
+        if (gg != null && (gg.isGrappling || gg.isBeingPulled)) return;
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 

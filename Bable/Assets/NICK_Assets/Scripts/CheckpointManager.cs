@@ -18,6 +18,7 @@ public class CheckpointState
     public bool hasBow;
     public bool hasBomb;
     public bool hasRemoteBomb;
+    public bool hasGrapple;
     public bool hasFireArrows;
     public bool hasIceArrows;
     public int keyCount;
@@ -93,6 +94,7 @@ public class CheckpointManager : MonoBehaviour
         savedState.hasBow = GameManager.hasBow;
         savedState.hasBomb = GameManager.hasBomb;
         savedState.hasRemoteBomb = GameManager.hasRemoteBomb;
+        savedState.hasGrapple = GameManager.hasGrapple;
         savedState.hasFireArrows = ArrowTypeManager.Instance != null && ArrowTypeManager.Instance.hasFireArrows;
         savedState.hasIceArrows = ArrowTypeManager.Instance != null && ArrowTypeManager.Instance.hasIceArrows;
         savedState.keyCount = KeyManager.Instance != null ? KeyManager.Instance.GetKeyCount() : 0;
@@ -164,6 +166,7 @@ public class CheckpointManager : MonoBehaviour
         GameManager.hasBow = savedState.hasBow;
         GameManager.hasBomb = savedState.hasBomb;
         GameManager.hasRemoteBomb = savedState.hasRemoteBomb;
+        GameManager.hasGrapple = savedState.hasGrapple;
         if (savedState.hasFireArrows && ArrowTypeManager.Instance != null)
             ArrowTypeManager.Instance.UnlockFireArrows();
         if (savedState.hasIceArrows && ArrowTypeManager.Instance != null)
