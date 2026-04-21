@@ -397,9 +397,9 @@ public class PlayerController : MonoBehaviour
         Sign sign = FindObjectOfType<Sign>();
         if (sign != null && sign.inCutscene) return;
 
-        // lock input while grappling
+        // lock input while being pulled OR while grounded-grappling (shooting from the ground)
         GrappleGlove gg = GetComponent<GrappleGlove>();
-        if (gg != null && (gg.isGrappling || gg.isBeingPulled)) return;
+        if (gg != null && (gg.isBeingPulled || gg.isGroundedGrappling)) return;
 
         horizontalInput = 0f;
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
@@ -516,9 +516,9 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
 
-        // skip movement during grapple
+        // skip physics movement when being pulled OR when grounded-grappling
         GrappleGlove gg = GetComponent<GrappleGlove>();
-        if (gg != null && (gg.isGrappling || gg.isBeingPulled)) return;
+        if (gg != null && (gg.isBeingPulled || gg.isGroundedGrappling)) return;
 
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 

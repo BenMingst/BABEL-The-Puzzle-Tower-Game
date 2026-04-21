@@ -51,7 +51,11 @@ public class GameManager : MonoBehaviour
             hasBow = true;
 
         if (scene.name == "Level_4")
+        {
+            hasBow = true;
+            hasBomb = true;
             hasGrapple = true;
+        }
     }
 
     void OnDestroy()

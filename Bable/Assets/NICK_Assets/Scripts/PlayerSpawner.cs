@@ -22,14 +22,21 @@ public class PlayerSpawner : MonoBehaviour
         if (CheckpointManager.Instance != null)
             CheckpointManager.Instance.RestoreState();
 
+        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+
         if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex >= 1)
             GameManager.hasSword = true;
 
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_3")
+        if (sceneName == "Level_3")
             GameManager.hasBow = true;
 
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_4")
+        if (sceneName == "Level_4")
+        {
+            GameManager.hasBow = true;
+            GameManager.hasBomb = true;
+            GameManager.hasRemoteBomb = true;
             GameManager.hasGrapple = true;
+        }
 
         if (GameManager.hasCustomSpawn)
         {
@@ -70,8 +77,8 @@ public class PlayerSpawner : MonoBehaviour
             if (grappleChestObject != null) grappleChestObject.SetActive(false);
         }
 
-        // unlock fire and ice arrows for level 3
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Level_3")
+        // unlock fire and ice arrows for level 3 and level 4
+        if (sceneName == "Level_3" || sceneName == "Level_4")
         {
             if (ArrowTypeManager.Instance != null)
             {

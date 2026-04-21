@@ -137,12 +137,6 @@ public class InventoryManager : MonoBehaviour
         else
             playerController.animator.Play("Idle_Right");
 
-        // show/hide bomb type UI
-        if (bombTypeUI != null)
-            bombTypeUI.SetActive(index == 2 && slotFilled[2] &&
-                BombTypeManager.Instance != null &&
-                BombTypeManager.Instance.hasRemoteBomb);
-
         RefreshUI();
     }
 

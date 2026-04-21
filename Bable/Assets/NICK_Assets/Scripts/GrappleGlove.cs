@@ -8,6 +8,7 @@ public class GrappleGlove : MonoBehaviour
     [Header("Grapple")]
     public GameObject grappleHeadPrefab;
     public Transform grappleSpawnPoint;
+    public Transform grapplePulledSpawnPoint;
 
     [Header("Pull Settings")]
     public float pullSpeed = 15f;
@@ -18,6 +19,7 @@ public class GrappleGlove : MonoBehaviour
 
     public bool isGrappling = false;
     public bool isBeingPulled = false;
+    public bool isGroundedGrappling = false;
 
     private PlayerController pc;
     private Animator animator;
@@ -39,28 +41,48 @@ public class GrappleGlove : MonoBehaviour
             lineRenderer.enabled = false;
     }
 
+    Transform CurrentSpawnPoint()
+    {
+        return isBeingPulled && grapplePulledSpawnPoint != null
+            ? grapplePulledSpawnPoint
+            : grappleSpawnPoint;
+    }
+
+    bool IsPlayerGrounded()
+    {
+        if (pc == null || pc.groundCheck == null) return false;
+        return Physics2D.OverlapCircle(pc.groundCheck.position, pc.groundCheckRadius, pc.groundLayer);
+    }
+
     public void StartGrapple()
     {
         if (isGrappling || isBeingPulled) return;
 
         isGrappling = true;
 
-        // lock player in place during shoot
-        rb.linearVelocity = Vector2.zero;
-        rb.bodyType = RigidbodyType2D.Kinematic;
+        animator.ResetTrigger("GrappleShootEnd");
 
-        // play shoot animation (stays on last frame)
-        animator.SetTrigger("GrappleShoot");
+        bool grounded = IsPlayerGrounded();
 
-        // spawn head
-        Vector3 spawnPos = grappleSpawnPoint.position;
+        if (grounded)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            isGroundedGrappling = true;
+        }
+
+        if (grounded)
+            animator.SetTrigger("GrappleShoot");
+        else
+            animator.SetTrigger("GrappleShootAir");
+
+        Vector3 spawnPos = CurrentSpawnPoint().position;
         Vector2 dir = pc.facingRight ? Vector2.right : Vector2.left;
 
         GameObject headObj = Instantiate(grappleHeadPrefab, spawnPos, Quaternion.identity);
         activeHead = headObj.GetComponent<GrappleHead>();
         activeHead.Launch(dir, this);
 
-        // enable line renderer
         if (lineRenderer != null)
         {
             lineRenderer.enabled = true;
@@ -70,10 +92,9 @@ public class GrappleGlove : MonoBehaviour
 
     void Update()
     {
-        // draw line from spawn point to head position every frame
         if (lineRenderer != null && lineRenderer.enabled && activeHead != null)
         {
-            lineRenderer.SetPosition(0, grappleSpawnPoint.position);
+            lineRenderer.SetPosition(0, CurrentSpawnPoint().position);
             lineRenderer.SetPosition(1, activeHead.transform.position);
         }
     }
@@ -88,14 +109,16 @@ public class GrappleGlove : MonoBehaviour
         isBeingPulled = true;
         animator.SetBool("GrappleGetPulled", true);
 
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+
         while (Vector3.Distance(transform.position, target) > stopDistance)
         {
             transform.position = Vector3.MoveTowards(transform.position, target, pullSpeed * Time.deltaTime);
 
-            // keep line drawing during pull
             if (lineRenderer != null && activeHead != null)
             {
-                lineRenderer.SetPosition(0, grappleSpawnPoint.position);
+                lineRenderer.SetPosition(0, CurrentSpawnPoint().position);
                 lineRenderer.SetPosition(1, activeHead.transform.position);
             }
 
@@ -104,8 +127,17 @@ public class GrappleGlove : MonoBehaviour
 
         // arrived
         isBeingPulled = false;
+        isGroundedGrappling = false;
         animator.SetBool("GrappleGetPulled", false);
         animator.SetTrigger("GrappleShootEnd");
+
+        animator.ResetTrigger("GrappleShoot");
+        animator.ResetTrigger("GrappleShootAir");
+
+        if (pc.facingRight)
+            animator.Play("Idle_Right");
+        else
+            animator.Play("Idle_Left");
 
         if (activeHead != null) Destroy(activeHead.gameObject);
         activeHead = null;
@@ -121,13 +153,22 @@ public class GrappleGlove : MonoBehaviour
 
     public void OnGrappleRetracted()
     {
-        // hit nothing, grapple returned empty
         if (lineRenderer != null)
             lineRenderer.enabled = false;
 
         animator.SetTrigger("GrappleShootEnd");
+
+        animator.ResetTrigger("GrappleShoot");
+        animator.ResetTrigger("GrappleShootAir");
+
+        if (pc.facingRight)
+            animator.Play("Idle_Right");
+        else
+            animator.Play("Idle_Left");
+
         rb.bodyType = RigidbodyType2D.Dynamic;
         isGrappling = false;
+        isGroundedGrappling = false;
         activeHead = null;
     }
 }
