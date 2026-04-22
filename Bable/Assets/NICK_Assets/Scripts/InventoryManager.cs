@@ -60,6 +60,10 @@ public class InventoryManager : MonoBehaviour
 
     void Update()
     {
+        // block slot switching during grapple sequence
+        GrappleGlove gg = GrappleGlove.Instance;
+        if (gg != null && (gg.isGrappling || gg.isBeingPulled)) return;
+
         if (Input.GetKeyDown(KeyCode.Alpha1)) SelectSlot(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SelectSlot(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SelectSlot(2);
