@@ -584,55 +584,40 @@ public class PlayerController : MonoBehaviour
     }
 
     IEnumerator BowAttack()
+{
+    isAttacking = true;
+    rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+
+    if (ArrowTypeManager.Instance != null)
+        ArrowTypeManager.Instance.isShooting = true;
+
+    ArrowTypeManager.ArrowType arrowType = ArrowTypeManager.Instance != null ?
+        ArrowTypeManager.Instance.currentArrowType :
+        ArrowTypeManager.ArrowType.Normal;
+
+    string prefix = !isGrounded ? "Midair" : "";
+    string suffix = facingRight ? "Right" : "Left";
+
+    switch (arrowType)
     {
-        isAttacking = true;
-        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
-        if (ArrowTypeManager.Instance != null)
-            ArrowTypeManager.Instance.isShooting = true;
-
-        ArrowTypeManager.ArrowType arrowType = ArrowTypeManager.Instance != null ?
-            ArrowTypeManager.Instance.currentArrowType :
-            ArrowTypeManager.ArrowType.Normal;
-
-        if (facingRight)
-        {
-            switch (arrowType)
-            {
-                case ArrowTypeManager.ArrowType.Normal:
-                    animator.SetTrigger("BowAttackRight");
-                    break;
-                case ArrowTypeManager.ArrowType.Ice:
-                    animator.SetTrigger("IceBowAttackRight");
-                    break;
-                case ArrowTypeManager.ArrowType.Fire:
-                    animator.SetTrigger("FireBowAttackRight");
-                    break;
-            }
-        }
-        else
-        {
-            switch (arrowType)
-            {
-                case ArrowTypeManager.ArrowType.Normal:
-                    animator.SetTrigger("BowAttackLeft");
-                    break;
-                case ArrowTypeManager.ArrowType.Ice:
-                    animator.SetTrigger("IceBowAttackLeft");
-                    break;
-                case ArrowTypeManager.ArrowType.Fire:
-                    animator.SetTrigger("FireBowAttackLeft");
-                    break;
-            }
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        if (ArrowTypeManager.Instance != null)
-            ArrowTypeManager.Instance.isShooting = false;
-
-        isAttacking = false;
+        case ArrowTypeManager.ArrowType.Normal:
+            animator.SetTrigger($"{prefix}BowAttack{suffix}");
+            break;
+        case ArrowTypeManager.ArrowType.Ice:
+            animator.SetTrigger($"{prefix}IceBowAttack{suffix}");
+            break;
+        case ArrowTypeManager.ArrowType.Fire:
+            animator.SetTrigger($"{prefix}FireBowAttack{suffix}");
+            break;
     }
+
+    yield return new WaitForSeconds(0.5f);
+
+    if (ArrowTypeManager.Instance != null)
+        ArrowTypeManager.Instance.isShooting = false;
+
+    isAttacking = false;
+}
 
     IEnumerator Roll()
     {

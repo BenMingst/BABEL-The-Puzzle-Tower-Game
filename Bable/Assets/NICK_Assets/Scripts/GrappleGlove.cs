@@ -8,7 +8,9 @@ public class GrappleGlove : MonoBehaviour
     [Header("Grapple")]
     public GameObject grappleHeadPrefab;
     public Transform grappleSpawnPoint;
+    public Transform grappleAirSpawnPoint;
     public Transform grapplePulledSpawnPoint;
+    public Transform grapplePulledAirSpawnPoint;
 
     [Header("Pull Settings")]
     public float pullSpeed = 15f;
@@ -25,6 +27,9 @@ public class GrappleGlove : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb;
     private GrappleHead activeHead;
+
+    // tracks whether the current grapple started from the air (persists through pull)
+    private bool startedFromAir = false;
 
     void Awake()
     {
@@ -43,9 +48,32 @@ public class GrappleGlove : MonoBehaviour
 
     Transform CurrentSpawnPoint()
     {
-        return isBeingPulled && grapplePulledSpawnPoint != null
-            ? grapplePulledSpawnPoint
-            : grappleSpawnPoint;
+        // while being pulled
+        if (isBeingPulled)
+        {
+            if (startedFromAir && grapplePulledAirSpawnPoint != null)
+                return grapplePulledAirSpawnPoint;
+            if (grapplePulledSpawnPoint != null)
+                return grapplePulledSpawnPoint;
+        }
+
+        // while grappling (not pulling yet)
+        if (isGrappling && !isGroundedGrappling && grappleAirSpawnPoint != null)
+            return grappleAirSpawnPoint;
+
+        return grappleSpawnPoint;
+    }
+
+    Vector3 CurrentSpawnWorldPosition()
+    {
+        Transform sp = CurrentSpawnPoint();
+        if (sp == null) return transform.position;
+
+        Vector3 localOffset = sp.localPosition;
+        if (!pc.facingRight)
+            localOffset.x = -localOffset.x;
+
+        return transform.TransformPoint(localOffset);
     }
 
     bool IsPlayerGrounded()
@@ -63,6 +91,7 @@ public class GrappleGlove : MonoBehaviour
         animator.ResetTrigger("GrappleShootEnd");
 
         bool grounded = IsPlayerGrounded();
+        startedFromAir = !grounded;
 
         if (grounded)
         {
@@ -76,7 +105,7 @@ public class GrappleGlove : MonoBehaviour
         else
             animator.SetTrigger("GrappleShootAir");
 
-        Vector3 spawnPos = CurrentSpawnPoint().position;
+        Vector3 spawnPos = CurrentSpawnWorldPosition();
         Vector2 dir = pc.facingRight ? Vector2.right : Vector2.left;
 
         GameObject headObj = Instantiate(grappleHeadPrefab, spawnPos, Quaternion.identity);
@@ -94,7 +123,7 @@ public class GrappleGlove : MonoBehaviour
     {
         if (lineRenderer != null && lineRenderer.enabled && activeHead != null)
         {
-            lineRenderer.SetPosition(0, CurrentSpawnPoint().position);
+            lineRenderer.SetPosition(0, CurrentSpawnWorldPosition());
             lineRenderer.SetPosition(1, activeHead.transform.position);
         }
     }
@@ -118,7 +147,7 @@ public class GrappleGlove : MonoBehaviour
 
             if (lineRenderer != null && activeHead != null)
             {
-                lineRenderer.SetPosition(0, CurrentSpawnPoint().position);
+                lineRenderer.SetPosition(0, CurrentSpawnWorldPosition());
                 lineRenderer.SetPosition(1, activeHead.transform.position);
             }
 
@@ -128,6 +157,7 @@ public class GrappleGlove : MonoBehaviour
         // arrived
         isBeingPulled = false;
         isGroundedGrappling = false;
+        startedFromAir = false;
         animator.SetBool("GrappleGetPulled", false);
         animator.SetTrigger("GrappleShootEnd");
 
@@ -169,6 +199,7 @@ public class GrappleGlove : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Dynamic;
         isGrappling = false;
         isGroundedGrappling = false;
+        startedFromAir = false;
         activeHead = null;
     }
 }
