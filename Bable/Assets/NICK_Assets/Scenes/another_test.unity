@@ -3556,6 +3556,7 @@ MonoBehaviour:
   sightBlockLayers:
     serializedVersion: 2
     m_Bits: 64
+  platformVelocity: {x: 0, y: 0}
   currentState: 0
   visibleDistance: 4
   semiVisibleAlpha: 0.25
