@@ -4110,7 +4110,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Change Window Mode
+  m_text: Change Resolution
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: abc8dff3a74f342859cd7f3784281c87, type: 2}
   m_sharedMaterial: {fileID: -2350509661348119940, guid: abc8dff3a74f342859cd7f3784281c87, type: 2}
