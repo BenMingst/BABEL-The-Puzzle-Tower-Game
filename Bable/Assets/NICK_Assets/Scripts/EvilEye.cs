@@ -29,6 +29,9 @@ public class EvilEye : MonoBehaviour
     public Animator eyeAnimator;
     public EnemyHealth enemyHealth;
 
+    [Header("Grapple Slow")]
+    public float grappleSlowMultiplier = 1f;
+
     public Vector2 platformVelocity = Vector2.zero;
 
     private Transform player;
@@ -132,7 +135,7 @@ public class EvilEye : MonoBehaviour
 
         eyeAnimator.SetTrigger("Attack");
 
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(attackCooldown / grappleSlowMultiplier);
 
         isAttacking = false;
     }
@@ -172,7 +175,7 @@ public class EvilEye : MonoBehaviour
         eyeAnimator.SetBool("FrontIdle", false);
         eyeAnimator.SetTrigger("CloseEye");
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.3f / grappleSlowMultiplier);
 
         eyeAnimator.SetBool("DefendIdle", true);
 
@@ -184,7 +187,7 @@ public class EvilEye : MonoBehaviour
         eyeAnimator.SetBool("DefendIdle", false);
         eyeAnimator.SetTrigger("OpenEye");
 
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.3f / grappleSlowMultiplier);
 
         isDefending = false;
         currentState = EvilEyeState.SideIdle;

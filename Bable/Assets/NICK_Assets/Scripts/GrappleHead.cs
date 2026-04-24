@@ -5,6 +5,8 @@ public class GrappleHead : MonoBehaviour
     public float travelSpeed = 20f;
     public float maxRange = 10f;
     public LayerMask groundLayer;
+    public LayerMask enemyLayer;
+    public LayerMask blockLayer;
 
     public enum State { Flying, Hit, Retracting }
     public State state = State.Flying;
@@ -19,7 +21,6 @@ public class GrappleHead : MonoBehaviour
         owner = ownerGlove;
         startPos = transform.position;
 
-        // rotate sprite to face direction
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
     }
@@ -56,10 +57,36 @@ public class GrappleHead : MonoBehaviour
     {
         if (state != State.Flying) return;
 
+        // check enemy layer first
+        if (((1 << other.gameObject.layer) & enemyLayer) != 0)
+        {
+            GrappleCatchable catchable = other.GetComponentInParent<GrappleCatchable>();
+            if (catchable != null && !catchable.IsCaught())
+            {
+                state = State.Hit;
+                owner.OnGrappleHitEnemy(catchable);
+                return;
+            }
+        }
+
+        // check block layer
+        if (((1 << other.gameObject.layer) & blockLayer) != 0)
+        {
+            GrappleableBlock block = other.GetComponentInParent<GrappleableBlock>();
+            if (block != null && !block.IsBeingPulled())
+            {
+                // use grapple head's current position as the anchor point
+                block.SetHitPoint(transform.position);
+                state = State.Hit;
+                owner.OnGrappleHitBlock(block);
+                return;
+            }
+        }
+
+        // check ground layer
         if (((1 << other.gameObject.layer) & groundLayer) != 0)
         {
             state = State.Hit;
-            transform.position = transform.position; // lock in place
             owner.OnGrappleHit(transform.position);
         }
     }

@@ -132,7 +132,6 @@ public class PlayerController : MonoBehaviour
 
         GameManager.hasRemoteBomb = true;
 
-        // always re-add to slot 2 so inventory reselects and animator switches to bomb animator
         InventoryManager.Instance.AddItem(2, bombAnimator);
 
         if (BombTypeManager.Instance != null)
@@ -328,19 +327,31 @@ public class PlayerController : MonoBehaviour
             if (necroHealth != null)
             {
                 NecromancerAI necroAI = necroHealth.GetComponent<NecromancerAI>();
-                if (necroAI != null && !necroAI.IsVulnerable()) return true;
+                if (necroAI != null && !necroAI.IsVulnerable())
+                {
+                    ShowInvulnIndicator(necroHealth.gameObject);
+                    return true;
+                }
             }
 
             // check normal enemy invulnerability
             EnemyHealth enemyHealth = hit.GetComponentInParent<EnemyHealth>();
-            if (enemyHealth != null && enemyHealth.IsInvulnerable()) return true;
+            if (enemyHealth != null && enemyHealth.IsInvulnerable())
+            {
+                ShowInvulnIndicator(enemyHealth.gameObject);
+                return true;
+            }
 
             // check armored skelly
             ArmoredSkellyHealth armoredHealth = hit.GetComponentInParent<ArmoredSkellyHealth>();
             if (armoredHealth != null)
             {
                 ArmoredSkellyAI ai = armoredHealth.GetComponent<ArmoredSkellyAI>();
-                if (ai != null && ai.isArmored) return true;
+                if (ai != null && ai.isArmored)
+                {
+                    ShowInvulnIndicator(armoredHealth.gameObject);
+                    return true;
+                }
             }
 
             // check ground layer
@@ -348,6 +359,16 @@ public class PlayerController : MonoBehaviour
         }
 
         return false;
+    }
+
+    void ShowInvulnIndicator(GameObject enemyObj)
+    {
+        InvulnerableIndicator indicator = enemyObj.GetComponentInChildren<InvulnerableIndicator>();
+        if (indicator != null)
+        {
+            bool enemyFacingRight = enemyObj.transform.localScale.x > 0;
+            indicator.Show(enemyFacingRight);
+        }
     }
 
     IEnumerator DoinkAttack()
@@ -397,7 +418,6 @@ public class PlayerController : MonoBehaviour
         Sign sign = FindObjectOfType<Sign>();
         if (sign != null && sign.inCutscene) return;
 
-        // lock input while being pulled OR while grounded-grappling (shooting from the ground)
         GrappleGlove gg = GetComponent<GrappleGlove>();
         if (gg != null && (gg.isBeingPulled || gg.isGroundedGrappling)) return;
 
@@ -484,7 +504,6 @@ public class PlayerController : MonoBehaviour
         {
             if (ba != null)
             {
-                // if remote bomb active detonate it
                 if (ba.activeRemoteBomb != null)
                 {
                     ba.StartBombAttack();
@@ -516,7 +535,6 @@ public class PlayerController : MonoBehaviour
     {
         if (isDead) return;
 
-        // skip physics movement when being pulled OR when grounded-grappling
         GrappleGlove gg = GetComponent<GrappleGlove>();
         if (gg != null && (gg.isBeingPulled || gg.isGroundedGrappling)) return;
 
@@ -584,40 +602,55 @@ public class PlayerController : MonoBehaviour
     }
 
     IEnumerator BowAttack()
-{
-    isAttacking = true;
-    rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
-
-    if (ArrowTypeManager.Instance != null)
-        ArrowTypeManager.Instance.isShooting = true;
-
-    ArrowTypeManager.ArrowType arrowType = ArrowTypeManager.Instance != null ?
-        ArrowTypeManager.Instance.currentArrowType :
-        ArrowTypeManager.ArrowType.Normal;
-
-    string prefix = !isGrounded ? "Midair" : "";
-    string suffix = facingRight ? "Right" : "Left";
-
-    switch (arrowType)
     {
-        case ArrowTypeManager.ArrowType.Normal:
-            animator.SetTrigger($"{prefix}BowAttack{suffix}");
-            break;
-        case ArrowTypeManager.ArrowType.Ice:
-            animator.SetTrigger($"{prefix}IceBowAttack{suffix}");
-            break;
-        case ArrowTypeManager.ArrowType.Fire:
-            animator.SetTrigger($"{prefix}FireBowAttack{suffix}");
-            break;
+        isAttacking = true;
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+
+        if (ArrowTypeManager.Instance != null)
+            ArrowTypeManager.Instance.isShooting = true;
+
+        ArrowTypeManager.ArrowType arrowType = ArrowTypeManager.Instance != null ?
+            ArrowTypeManager.Instance.currentArrowType :
+            ArrowTypeManager.ArrowType.Normal;
+
+        if (facingRight)
+        {
+            switch (arrowType)
+            {
+                case ArrowTypeManager.ArrowType.Normal:
+                    animator.SetTrigger("BowAttackRight");
+                    break;
+                case ArrowTypeManager.ArrowType.Ice:
+                    animator.SetTrigger("IceBowAttackRight");
+                    break;
+                case ArrowTypeManager.ArrowType.Fire:
+                    animator.SetTrigger("FireBowAttackRight");
+                    break;
+            }
+        }
+        else
+        {
+            switch (arrowType)
+            {
+                case ArrowTypeManager.ArrowType.Normal:
+                    animator.SetTrigger("BowAttackLeft");
+                    break;
+                case ArrowTypeManager.ArrowType.Ice:
+                    animator.SetTrigger("IceBowAttackLeft");
+                    break;
+                case ArrowTypeManager.ArrowType.Fire:
+                    animator.SetTrigger("FireBowAttackLeft");
+                    break;
+            }
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        if (ArrowTypeManager.Instance != null)
+            ArrowTypeManager.Instance.isShooting = false;
+
+        isAttacking = false;
     }
-
-    yield return new WaitForSeconds(0.5f);
-
-    if (ArrowTypeManager.Instance != null)
-        ArrowTypeManager.Instance.isShooting = false;
-
-    isAttacking = false;
-}
 
     IEnumerator Roll()
     {

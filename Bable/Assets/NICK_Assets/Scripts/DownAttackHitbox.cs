@@ -16,6 +16,7 @@ public class DownAttackHitbox : MonoBehaviour
                 NecromancerAI necroAI = necroHealth.GetComponent<NecromancerAI>();
                 if (necroAI != null && !necroAI.IsVulnerable())
                 {
+                    ShowInvulnIndicator(necroHealth.gameObject);
                     playerController.DownAttackBounce();
                     return;
                 }
@@ -31,6 +32,7 @@ public class DownAttackHitbox : MonoBehaviour
                 ArmoredSkellyAI ai = armoredHealth.GetComponent<ArmoredSkellyAI>();
                 if (ai != null && ai.isArmored)
                 {
+                    ShowInvulnIndicator(armoredHealth.gameObject);
                     playerController.DownAttackBounce();
                     return;
                 }
@@ -55,9 +57,26 @@ public class DownAttackHitbox : MonoBehaviour
             EnemyHealth enemyHealth = other.GetComponentInParent<EnemyHealth>();
             if (enemyHealth != null)
             {
+                if (enemyHealth.IsInvulnerable())
+                {
+                    ShowInvulnIndicator(enemyHealth.gameObject);
+                    playerController.DownAttackBounce();
+                    return;
+                }
+
                 enemyHealth.TakeDamageWithKnockback(damage, transform.position);
                 playerController.DownAttackBounce();
             }
+        }
+    }
+
+    void ShowInvulnIndicator(GameObject enemyObj)
+    {
+        InvulnerableIndicator indicator = enemyObj.GetComponentInChildren<InvulnerableIndicator>();
+        if (indicator != null)
+        {
+            bool enemyFacingRight = enemyObj.transform.localScale.x > 0;
+            indicator.Show(enemyFacingRight);
         }
     }
 }

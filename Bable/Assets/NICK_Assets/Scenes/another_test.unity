@@ -1427,7 +1427,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.1592
+      value: -10.4
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2835,7 +2835,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.16301
+      value: -10.403
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3482,7 +3482,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.33480072
+      value: 0.091
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3556,6 +3556,8 @@ MonoBehaviour:
   sightBlockLayers:
     serializedVersion: 2
     m_Bits: 64
+  grappleSlowMultiplier: 1
+  platformVelocity: {x: 0, y: 0}
   currentState: 0
   visibleDistance: 4
   semiVisibleAlpha: 0.25
@@ -3659,7 +3661,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -21.3992
+      value: -21.662
       objectReference: {fileID: 0}
     - target: {fileID: 4956877536769078364, guid: 151a9b12fb2be497baebeab1aae15fea, type: 3}
       propertyPath: m_LocalPosition.z

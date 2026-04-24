@@ -86,6 +86,16 @@ public class EnemyHealth : MonoBehaviour
         }
         else
         {
+            // spider uses custom pendulum swing knockback
+            SpiderAI spider = GetComponent<SpiderAI>();
+            if (spider != null)
+            {
+                float knockDirX = transform.position.x > hitPosition.x ? 1f : -1f;
+                Vector2 knockForce = new Vector2(knockDirX * knockbackForce * 2f, 2f);
+                spider.OnHurtByPlayer(knockForce);
+                return;
+            }
+
             float knockbackDirection = transform.position.x > hitPosition.x ? 1f : -1f;
             StartCoroutine(Knockback(knockbackDirection));
         }
@@ -188,37 +198,37 @@ public class EnemyHealth : MonoBehaviour
     }
 
     IEnumerator DeathSequence()
-{
-    enemyAnimator.SetBool("IsHurt", true);
-    yield return new WaitForSeconds(0.6f);
+    {
+        enemyAnimator.SetBool("IsHurt", true);
+        yield return new WaitForSeconds(0.6f);
 
-    enemyAnimator.SetBool("IsHurt", false);
-    enemyAnimator.SetBool("IsWalking", false);
-    yield return null;
+        enemyAnimator.SetBool("IsHurt", false);
+        enemyAnimator.SetBool("IsWalking", false);
+        yield return null;
 
-    enemyAnimator.enabled = false;
-    enemyAnimator.enabled = true;
-    enemyAnimator.Play("Death", 0, 0f);
+        enemyAnimator.enabled = false;
+        enemyAnimator.enabled = true;
+        enemyAnimator.Play("Death", 0, 0f);
 
-    EnemyAI enemyAI = GetComponent<EnemyAI>();
-    ArcherAI archerAI = GetComponent<ArcherAI>();
-    EvilEye evilEye = GetComponent<EvilEye>();
-    if (enemyAI != null) enemyAI.enabled = false;
-    if (archerAI != null) archerAI.enabled = false;
-    if (evilEye != null) evilEye.enabled = false;
+        EnemyAI enemyAI = GetComponent<EnemyAI>();
+        ArcherAI archerAI = GetComponent<ArcherAI>();
+        EvilEye evilEye = GetComponent<EvilEye>();
+        if (enemyAI != null) enemyAI.enabled = false;
+        if (archerAI != null) archerAI.enabled = false;
+        if (evilEye != null) evilEye.enabled = false;
 
-    // mark permanent death enemy
-    PermanentDeathEnemy pde = GetComponent<PermanentDeathEnemy>();
-    if (pde != null) pde.MarkDead();
+        // mark permanent death enemy
+        PermanentDeathEnemy pde = GetComponent<PermanentDeathEnemy>();
+        if (pde != null) pde.MarkDead();
 
-    if (archerBottom != null)
-        archerBottom.SetActive(false);
+        if (archerBottom != null)
+            archerBottom.SetActive(false);
 
-    yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.5f);
 
-    if (heartDropPrefab != null && Random.value > 0.25f)
-        Instantiate(heartDropPrefab, transform.position, Quaternion.identity);
+        if (heartDropPrefab != null && Random.value > 0.25f)
+            Instantiate(heartDropPrefab, transform.position, Quaternion.identity);
 
-    Destroy(gameObject);
-}
+        Destroy(gameObject);
+    }
 }

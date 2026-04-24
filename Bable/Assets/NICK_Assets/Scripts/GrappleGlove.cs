@@ -11,10 +11,16 @@ public class GrappleGlove : MonoBehaviour
     public Transform grappleAirSpawnPoint;
     public Transform grapplePulledSpawnPoint;
     public Transform grapplePulledAirSpawnPoint;
+    public Transform getOverHereSpawnPoint;
+    public Transform getOverHereAirSpawnPoint;
 
     [Header("Pull Settings")]
     public float pullSpeed = 15f;
     public float stopDistance = 0.5f;
+
+    [Header("Enemy Catch Settings")]
+    public Transform enemyReleasePoint;
+    public float enemyPullSpeed = 20f;
 
     [Header("Line Renderer")]
     public LineRenderer lineRenderer;
@@ -22,13 +28,12 @@ public class GrappleGlove : MonoBehaviour
     public bool isGrappling = false;
     public bool isBeingPulled = false;
     public bool isGroundedGrappling = false;
+    public bool isCatchingEnemy = false;
 
     private PlayerController pc;
     private Animator animator;
     private Rigidbody2D rb;
     private GrappleHead activeHead;
-
-    // tracks whether the current grapple started from the air (persists through pull)
     private bool startedFromAir = false;
 
     void Awake()
@@ -48,7 +53,14 @@ public class GrappleGlove : MonoBehaviour
 
     Transform CurrentSpawnPoint()
     {
-        // while being pulled
+        if (isCatchingEnemy)
+        {
+            if (startedFromAir && getOverHereAirSpawnPoint != null)
+                return getOverHereAirSpawnPoint;
+            if (getOverHereSpawnPoint != null)
+                return getOverHereSpawnPoint;
+        }
+
         if (isBeingPulled)
         {
             if (startedFromAir && grapplePulledAirSpawnPoint != null)
@@ -57,14 +69,13 @@ public class GrappleGlove : MonoBehaviour
                 return grapplePulledSpawnPoint;
         }
 
-        // while grappling (not pulling yet)
         if (isGrappling && !isGroundedGrappling && grappleAirSpawnPoint != null)
             return grappleAirSpawnPoint;
 
         return grappleSpawnPoint;
     }
 
-    Vector3 CurrentSpawnWorldPosition()
+    public Vector3 CurrentSpawnWorldPosition()
     {
         Transform sp = CurrentSpawnPoint();
         if (sp == null) return transform.position;
@@ -80,6 +91,28 @@ public class GrappleGlove : MonoBehaviour
     {
         if (pc == null || pc.groundCheck == null) return false;
         return Physics2D.OverlapCircle(pc.groundCheck.position, pc.groundCheckRadius, pc.groundLayer);
+    }
+
+    bool IsPlayerBlockedByWall()
+    {
+        if (pc == null) return false;
+
+        Collider2D playerCol = pc.standingCollider != null ? pc.standingCollider : pc.GetComponent<Collider2D>();
+        if (playerCol == null) return false;
+
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            playerCol.bounds.center,
+            playerCol.bounds.size * 0.9f,
+            0f,
+            pc.groundLayer);
+
+        foreach (var hit in hits)
+        {
+            if (hit != playerCol && hit.gameObject != gameObject)
+                return true;
+        }
+
+        return false;
     }
 
     public void StartGrapple()
@@ -133,6 +166,134 @@ public class GrappleGlove : MonoBehaviour
         StartCoroutine(PullToTarget(hitPosition));
     }
 
+    public void OnGrappleHitEnemy(GrappleCatchable caught)
+    {
+        StartCoroutine(PullEnemyToPlayer(caught));
+    }
+
+    public void OnGrappleHitBlock(GrappleableBlock block)
+    {
+        StartCoroutine(PullBlockToPlayer(block));
+    }
+
+    IEnumerator PullEnemyToPlayer(GrappleCatchable caught)
+    {
+        isBeingPulled = true;
+        isCatchingEnemy = true;
+
+        bool facingRight = pc.facingRight;
+        if (startedFromAir)
+            animator.SetTrigger(facingRight ? "GetOverHereAirRight" : "GetOverHereAirLeft");
+        else
+            animator.SetTrigger(facingRight ? "GetOverHereRight" : "GetOverHereLeft");
+
+        caught.OnGrappleCaught();
+
+        Vector3 releasePoint;
+        if (enemyReleasePoint != null)
+        {
+            Vector3 localOffset = enemyReleasePoint.localPosition;
+            if (!facingRight)
+                localOffset.x = -localOffset.x;
+            releasePoint = transform.TransformPoint(localOffset);
+        }
+        else
+        {
+            releasePoint = transform.position + new Vector3(facingRight ? 1f : -1f, 0f, 0f);
+        }
+
+        Transform enemyTf = caught.transform;
+
+        Vector3 anchorOffset = caught.GetAnchorPosition() - enemyTf.position;
+
+        while (Vector3.Distance(caught.GetAnchorPosition(), releasePoint) > 0.1f)
+        {
+            Vector3 enemyTargetPos = releasePoint - anchorOffset;
+            enemyTf.position = Vector3.MoveTowards(enemyTf.position, enemyTargetPos, enemyPullSpeed * Time.deltaTime);
+
+            if (lineRenderer != null && activeHead != null)
+            {
+                activeHead.transform.position = caught.GetAnchorPosition();
+                lineRenderer.SetPosition(0, CurrentSpawnWorldPosition());
+                lineRenderer.SetPosition(1, caught.GetAnchorPosition());
+            }
+
+            yield return null;
+        }
+
+        caught.OnGrappleReleased();
+
+        isBeingPulled = false;
+        isCatchingEnemy = false;
+        isGroundedGrappling = false;
+        startedFromAir = false;
+        animator.SetTrigger("GrappleShootEnd");
+        animator.ResetTrigger("GrappleShoot");
+        animator.ResetTrigger("GrappleShootAir");
+        animator.ResetTrigger("GetOverHereRight");
+        animator.ResetTrigger("GetOverHereLeft");
+        animator.ResetTrigger("GetOverHereAirRight");
+        animator.ResetTrigger("GetOverHereAirLeft");
+
+        if (pc.facingRight)
+            animator.Play("Idle_Right");
+        else
+            animator.Play("Idle_Left");
+
+        if (activeHead != null) Destroy(activeHead.gameObject);
+        activeHead = null;
+
+        if (lineRenderer != null)
+            lineRenderer.enabled = false;
+
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.linearVelocity = Vector2.zero;
+
+        isGrappling = false;
+    }
+
+    IEnumerator PullBlockToPlayer(GrappleableBlock block)
+    {
+        isBeingPulled = true;
+        isCatchingEnemy = true;
+
+        bool facingRight = pc.facingRight;
+        if (startedFromAir)
+            animator.SetTrigger(facingRight ? "GetOverHereAirRight" : "GetOverHereAirLeft");
+        else
+            animator.SetTrigger(facingRight ? "GetOverHereRight" : "GetOverHereLeft");
+
+        yield return StartCoroutine(block.PullTowardPlayer(transform, lineRenderer, activeHead, CurrentSpawnWorldPosition));
+
+        isBeingPulled = false;
+        isCatchingEnemy = false;
+        isGroundedGrappling = false;
+        startedFromAir = false;
+        animator.SetTrigger("GrappleShootEnd");
+        animator.ResetTrigger("GrappleShoot");
+        animator.ResetTrigger("GrappleShootAir");
+        animator.ResetTrigger("GetOverHereRight");
+        animator.ResetTrigger("GetOverHereLeft");
+        animator.ResetTrigger("GetOverHereAirRight");
+        animator.ResetTrigger("GetOverHereAirLeft");
+
+        if (pc.facingRight)
+            animator.Play("Idle_Right");
+        else
+            animator.Play("Idle_Left");
+
+        if (activeHead != null) Destroy(activeHead.gameObject);
+        activeHead = null;
+
+        if (lineRenderer != null)
+            lineRenderer.enabled = false;
+
+        rb.bodyType = RigidbodyType2D.Dynamic;
+        rb.linearVelocity = Vector2.zero;
+
+        isGrappling = false;
+    }
+
     IEnumerator PullToTarget(Vector3 target)
     {
         isBeingPulled = true;
@@ -151,10 +312,12 @@ public class GrappleGlove : MonoBehaviour
                 lineRenderer.SetPosition(1, activeHead.transform.position);
             }
 
+            if (IsPlayerBlockedByWall())
+                break;
+
             yield return null;
         }
 
-        // arrived
         isBeingPulled = false;
         isGroundedGrappling = false;
         startedFromAir = false;
@@ -200,6 +363,7 @@ public class GrappleGlove : MonoBehaviour
         isGrappling = false;
         isGroundedGrappling = false;
         startedFromAir = false;
+        isCatchingEnemy = false;
         activeHead = null;
     }
 }

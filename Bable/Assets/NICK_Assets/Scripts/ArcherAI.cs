@@ -22,6 +22,9 @@ public class ArcherAI : MonoBehaviour
     [Header("Direction")]
     public bool facingRight = true;
 
+    [Header("Grapple Slow")]
+    public float grappleSlowMultiplier = 1f;
+
     public Vector2 platformVelocity = Vector2.zero;
 
     private bool isShooting = false;
@@ -34,7 +37,6 @@ public class ArcherAI : MonoBehaviour
         enemyHealth = GetComponent<EnemyHealth>();
         rb = GetComponent<Rigidbody2D>();
 
-        // apply initial facing direction
         if (!facingRight)
         {
             Vector3 scale = transform.localScale;
@@ -44,18 +46,17 @@ public class ArcherAI : MonoBehaviour
     }
 
     bool CanSeePlayer()
-{
-    if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
+    {
+        if (Mathf.Abs(transform.position.y - player.position.y) > yTolerance) return false;
 
-    // use a lower origin point so raycast doesn't shoot over player
-    Vector2 origin = new Vector2(transform.position.x, transform.position.y);
-    Vector2 target = new Vector2(player.position.x, player.position.y + 0.5f);
-    Vector2 direction = (target - origin).normalized;
-    float distance = Vector2.Distance(origin, target);
-    RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
+        Vector2 origin = new Vector2(transform.position.x, transform.position.y);
+        Vector2 target = new Vector2(player.position.x, player.position.y + 0.5f);
+        Vector2 direction = (target - origin).normalized;
+        float distance = Vector2.Distance(origin, target);
+        RaycastHit2D hit = Physics2D.Raycast(origin, direction, distance, sightBlockLayers);
 
-    return hit.collider == null;
-}
+        return hit.collider == null;
+    }
 
     void Flip()
     {
@@ -73,7 +74,6 @@ public class ArcherAI : MonoBehaviour
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         bool canSee = CanSeePlayer();
 
-        // face player when not shooting
         if (!isShooting && canSee)
         {
             if (player.position.x < transform.position.x && facingRight)
@@ -121,16 +121,15 @@ public class ArcherAI : MonoBehaviour
     }
 
     IEnumerator ShootSequence()
-{
-    isShooting = true;
-    animator.SetBool("IsIdle", false);
+    {
+        isShooting = true;
+        animator.SetBool("IsIdle", false);
 
-    // always use ShootRight trigger - scale flip handles visual direction
-    animator.SetTrigger("ShootRight");
+        animator.SetTrigger("ShootRight");
 
-    yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(attackCooldown / grappleSlowMultiplier);
 
-    isShooting = false;
-    yield break;
-}
+        isShooting = false;
+        yield break;
+    }
 }

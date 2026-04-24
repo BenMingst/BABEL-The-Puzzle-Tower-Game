@@ -33,6 +33,9 @@ public class ArmoredSkellyAI : MonoBehaviour
     public GameObject armorBreakEffect;
     public float slashKnockback = 0.5f;
 
+    [Header("Grapple Slow")]
+    public float grappleSlowMultiplier = 1f;
+
     public Vector2 platformVelocity = Vector2.zero;
 
     private Animator animator;
@@ -112,7 +115,7 @@ public class ArmoredSkellyAI : MonoBehaviour
         else if (distanceToPlayer <= sightRange && !isAttacking && !armoredHealth.isHurt && groundAhead && canSee)
         {
             float direction = player.position.x > transform.position.x ? 1f : -1f;
-            rb.linearVelocity = new Vector2(direction * walkSpeed + platformVelocity.x, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(direction * walkSpeed * grappleSlowMultiplier + platformVelocity.x, rb.linearVelocity.y);
         }
         else
         {
@@ -174,7 +177,7 @@ public class ArmoredSkellyAI : MonoBehaviour
 
         animator.SetTrigger("AttackRight");
 
-        yield return new WaitForSeconds(hitboxDelay);
+        yield return new WaitForSeconds(hitboxDelay / grappleSlowMultiplier);
 
         if (armoredHealth.isHurt)
         {
@@ -189,11 +192,11 @@ public class ArmoredSkellyAI : MonoBehaviour
 
         enemyHitbox.GetComponent<Collider2D>().enabled = true;
 
-        yield return new WaitForSeconds(hitboxDuration);
+        yield return new WaitForSeconds(hitboxDuration / grappleSlowMultiplier);
 
         enemyHitbox.GetComponent<Collider2D>().enabled = false;
 
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(attackCooldown / grappleSlowMultiplier);
 
         isAttacking = false;
     }

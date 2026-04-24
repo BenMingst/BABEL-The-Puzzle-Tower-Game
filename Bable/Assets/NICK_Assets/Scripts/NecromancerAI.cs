@@ -46,6 +46,9 @@ public class NecromancerAI : MonoBehaviour
     [Header("Animation")]
     public Animator animator;
 
+    [Header("Grapple Slow")]
+    public float grappleSlowMultiplier = 1f;
+
     public bool playerInRange = false;
     public bool isStaggered = false;
     private bool isSpawning = false;
@@ -279,7 +282,7 @@ public class NecromancerAI : MonoBehaviour
         }
 
         animator.SetTrigger("SummonWindup");
-        yield return new WaitForSeconds(GetAnimationLength("SummonWindup"));
+        yield return new WaitForSeconds(GetAnimationLength("SummonWindup") / grappleSlowMultiplier);
 
         animator.SetTrigger("Summon");
 
@@ -289,7 +292,7 @@ public class NecromancerAI : MonoBehaviour
                 Instantiate(spawnEffectPrefab, pos, Quaternion.identity);
         }
 
-        yield return new WaitForSeconds(spawnEffectDuration);
+        yield return new WaitForSeconds(spawnEffectDuration / grappleSlowMultiplier);
 
         bool needsIndicator = indicatorEnemy == null;
         int indicatorIndex = needsIndicator ? Random.Range(0, spawnPositions.Count) : -1;
@@ -305,13 +308,13 @@ public class NecromancerAI : MonoBehaviour
         }
 
         float summonLength = GetAnimationLength("Summon");
-        float remainingTime = summonLength - spawnEffectDuration;
+        float remainingTime = (summonLength - spawnEffectDuration) / grappleSlowMultiplier;
         if (remainingTime > 0)
             yield return new WaitForSeconds(remainingTime);
 
         animator.SetTrigger("Idle");
 
-        yield return new WaitForSeconds(neckroCooldown);
+        yield return new WaitForSeconds(neckroCooldown / grappleSlowMultiplier);
 
         isSpawning = false;
     }
@@ -483,7 +486,6 @@ public class NecromancerAI : MonoBehaviour
             Gizmos.DrawWireCube(spawnZone.bounds.center, spawnZone.bounds.size);
         }
 
-        // draw intersection in white
         if (spawnZone != null && teleportZone != null)
         {
             Bounds sb = spawnZone.bounds;

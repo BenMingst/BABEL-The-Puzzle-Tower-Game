@@ -45,6 +45,9 @@ public class SerpentAI : MonoBehaviour
     [Header("Platform")]
     public Vector2 platformVelocity = Vector2.zero;
 
+    [Header("Grapple Slow")]
+    public float grappleSlowMultiplier = 1f;
+
     private Animator animator;
     private Rigidbody2D rb;
     private SerpentHealth serpentHealth;
@@ -185,7 +188,7 @@ public class SerpentAI : MonoBehaviour
         if (distanceToPlayer <= sightRange && distanceToPlayer > attackRange && !IsPlayerInUpwardRange() && canSee)
         {
             float direction = player.position.x > transform.position.x ? 1f : -1f;
-            rb.linearVelocity = new Vector2(direction * crawlSpeed + platformVelocity.x, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(direction * crawlSpeed * grappleSlowMultiplier + platformVelocity.x, rb.linearVelocity.y);
         }
         else
         {
@@ -212,7 +215,7 @@ public class SerpentAI : MonoBehaviour
         while (windupElapsed < windupLength)
         {
             if (!serpentHealth.isHurt)
-                windupElapsed += Time.deltaTime;
+                windupElapsed += Time.deltaTime * grappleSlowMultiplier;
             yield return null;
         }
 
@@ -267,7 +270,7 @@ public class SerpentAI : MonoBehaviour
         {
             if (isBombSwallowed) yield break;
             if (serpentHealth.isDead) yield break;
-            elapsed += Time.deltaTime;
+            elapsed += Time.deltaTime * grappleSlowMultiplier;
             yield return null;
         }
 
@@ -297,7 +300,7 @@ public class SerpentAI : MonoBehaviour
         {
             if (isBombSwallowed) yield break;
             if (serpentHealth.isDead) yield break;
-            elapsed += Time.deltaTime;
+            elapsed += Time.deltaTime * grappleSlowMultiplier;
             yield return null;
         }
 
@@ -353,7 +356,7 @@ public class SerpentAI : MonoBehaviour
             GameObject fire = Instantiate(groundFirePrefab, pos, Quaternion.identity);
             activeGroundFires.Add(fire);
 
-            yield return new WaitForSeconds(fireSpreadDelay);
+            yield return new WaitForSeconds(fireSpreadDelay / grappleSlowMultiplier);
         }
     }
 

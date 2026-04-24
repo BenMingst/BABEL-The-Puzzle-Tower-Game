@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
 
     public float speed = 1.5f;
     public float maxDistance = 15f;
-    public float stickDuration = 3f;
+    public float stickDuration = 1f;
     public int damage = 1;
     public float spawnIgnoreTime = 0.1f;
     public bool isPlayerArrow = false;
@@ -63,6 +63,16 @@ public class Arrow : MonoBehaviour
         StartCoroutine(BounceDestroy());
     }
 
+    void ShowInvulnIndicator(GameObject enemyObj)
+    {
+        InvulnerableIndicator indicator = enemyObj.GetComponentInChildren<InvulnerableIndicator>();
+        if (indicator != null)
+        {
+            bool enemyFacingRight = enemyObj.transform.localScale.x > 0;
+            indicator.Show(enemyFacingRight);
+        }
+    }
+
     void Update()
     {
         if (isStuck) return;
@@ -98,6 +108,7 @@ public class Arrow : MonoBehaviour
                 NecromancerAI necroAI = necroHealth.GetComponent<NecromancerAI>();
                 if (necroAI != null && !necroAI.IsVulnerable())
                 {
+                    ShowInvulnIndicator(necroHealth.gameObject);
                     BounceOff();
                     return;
                 }
@@ -122,6 +133,7 @@ public class Arrow : MonoBehaviour
                 ArmoredSkellyAI ai = armoredHealth.GetComponent<ArmoredSkellyAI>();
                 if (ai != null && ai.isArmored)
                 {
+                    ShowInvulnIndicator(armoredHealth.gameObject);
                     BounceOff();
                     return;
                 }
@@ -138,12 +150,14 @@ public class Arrow : MonoBehaviour
             {
                 if (enemyHealth.IsInvulnerable())
                 {
+                    ShowInvulnIndicator(enemyHealth.gameObject);
                     BounceOff();
                     return;
                 }
 
                 if (enemyHealth.IsImmuneToArrow(arrowType))
                 {
+                    ShowInvulnIndicator(enemyHealth.gameObject);
                     BounceOff();
                     return;
                 }

@@ -27,6 +27,9 @@ public class EnemyAI : MonoBehaviour
     [Header("Sight")]
     public LayerMask sightBlockLayers;
 
+    [Header("Grapple Slow")]
+    public float grappleSlowMultiplier = 1f;
+
     public Vector2 platformVelocity = Vector2.zero;
 
     protected Animator animator;
@@ -103,7 +106,7 @@ public class EnemyAI : MonoBehaviour
         else if (distanceToPlayer <= sightRange && !isAttacking && !enemyHealth.isHurt && groundAhead && canSee)
         {
             float direction = player.position.x > transform.position.x ? 1f : -1f;
-            rb.linearVelocity = new Vector2(direction * walkSpeed + platformVelocity.x, rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(direction * walkSpeed * grappleSlowMultiplier + platformVelocity.x, rb.linearVelocity.y);
         }
         else
         {
@@ -132,7 +135,7 @@ public class EnemyAI : MonoBehaviour
 
         animator.SetTrigger("AttackRight");
 
-        yield return new WaitForSeconds(hitboxDelay);
+        yield return new WaitForSeconds(hitboxDelay / grappleSlowMultiplier);
 
         if (enemyHealth.isHurt)
         {
@@ -147,11 +150,11 @@ public class EnemyAI : MonoBehaviour
 
         enemyHitbox.GetComponent<Collider2D>().enabled = true;
 
-        yield return new WaitForSeconds(hitboxDuration);
+        yield return new WaitForSeconds(hitboxDuration / grappleSlowMultiplier);
 
         enemyHitbox.GetComponent<Collider2D>().enabled = false;
 
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(attackCooldown / grappleSlowMultiplier);
 
         isAttacking = false;
     }
