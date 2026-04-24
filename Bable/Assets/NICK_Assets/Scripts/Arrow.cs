@@ -82,6 +82,12 @@ public class Arrow : MonoBehaviour
         {
             if (other.CompareTag("Player")) return;
 
+            if (other.CompareTag("Target"))
+            {
+                other.GetComponent<Target>()?.TakeHit();
+                return;
+            }
+
             IceWall iceWall = other.GetComponent<IceWall>();
             if (iceWall == null) iceWall = other.GetComponentInParent<IceWall>();
             if (iceWall != null && arrowType == ArrowType.Fire)

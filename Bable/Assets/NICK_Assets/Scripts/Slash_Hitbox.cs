@@ -50,5 +50,9 @@ public class SlashHitbox : MonoBehaviour
         {
             other.GetComponent<DoorHealth>()?.TakeHit();
         }
+        else if (other.CompareTag("Target"))
+        {
+            other.GetComponent<Target>()?.TakeHit();
+        }
     }
 }
