@@ -66,16 +66,20 @@ MonoBehaviour:
   buttonSounds:
   - {fileID: 8300000, guid: 691098816f1199d488c72f38dffd7f8a, type: 3}
   doorOpenSound: {fileID: 8300000, guid: 7e4cc314097751245a472a12ddff9ed5, type: 3}
+  doorCloseSound: {fileID: 8300000, guid: 14646e7f4fb1c684885c80c24b80eaf3, type: 3}
   doorEnterSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
   doorLockedSounds:
-  - {fileID: 8300000, guid: 483463de458454f4dbb1510e6065e0a0, type: 3}
+  - {fileID: 8300000, guid: fd058d5182dfa3b459b970859cbf40fb, type: 3}
   doorUnlockSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
   doorHurtSounds:
   - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
-  doorBreakSound: {fileID: 8300000, guid: 89048c26927674a47a07b5a8fe15ce66, type: 3}
+  doorBreakSound: {fileID: 8300000, guid: 71c052a78a9dd84428110b893ea2642b, type: 3}
   chestOpenSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
   chestLockedSound: {fileID: 8300000, guid: 55d90ed8523c0a44bbdb0d4ca609a8bc, type: 3}
   chestUnlockSound: {fileID: 8300000, guid: 6a9313f3487e82f4ca1a8b1f105ab314, type: 3}
+  arrowShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  arrowStuckSound: {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
+  arrowBounceSound: {fileID: 0}
   stalkerVanishSound: {fileID: 0}
   stalkerAppearSound: {fileID: 0}
   soundFXObject: {fileID: 456598269487561052, guid: 850049122f3ee054bb66c9094d1c8514, type: 3}

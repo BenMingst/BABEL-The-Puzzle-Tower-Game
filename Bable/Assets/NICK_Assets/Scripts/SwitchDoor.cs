@@ -86,6 +86,9 @@ public class SwitchDoor : MonoBehaviour
         if (doorCollider != null) doorCollider.enabled = false;
         doorAnimator.SetTrigger("Close");
 
+        // play door close sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorCloseSound, transform, 1f);
+
         yield return new WaitForSeconds(GetAnimationLength("closing"));
         if (doorCollider != null) doorCollider.enabled = true;
     }

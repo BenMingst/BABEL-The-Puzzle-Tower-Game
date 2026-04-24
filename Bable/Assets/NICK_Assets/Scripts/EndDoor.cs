@@ -50,6 +50,9 @@ public class EndDoor : MonoBehaviour
         // lock player input
         playerController.isDead = true;
 
+        // play door enter sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorEnterSound, transform, 1f);
+        
         sceneController = FindFirstObjectByType<SceneController>();
         yield return new WaitForSeconds(walkDuration);
 

@@ -32,6 +32,7 @@ public class Arrow : MonoBehaviour
 
     void Start()
     {
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowShotSound, transform, 1f);
         rb.linearVelocity = travelDirection * speed;
         StartCoroutine(EnableGroundCollision());
     }
@@ -77,7 +78,6 @@ public class Arrow : MonoBehaviour
     {
         if (isStuck) return;
         if (ignoreGround) return;
-
         if (isPlayerArrow)
         {
             if (other.CompareTag("Player")) return;
@@ -186,6 +186,7 @@ public class Arrow : MonoBehaviour
         isStuck = true;
         yield return new WaitForSeconds(bounceDestroyDelay);
         Destroy(gameObject);
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowBounceSound, transform, 1f);
     }
 
     IEnumerator HitAndDestroy()
@@ -203,6 +204,8 @@ public class Arrow : MonoBehaviour
     IEnumerator StickToWall()
     {
         isStuck = true;
+        // play stick sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowStuckSound, transform, 1f);
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
         DisableAllColliders();

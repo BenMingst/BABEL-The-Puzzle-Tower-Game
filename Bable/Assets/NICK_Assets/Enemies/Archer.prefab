@@ -375,7 +375,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
   universal:
     attackSounds: []
-    hurtSounds: []
+    hurtSounds:
+    - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
     deathSound: {fileID: 8300000, guid: 86316873cf9b0d44cb9772f4726cebdf, type: 3}
   evilEye:
     bombLaunchSound: {fileID: 0}

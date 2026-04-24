@@ -104,6 +104,8 @@ public class OneWayDoorEntrance : MonoBehaviour
             doorAnimator.SetTrigger("Open");
             hasBeenOpened = true;
             yield return new WaitForSecondsRealtime(0.4f);
+            // play door open sound
+            SoundManager.instance.PlayWorldClip(SoundManager.instance.doorOpenSound, transform, 1f);
         }
 
         playerAnimator.runtimeAnimatorController = pc.swordAnimator;

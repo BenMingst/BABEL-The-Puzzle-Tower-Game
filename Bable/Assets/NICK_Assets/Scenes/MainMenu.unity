@@ -1788,10 +1788,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 8193082332978435, guid: 74037d431414ced448303e4834aecb41, type: 3}
-      propertyPath: audioMixer
-      value: 
-      objectReference: {fileID: 24100000, guid: e6d8b456b877462428fb1eec1d1391c1, type: 2}
     - target: {fileID: 2269163977221501584, guid: 74037d431414ced448303e4834aecb41, type: 3}
       propertyPath: m_Name
       value: SoundManager

@@ -22,6 +22,7 @@ public class SoundManager : MonoBehaviour
     [Header("-------- WORLD SOUNDS --------")]
     [Header("Prop Sounds")]
     [SerializeField] public AudioClip doorOpenSound;
+    [SerializeField] public AudioClip doorCloseSound;
     [SerializeField] public AudioClip doorEnterSound;
     [SerializeField] public AudioClip[] doorLockedSounds;
     [SerializeField] public AudioClip doorUnlockSound;
@@ -30,6 +31,9 @@ public class SoundManager : MonoBehaviour
     [SerializeField] public AudioClip chestOpenSound;
     [SerializeField] public AudioClip chestLockedSound;
     [SerializeField] public AudioClip chestUnlockSound;
+    [SerializeField] public AudioClip arrowShotSound;
+    [SerializeField] public AudioClip arrowStuckSound;
+    [SerializeField] public AudioClip arrowBounceSound;
 
 
     [Header("Stalker Sounds")]

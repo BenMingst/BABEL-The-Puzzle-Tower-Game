@@ -43,21 +43,39 @@ public class LevelTransitionManager : MonoBehaviour
 
     private IEnumerator DisplayStatsSequence(List<string> stats, string nextSceneName)
     {
-
         completeTextDisplay.gameObject.SetActive(true);
         yield return new WaitForSeconds(delayBetweenStats);
 
         foreach (string stat in stats)
         {
             statsTextDisplay.text += stat + "\n";
-            yield return new WaitForSeconds(delayBetweenStats);
+
+            float timer = 0f;
+            bool skipped = false;
+            while (timer < delayBetweenStats)
+            {
+                if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) ||
+                    Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
+                {
+                    skipped = true;
+                    break;
+                }
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            // if they clicked through, dump all remaining stats instantly
+            if (skipped)
+            {
+                foreach (string remaining in stats)
+                    if (!statsTextDisplay.text.Contains(remaining))
+                        statsTextDisplay.text += remaining + "\n";
+                break;
+            }
         }
 
         if (continueTextDisplay != null)
-        {
             continueTextDisplay.gameObject.SetActive(true);
-        }
-
 
         yield return new WaitUntil(() =>
             Input.GetMouseButtonDown(0) ||

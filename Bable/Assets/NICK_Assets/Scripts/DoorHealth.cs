@@ -59,6 +59,8 @@ public class DoorHealth : MonoBehaviour
     {
         isDestroyed = true;
         animator.SetTrigger("Destroyed");
+        // play death sound
+        SoundManager.instance.PlayWorldRandom(deathSounds, transform, 1f);
         col.enabled = false;
         rb.bodyType = RigidbodyType2D.Static;
         yield break;
