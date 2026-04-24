@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6321741988649851981}
   - component: {fileID: 8193082332978435}
   - component: {fileID: 3427822123060880516}
+  - component: {fileID: 1705755448965585391}
   m_Layer: 5
   m_Name: SoundManager
   m_TagString: Untagged
@@ -98,6 +99,8 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: e6d8b456b877462428fb1eec1d1391c1, type: 2}
   musicSlider: {fileID: 8461561921294574122, guid: ba94031b16ba01b418bfa1001319586e, type: 3}
   soundFXSlider: {fileID: 4933178429241584815, guid: dfa49a8a4f5c4d249a62d0a5a4242ee0, type: 3}
+  resolutionDropdown: {fileID: 0}
+  fullscreenToggle: {fileID: 0}
 --- !u!114 &3427822123060880516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,3 +114,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   volume: 1
+--- !u!114 &1705755448965585391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2269163977221501584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82eb2bb1e1e817d4398eb95d6da656d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AutoSaveHook

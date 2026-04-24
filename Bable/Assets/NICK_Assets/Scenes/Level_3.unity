@@ -12092,6 +12092,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb46593b6cd6ebb4e8102648a703eac7, type: 3}
+--- !u!1 &1702048291 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1971778392125208395, guid: eb46593b6cd6ebb4e8102648a703eac7, type: 3}
+  m_PrefabInstance: {fileID: 1702048290}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1702048292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3906529401414100563, guid: eb46593b6cd6ebb4e8102648a703eac7, type: 3}
+  m_PrefabInstance: {fileID: 1702048290}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1704310532 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9206818105282490247, guid: 4e6bd075a79e541ffbb382a563abc2ae, type: 3}
@@ -15135,6 +15145,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1721388093544366470, guid: c9c292def9dba427686469f8f1e969a6, type: 3}
+      propertyPath: pausePanel
+      value: 
+      objectReference: {fileID: 1702048291}
+    - target: {fileID: 1721388093544366470, guid: c9c292def9dba427686469f8f1e969a6, type: 3}
+      propertyPath: optionsPanel
+      value: 
+      objectReference: {fileID: 1702048292}
     - target: {fileID: 1721388093544366470, guid: c9c292def9dba427686469f8f1e969a6, type: 3}
       propertyPath: bowCooldownUI
       value: 

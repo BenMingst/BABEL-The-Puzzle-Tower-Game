@@ -32,19 +32,6 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == 2)
-        {
-            hasSword = false;
-            hasBow = false;
-            hasBomb = false;
-            hasRemoteBomb = false;
-            hasGrapple = false;
-            furthestCheckpoint = 0;
-            hasCustomSpawn = false;
-            respawnWithSword = false;
-            spawnPosition = Vector3.zero;
-        }
-
         if (scene.buildIndex >= 3)
             hasSword = true;
 
@@ -66,27 +53,16 @@ public class GameManager : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        hasSword = false;
-        hasBow = false;
-        hasBomb = false;
-        hasRemoteBomb = false;
-        hasGrapple = false;
-        furthestCheckpoint = 0;
-        hasCustomSpawn = false;
-        respawnWithSword = false;
+        
     }
 
     public bool ReachedCheckpoint(int checkpointIndex, Vector3 position, bool sword)
     {
-        if (checkpointIndex > furthestCheckpoint)
-        {
-            furthestCheckpoint = checkpointIndex;
-            spawnPosition = position;
-            hasCustomSpawn = true;
-            if (sword) respawnWithSword = true;
-            return true;
-        }
-        return false;
+        furthestCheckpoint = checkpointIndex;
+        spawnPosition = position;
+        hasCustomSpawn = true;
+        if (sword) respawnWithSword = true;
+        return true;
     }
 
     public void TryAgain()
