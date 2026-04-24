@@ -70,6 +70,7 @@ public class Sign : MonoBehaviour
         }
 
         cutscenePanel.SetActive(true);
+        SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueConfirmSound, 1f);
         int currentLine = 0;
         dialogueText.text = dialogueLines[currentLine];
 
@@ -85,6 +86,8 @@ public class Sign : MonoBehaviour
                     dialogueText.text = dialogueLines[currentLine];
                 else
                     break;
+                // play dialogue confirm sound
+                SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueConfirmSound, 1f);
             }
         }
 

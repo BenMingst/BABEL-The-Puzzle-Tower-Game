@@ -24,7 +24,7 @@ public class PlayerSpawner : MonoBehaviour
 
         string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex >= 1)
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex >= 3)
             GameManager.hasSword = true;
 
         if (sceneName == "Level_3")

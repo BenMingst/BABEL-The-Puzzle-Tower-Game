@@ -27,6 +27,7 @@ public class DoorHealth : MonoBehaviour
 
     public void TakeHit()
     {
+        SoundManager.instance.PlayWorldRandom(hurtSounds, transform, 1f);
         if (isDestroyed || isHit) return;
 
         hits++;

@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.buildIndex == 0)
+        if (scene.buildIndex == 2)
         {
             hasSword = false;
             hasBow = false;
@@ -44,7 +45,7 @@ public class GameManager : MonoBehaviour
             spawnPosition = Vector3.zero;
         }
 
-        if (scene.buildIndex >= 1)
+        if (scene.buildIndex >= 3)
             hasSword = true;
 
         if (scene.name == "Level_3")

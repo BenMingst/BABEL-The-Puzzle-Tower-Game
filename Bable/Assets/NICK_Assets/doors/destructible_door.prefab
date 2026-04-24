@@ -159,7 +159,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.49999997, y: -0.25}
+    pivot: {x: 0.49999997, y: 0.012499988}
     oldSize: {x: 1, y: 4}
     newSize: {x: 1, y: 4}
     adaptiveTilingThreshold: 0.5
@@ -203,6 +203,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   persistentID: 
-  hurtSounds: []
-  deathSounds: []
+  hurtSounds:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  - {fileID: 8300000, guid: e77dc41a59e26ca4d84aa567a32b1f8e, type: 3}
+  deathSounds:
+  - {fileID: 8300000, guid: 71c052a78a9dd84428110b893ea2642b, type: 3}
   isDestroyed: 0
