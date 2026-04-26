@@ -28,7 +28,7 @@ public class PlayerHealth : MonoBehaviour
 
     if (sceneName == "Level_3")
         maxHearts = 5;
-    else if (buildIndex >= 1)
+    else if (sceneName == "new_level2")
         maxHearts = 4;
     else
         maxHearts = 3;
@@ -71,6 +71,8 @@ public class PlayerHealth : MonoBehaviour
             else
                 heartAnimators[heartIndex].SetTrigger("FullBreak");
         }
+        // update stats
+        StatManager.Instance.damageTaken += damage;
     }
 
     public void TakeDamage(int damage, Vector2 enemyPosition)
@@ -174,6 +176,8 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+        if (StatManager.Instance != null)
+            StatManager.Instance.deaths++;
         playerController.OnDeath();
         StartCoroutine(DeathSequence());
     }

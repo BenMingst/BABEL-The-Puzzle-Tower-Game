@@ -18,7 +18,7 @@ public class EndDoor : MonoBehaviour
     private bool playerNearby = false;
     private bool isTransitioning = false;
     private PlayerController playerController;
-
+    public SceneController sceneController;
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
@@ -50,7 +50,10 @@ public class EndDoor : MonoBehaviour
         // lock player input
         playerController.isDead = true;
 
-
+        // play door enter sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorEnterSound, transform, 1f);
+        
+        sceneController = FindFirstObjectByType<SceneController>();
         yield return new WaitForSeconds(walkDuration);
 
         // reset GameManager checkpoint for new level
@@ -59,6 +62,6 @@ public class EndDoor : MonoBehaviour
         GameManager.spawnPosition = Vector3.zero;
 
         Time.timeScale = 1f;
-        SceneManager.LoadScene(nextSceneName);
+        sceneController.loadTransitionScene(nextSceneName);
     }
 }

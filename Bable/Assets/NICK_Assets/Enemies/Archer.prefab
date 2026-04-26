@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 2522652290330636136}
   - component: {fileID: 2620209816621303359}
   - component: {fileID: 8973670816672060374}
-  - component: {fileID: 4273423410058465480}
+  - component: {fileID: -2078740234604280236}
   m_Layer: 3
   m_Name: Archer
   m_TagString: Enemy
@@ -364,7 +364,7 @@ MonoBehaviour:
   facingRight: 1
   grappleSlowMultiplier: 1
   platformVelocity: {x: 0, y: 0}
---- !u!114 &4273423410058465480
+--- !u!114 &-2078740234604280236
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -373,19 +373,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 2636756626048718034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a07bfb4e2cdb411db0be96fa6ee1330, type: 3}
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GrappleCatchable
-  enemyAnimator: {fileID: 6064667835193848774}
-  enemyRb: {fileID: 2522652290330636136}
-  aiScriptsToDisable:
-  - {fileID: 8973670816672060374}
-  collidersToDisableDuringPull: []
-  idleStateName: Idle
-  grappleAnchor: {fileID: 4774648920245649439}
-  slowDuration: 2
-  slowMultiplier: 0.1
-  stunnedIndicator: {fileID: 8256311416547212651}
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  universal:
+    attackSounds: []
+    hurtSounds:
+    - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+    deathSound: {fileID: 8300000, guid: 86316873cf9b0d44cb9772f4726cebdf, type: 3}
+  evilEye:
+    bombLaunchSound: {fileID: 0}
+    shieldUpSound: {fileID: 0}
+    shieldDownSound: {fileID: 0}
+  necromancer:
+    necromancerSummonSound: {fileID: 0}
+  serpent:
+    serpentTauntSound: {fileID: 0}
+  stalker:
+    stalkerAppearSound: {fileID: 0}
+    stalkerDisappearSound: {fileID: 0}
 --- !u!1 &3247150508916688906
 GameObject:
   m_ObjectHideFlags: 0

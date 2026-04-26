@@ -3,6 +3,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField] private float footstepRate = 0f;
+    private float footstepTimer = 0f;
+    private AudioSource audioSource;
+    private PlayerAudio playerAudio;
+
+    [Header("Menus")]
+    public GameObject deathCanvas;
+    public GameObject pausePanel;
+    public GameObject optionsPanel;
+    public static bool isPaused = false;
+
     [Header("Movement")]
     public float moveSpeed = 7f;
     public float jumpForce = 12f;
@@ -91,6 +103,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         animator.runtimeAnimatorController = noSwordAnimator;
+
+        playerAudio = GetComponent<PlayerAudio>();
+        if (playerAudio == null) playerAudio = gameObject.AddComponent<PlayerAudio>();
 
         if (freezeOverlayObject != null)
             freezeOverlayObject.SetActive(false);
@@ -196,6 +211,9 @@ public class PlayerController : MonoBehaviour
             Debug.Log("DeathScreenEffect Instance is NULL");
         else
             DeathScreenEffect.Instance.PlayDeathEffect();
+
+        // play game over sound
+        SoundManager.instance.PlayUIClip(SoundManager.instance.gameOverSound, 1f);
     }
 
     public void SpawnPlayerArrow()
@@ -256,6 +274,7 @@ public class PlayerController : MonoBehaviour
             moveSpeed = moveSpeed / freezeEffect;
 
         isFrozen = true;
+        SoundManager.instance.PlayWorldRandom(playerAudio.freezeSounds, transform, 1f);
         float originalSpeed = moveSpeed;
         moveSpeed *= freezeEffect;
 
@@ -286,7 +305,7 @@ public class PlayerController : MonoBehaviour
 
         if (burnOverlayObject != null)
             burnOverlayObject.SetActive(true);
-
+            SoundManager.instance.PlayWorldRandom(playerAudio.burnSounds, transform, 1f);
         yield return new WaitForSeconds(afterBurnDuration);
 
         PlayerHealth ph = GetComponent<PlayerHealth>();
@@ -397,6 +416,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (!isDead)
+                Pause();
+        }
+
         if (isDead) return;
         if (isHurt) return;
 
@@ -425,6 +450,21 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) horizontalInput = -1f;
         if (Input.GetKey(KeyCode.D)) horizontalInput = 1f;
 
+        // Footstep sounds
+        if (isGrounded && Mathf.Abs(horizontalInput) > 0.1f && !isCrouching && !isRolling && !isAttacking)
+        {
+            footstepTimer -= Time.deltaTime;
+            if (footstepTimer <= 0f)
+            {
+                SoundManager.instance.PlayWorldRandom(playerAudio.walkSounds, transform, 1f);
+                footstepTimer = footstepRate;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
+        }
+
         isCrouching = (Input.GetKey(KeyCode.S) || (!HasRoomToStand() && isGrounded)) && isGrounded && !isAttacking && !isRolling && !isHurt;
 
         BombAttack ba = GetComponent<BombAttack>();
@@ -435,7 +475,11 @@ public class PlayerController : MonoBehaviour
             else
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                // play jump sound
+                SoundManager.instance.PlayWorldRandom(playerAudio.jumpSounds, transform, 1f);
                 jumpTimer = 0f;
+                // update stats
+                StatManager.Instance.jumps++;
             }
         }
 
@@ -486,7 +530,7 @@ public class PlayerController : MonoBehaviour
             downAttackHitbox.GetComponent<Collider2D>().enabled = false;
         }
 
-        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && CanUseSword())
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && isGrounded && CanUseSword() && !isPaused)
         {
             isCrouching = false;
             if (IsHittingInvulnerableEnemy())
@@ -494,13 +538,13 @@ public class PlayerController : MonoBehaviour
             else
                 StartCoroutine(SlashAttack());
         }
-        else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseBow())
+        else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseBow() && !isPaused)
         {
             if (bowCooldownUI != null && !bowCooldownUI.HasArrows()) return;
             isCrouching = false;
             StartCoroutine(BowAttack());
         }
-        else if (Input.GetMouseButtonDown(0) && CanUseBomb())
+        else if (Input.GetMouseButtonDown(0) && CanUseBomb() && !isPaused)
         {
             if (ba != null)
             {
@@ -515,13 +559,13 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseGrapple())
+        else if (Input.GetMouseButtonDown(0) && !isAttacking && !isRolling && CanUseGrapple() && !isPaused)
         {
             if (gg != null && !gg.isGrappling && !gg.isBeingPulled)
                 gg.StartGrapple();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && !isAttacking && !isRolling && isGrounded && !isPaused)
         {
             isCrouching = false;
             StartCoroutine(Roll());
@@ -556,6 +600,9 @@ public class PlayerController : MonoBehaviour
     {
         isDropping = true;
 
+        // play drop down sound
+        SoundManager.instance.PlayWorldRandom(playerAudio.dropDownSounds, transform, 1f);
+
         if (dropdownCollider != null)
         {
             Physics2D.IgnoreCollision(standingCollider, dropdownCollider, true);
@@ -579,6 +626,9 @@ public class PlayerController : MonoBehaviour
     {
         isAttacking = true;
         animator.SetBool("IsSlashing", true);
+
+        // play slash sound
+        SoundManager.instance.PlayWorldRandom(playerAudio.swordSlashAttackSounds, transform, 1f);
 
         float lungeDirection = facingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
@@ -657,6 +707,9 @@ public class PlayerController : MonoBehaviour
         isRolling = true;
         animator.SetBool("IsRolling", true);
 
+        // play roll sound
+        SoundManager.instance.PlayWorldRandom(playerAudio.rollSounds, transform, 1f);
+
         float rollDirection = facingRight ? 1f : -1f;
         rb.linearVelocity = new Vector2(rollDirection * 4f, rb.linearVelocity.y);
 
@@ -680,6 +733,8 @@ public class PlayerController : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, downAttackBounceForce);
         animator.SetBool("DownAttack", true);
+        // play bounce sound
+        SoundManager.instance.PlayWorldRandom(playerAudio.swordDownAttackSounds, transform, 1f);
     }
 
     void HandleAnimations()
@@ -744,5 +799,35 @@ public class PlayerController : MonoBehaviour
             Gizmos.color = HasRoomToStand() ? Color.green : Color.red;
             Gizmos.DrawWireSphere(ceilingCheck.position, ceilingCheckRadius);
         }
+    }
+
+    public void Pause()
+    {
+        if (!isPaused)
+        {
+            pausePanel.SetActive(true);
+            Time.timeScale = 0f;
+            isPaused = true;
+            // play pause sound
+            SoundManager.instance.PlayUIClip(SoundManager.instance.pauseSound, 1f);
+        }
+        else
+        {
+            pausePanel.SetActive(false);
+            optionsPanel.SetActive(false);
+            Time.timeScale = 1f;
+            isPaused = false;
+            // play unpause sound
+            SoundManager.instance.PlayUIClip(SoundManager.instance.unpauseSound, 1f);
+        }
+    }
+
+    public void Resume()
+    {
+        pausePanel.SetActive(false);
+        optionsPanel.SetActive(false);
+        Time.timeScale = 1f;
+        isPaused = false;
+        SoundManager.instance.PlayUIClip(SoundManager.instance.unpauseSound, 1f);
     }
 }

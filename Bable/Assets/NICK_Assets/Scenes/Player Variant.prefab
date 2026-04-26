@@ -364,6 +364,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: isPaused
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1599378882425168468, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: ceilingCheck
       value: 
       objectReference: {fileID: 7197804080686655205}

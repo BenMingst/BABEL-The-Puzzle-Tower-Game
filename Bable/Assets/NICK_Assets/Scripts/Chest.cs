@@ -139,6 +139,7 @@ public class Chest : MonoBehaviour
                 yield return null;
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueConfirmSound, 1f);
                     currentLine++;
                     if (currentLine < dialogueLines.Length)
                         dialogueText.text = dialogueLines[currentLine];
@@ -195,6 +196,9 @@ public class Chest : MonoBehaviour
         yield return null;
 
         inCutscene = false;
+
+        // update stats
+        StatManager.Instance.chestsFound++;
     }
 
     IEnumerator FlashPrompt()

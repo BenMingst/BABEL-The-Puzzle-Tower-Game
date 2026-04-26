@@ -44,50 +44,50 @@ public class CheckpointManager : MonoBehaviour
 
     public void SaveState(int checkpointIndex)
     {
-        Debug.Log("SaveState called - checkpoint: " + checkpointIndex + " hasBow: " + GameManager.hasBow + " chests found: " + FindObjectsOfType<Chest>().Length);
+        Debug.Log("SaveState called - checkpoint: " + checkpointIndex + " hasBow: " + GameManager.hasBow + " chests found: " + FindObjectsByType<Chest>(FindObjectsSortMode.InstanceID).Length);
 
         savedState = new CheckpointState();
         savedState.checkpointIndex = checkpointIndex;
 
-        foreach (var door in FindObjectsOfType<DoorHealth>())
+        foreach (var door in FindObjectsByType<DoorHealth>(FindObjectsSortMode.InstanceID))
             if (door.isDestroyed)
                 savedState.destroyedDoors.Add(door.persistentID);
 
-        foreach (var door in FindObjectsOfType<LockedDoor>())
+        foreach (var door in FindObjectsByType<LockedDoor>(FindObjectsSortMode.InstanceID))
             if (door.isUnlocked)
                 savedState.openedLockedDoors.Add(door.persistentID);
 
-        foreach (var wall in FindObjectsOfType<IceWall>())
+        foreach (var wall in FindObjectsByType<IceWall>(FindObjectsSortMode.InstanceID))
             if (wall.currentState == IceWall.IceWallState.Melted)
                 savedState.meltedIceWalls.Add(wall.persistentID);
 
-        foreach (var door in FindObjectsOfType<OneWayDoorEntrance>())
+        foreach (var door in FindObjectsByType<OneWayDoorEntrance>(FindObjectsSortMode.InstanceID))
             if (door.hasBeenOpened)
                 savedState.openedEntranceDoors.Add(door.persistentID);
 
-        foreach (var door in FindObjectsOfType<OneWayDoorExit>())
+        foreach (var door in FindObjectsByType<OneWayDoorExit>(FindObjectsSortMode.InstanceID))
             if (door.hasBeenOpened)
                 savedState.openedExitDoors.Add(door.persistentID);
 
-        foreach (var chest in FindObjectsOfType<Chest>())
+        foreach (var chest in FindObjectsByType<Chest>(FindObjectsSortMode.InstanceID))
             if (chest.isOpened)
                 savedState.openedChests.Add(chest.persistentID);
 
-        foreach (var enemy in FindObjectsOfType<PermanentDeathEnemy>())
+        foreach (var enemy in FindObjectsByType<PermanentDeathEnemy>(FindObjectsSortMode.InstanceID))
             if (enemy.isDead)
                 savedState.deadEnemies.Add(enemy.persistentID);
 
-        foreach (var door in FindObjectsOfType<EnemyDoor>())
+        foreach (var door in FindObjectsByType<EnemyDoor>(FindObjectsSortMode.InstanceID))
             if (door.isOpened)
                 savedState.openedEnemyDoors.Add(door.persistentID);
 
         // save bombed skulls
-        foreach (var skull in FindObjectsOfType<BombableSkull>())
+        foreach (var skull in FindObjectsByType<BombableSkull>(FindObjectsSortMode.InstanceID))
             if (skull.hasBeenBombed && !string.IsNullOrEmpty(skull.persistentID))
                 savedState.bombledSkulls.Add(skull.persistentID);
 
         // save permanently opened doors via skull manager
-        foreach (var manager in FindObjectsOfType<BombableSkullManager>())
+        foreach (var manager in FindObjectsByType<BombableSkullManager>(FindObjectsSortMode.InstanceID))
             if (manager.doorOpened && !string.IsNullOrEmpty(manager.persistentID))
                 savedState.permanentlyOpenedDoors.Add(manager.persistentID);
 
@@ -109,50 +109,50 @@ public class CheckpointManager : MonoBehaviour
                   " checkpoint: " + savedState.checkpointIndex +
                   " hasBow: " + savedState.hasBow +
                   " openedChests: " + savedState.openedChests.Count +
-                  " chests found: " + FindObjectsOfType<Chest>().Length);
+                  " chests found: " + FindObjectsByType<Chest>(FindObjectsSortMode.InstanceID).Length);
 
         if (savedState == null) return;
 
-        foreach (var door in FindObjectsOfType<DoorHealth>())
+        foreach (var door in FindObjectsByType<DoorHealth>(FindObjectsSortMode.InstanceID))
             if (savedState.destroyedDoors.Contains(door.persistentID))
                 door.RestoreDestroyed();
 
-        foreach (var door in FindObjectsOfType<LockedDoor>())
+        foreach (var door in FindObjectsByType<LockedDoor>(FindObjectsSortMode.InstanceID))
             if (savedState.openedLockedDoors.Contains(door.persistentID))
                 door.RestoreUnlocked();
 
-        foreach (var wall in FindObjectsOfType<IceWall>())
+        foreach (var wall in FindObjectsByType<IceWall>(FindObjectsSortMode.InstanceID))
             if (savedState.meltedIceWalls.Contains(wall.persistentID))
                 wall.RestoreMelted();
 
-        foreach (var door in FindObjectsOfType<OneWayDoorEntrance>())
+        foreach (var door in FindObjectsByType<OneWayDoorEntrance>(FindObjectsSortMode.InstanceID))
             if (savedState.openedEntranceDoors.Contains(door.persistentID))
                 door.RestoreOpened();
 
-        foreach (var door in FindObjectsOfType<OneWayDoorExit>())
+        foreach (var door in FindObjectsByType<OneWayDoorExit>(FindObjectsSortMode.InstanceID))
             if (savedState.openedExitDoors.Contains(door.persistentID))
                 door.RestoreOpened();
 
-        foreach (var chest in FindObjectsOfType<Chest>())
+        foreach (var chest in FindObjectsByType<Chest>(FindObjectsSortMode.InstanceID))
             if (savedState.openedChests.Contains(chest.persistentID))
                 chest.RestoreOpened();
 
-        foreach (var enemy in FindObjectsOfType<PermanentDeathEnemy>())
+        foreach (var enemy in FindObjectsByType<PermanentDeathEnemy>(FindObjectsSortMode.InstanceID))
             if (savedState.deadEnemies.Contains(enemy.persistentID))
                 Destroy(enemy.gameObject);
 
-        foreach (var door in FindObjectsOfType<EnemyDoor>())
+        foreach (var door in FindObjectsByType<EnemyDoor>(FindObjectsSortMode.InstanceID))
             if (savedState.openedEnemyDoors.Contains(door.persistentID))
                 door.RestoreOpened();
 
         // restore bombed skulls
-        foreach (var skull in FindObjectsOfType<BombableSkull>())
+        foreach (var skull in FindObjectsByType<BombableSkull>(FindObjectsSortMode.InstanceID))
             if (!string.IsNullOrEmpty(skull.persistentID) &&
                 savedState.bombledSkulls.Contains(skull.persistentID))
                 skull.RestoreBombed();
 
         // restore permanently opened doors
-        foreach (var manager in FindObjectsOfType<BombableSkullManager>())
+        foreach (var manager in FindObjectsByType<BombableSkullManager>(FindObjectsSortMode.InstanceID))
         {
             if (!string.IsNullOrEmpty(manager.persistentID) &&
                 savedState.permanentlyOpenedDoors.Contains(manager.persistentID))

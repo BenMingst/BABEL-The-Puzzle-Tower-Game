@@ -48,7 +48,9 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        if (GameObject.FindWithTag("Player") != null)
+        {
+            playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
         if (bowCooldownUI != null)
             bowCooldownUI.SetActive(false);
         if (arrowTypeUI != null)
@@ -56,6 +58,7 @@ public class InventoryManager : MonoBehaviour
         if (bombTypeUI != null)
             bombTypeUI.SetActive(false);
         RefreshUI();
+        }
     }
 
     void Update()

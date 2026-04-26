@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Checkpoint : MonoBehaviour
 {
+    public string scene => SceneManager.GetActiveScene().name;
     public int checkpointIndex;
     public Transform spawnPoint;
 
@@ -22,5 +24,7 @@ public class Checkpoint : MonoBehaviour
             CheckpointManager.Instance.SaveState(checkpointIndex);
             Debug.Log("Checkpoint " + checkpointIndex + " state saved");
         }
+
+        SaveSlotManager.WriteActiveSlot(scene, GameManager.furthestCheckpoint);
     }
 }

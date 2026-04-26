@@ -24,20 +24,6 @@ public class PlayerSpawner : MonoBehaviour
 
         string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex >= 1)
-            GameManager.hasSword = true;
-
-        if (sceneName == "Level_3")
-            GameManager.hasBow = true;
-
-        if (sceneName == "Level_4")
-        {
-            GameManager.hasBow = true;
-            GameManager.hasBomb = true;
-            GameManager.hasRemoteBomb = true;
-            GameManager.hasGrapple = true;
-        }
-
         if (GameManager.hasCustomSpawn)
         {
             transform.position = GameManager.spawnPosition;

@@ -121,6 +121,8 @@ public class EnemyHealth : MonoBehaviour
     IEnumerator HurtNoKnockback()
     {
         isHurt = true;
+        // play hurt sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.universal.hurtSounds, transform, 1f);
         enemyAnimator.SetBool("IsHurt", true);
 
         if (archerBottom != null)
@@ -147,6 +149,8 @@ public class EnemyHealth : MonoBehaviour
     IEnumerator Knockback(float direction)
     {
         isHurt = true;
+        // play hurt sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.universal.hurtSounds, transform, 1f);
         enemyAnimator.SetBool("IsHurt", true);
 
         if (archerBottom != null)
@@ -176,6 +180,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
+        SoundManager.instance.PlayWorldClip(EnemyAudio.instance.universal.deathSound, transform, 1f);
         isDead = true;
         StopAllCoroutines();
 
@@ -229,6 +234,8 @@ public class EnemyHealth : MonoBehaviour
         if (heartDropPrefab != null && Random.value > 0.25f)
             Instantiate(heartDropPrefab, transform.position, Quaternion.identity);
 
-        Destroy(gameObject);
-    }
+    Destroy(gameObject);
+    // Increment global enemy defeat count
+    StatManager.Instance.enemiesDefeated++;
+}
 }

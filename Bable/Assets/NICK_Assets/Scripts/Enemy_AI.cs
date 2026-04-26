@@ -134,8 +134,8 @@ public class EnemyAI : MonoBehaviour
         if (enemyHealth.isHurt) { isAttacking = false; yield break; }
 
         animator.SetTrigger("AttackRight");
-
-        yield return new WaitForSeconds(hitboxDelay / grappleSlowMultiplier);
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.universal.attackSounds, transform, 1f);
+        yield return new WaitForSeconds(hitboxDelay);
 
         if (enemyHealth.isHurt)
         {

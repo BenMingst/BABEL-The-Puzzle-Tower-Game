@@ -98,7 +98,8 @@ public class OneWayDoorExit : MonoBehaviour
     public IEnumerator ExitSequence(GameObject player, PlayerController pc, Animator playerAnimator, SpriteRenderer playerSprite, CanvasGroup fadeCanvas)
     {
         inCutscene = true;
-
+        // play door exit sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorCloseSound, transform, 0.7f);
         player.transform.position = exitSpawnPoint.position;
 
         if (!hasBeenOpened)
@@ -143,7 +144,8 @@ public class OneWayDoorExit : MonoBehaviour
     IEnumerator ReturnToEntranceSequence()
     {
         inCutscene = true;
-
+        // play door enter sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorEnterSound, transform, 1f);
         GameObject player = GameObject.FindWithTag("Player");
         PlayerController pc = player.GetComponent<PlayerController>();
         Animator playerAnimator = pc.animator;
@@ -188,7 +190,8 @@ public class OneWayDoorExit : MonoBehaviour
         cutscenePanel.SetActive(true);
         int currentLine = 0;
         dialogueText.text = dialogue[currentLine];
-
+        // play dialogue blip sound
+        SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueBlipSound, 1f);
         IEnumerator flashCoroutine = FlashPrompt();
         StartCoroutine(flashCoroutine);
 
@@ -197,6 +200,8 @@ public class OneWayDoorExit : MonoBehaviour
             yield return null;
             if (Input.GetKeyDown(KeyCode.E))
             {
+                // play dialogue confirm sound
+                SoundManager.instance.PlayUIClip(SoundManager.instance.dialogueConfirmSound, 1f);
                 currentLine++;
                 if (currentLine < dialogue.Length)
                     dialogueText.text = dialogue[currentLine];
