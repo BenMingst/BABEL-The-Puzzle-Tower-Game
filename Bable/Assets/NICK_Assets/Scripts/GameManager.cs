@@ -42,6 +42,15 @@ public class GameManager : MonoBehaviour
         {
             hasBow = true;
             hasBomb = true;
+            hasRemoteBomb = true;
+            hasGrapple = true;
+        }
+
+        if (scene.name == "Level_5")
+        {
+            hasBow = true;
+            hasBomb = true;
+            hasRemoteBomb = true;
             hasGrapple = true;
         }
     }

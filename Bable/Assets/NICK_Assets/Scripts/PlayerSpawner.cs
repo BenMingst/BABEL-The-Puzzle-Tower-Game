@@ -24,6 +24,15 @@ public class PlayerSpawner : MonoBehaviour
 
         string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
+        // re-apply level-specific auto-equips after checkpoint restore (overrides saved state)
+        if (sceneName == "Level_4" || sceneName == "Level_5")
+        {
+            GameManager.hasBow = true;
+            GameManager.hasBomb = true;
+            GameManager.hasRemoteBomb = true;
+            GameManager.hasGrapple = true;
+        }
+
         if (GameManager.hasCustomSpawn)
         {
             transform.position = GameManager.spawnPosition;
@@ -63,8 +72,8 @@ public class PlayerSpawner : MonoBehaviour
             if (grappleChestObject != null) grappleChestObject.SetActive(false);
         }
 
-        // unlock fire and ice arrows for level 3 and level 4
-        if (sceneName == "Level_3" || sceneName == "Level_4")
+        // unlock fire and ice arrows for level 3, 4, and 5
+        if (sceneName == "Level_3" || sceneName == "Level_4" || sceneName == "Level_5")
         {
             if (ArrowTypeManager.Instance != null)
             {
