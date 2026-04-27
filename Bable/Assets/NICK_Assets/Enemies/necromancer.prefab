@@ -462,7 +462,7 @@ MonoBehaviour:
   spawnHeightOffset: 0
   neckroCooldown: 10
   spawnCap: 8
-  minSpawnDistance: 1
+  minSpawnDistance: 3
   minDistanceBetweenSpawns: 4
   indicatorPrefab: {fileID: 4953547501042442552, guid: a265ce9439dbc498ab34b9ff2a1a91ab, type: 3}
   staggerDuration: 10

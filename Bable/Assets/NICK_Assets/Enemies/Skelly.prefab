@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7269744232961311551}
   - component: {fileID: 3301889814299977434}
   - component: {fileID: -6718444223563714947}
+  - component: {fileID: 4890217719205142829}
   m_Layer: 3
   m_Name: Skelly
   m_TagString: Enemy
@@ -269,6 +270,28 @@ MonoBehaviour:
   stalker:
     stalkerAppearSound: {fileID: 0}
     stalkerDisappearSound: {fileID: 0}
+--- !u!114 &4890217719205142829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509796635320564794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a07bfb4e2cdb411db0be96fa6ee1330, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GrappleCatchable
+  enemyAnimator: {fileID: 5191935925132361289}
+  enemyRb: {fileID: 6827792808560694515}
+  aiScriptsToDisable:
+  - {fileID: 7269744232961311551}
+  collidersToDisableDuringPull: []
+  idleStateName: Idle
+  grappleAnchor: {fileID: 7134161856018748511}
+  slowDuration: 2
+  slowMultiplier: 0.1
+  stunnedIndicator: {fileID: 1280304262463392817}
 --- !u!1 &1598112752036575456
 GameObject:
   m_ObjectHideFlags: 0

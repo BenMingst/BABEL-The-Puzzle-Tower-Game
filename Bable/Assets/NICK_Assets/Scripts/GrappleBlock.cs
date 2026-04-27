@@ -11,7 +11,8 @@ public class GrappleableBlock : MonoBehaviour
     public float stopDistanceFromPlayer = 1f;
 
     private bool isBeingPulled = false;
-    private Vector3 hitOffset; // offset from block center to where the grapple hit
+    private bool cancelPull = false;
+    private Vector3 hitOffset;
 
     void Awake()
     {
@@ -20,7 +21,6 @@ public class GrappleableBlock : MonoBehaviour
 
     public void SetHitPoint(Vector3 worldHitPoint)
     {
-        // store the hit as a local offset so it moves with the block
         hitOffset = worldHitPoint - transform.position;
     }
 
@@ -31,13 +31,20 @@ public class GrappleableBlock : MonoBehaviour
 
     public bool IsBeingPulled() => isBeingPulled;
 
+    public void CancelPull()
+    {
+        cancelPull = true;
+    }
+
     public IEnumerator PullTowardPlayer(Transform player, LineRenderer lineRenderer, GrappleHead head, System.Func<Vector3> spawnPointGetter)
     {
         isBeingPulled = true;
+        cancelPull = false;
 
         while (true)
         {
             if (player == null) break;
+            if (cancelPull) break;
 
             float dx = player.position.x - transform.position.x;
             float distance = Mathf.Abs(dx);
@@ -59,5 +66,6 @@ public class GrappleableBlock : MonoBehaviour
 
         blockRb.linearVelocity = new Vector2(0f, blockRb.linearVelocity.y);
         isBeingPulled = false;
+        cancelPull = false;
     }
 }

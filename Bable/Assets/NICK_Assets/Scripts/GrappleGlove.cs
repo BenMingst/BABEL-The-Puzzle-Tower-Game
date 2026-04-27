@@ -115,6 +115,20 @@ public class GrappleGlove : MonoBehaviour
         return false;
     }
 
+    bool IsLineBlockedByGround(Vector3 targetPosition)
+    {
+        if (pc == null) return false;
+
+        Vector3 spawnPos = CurrentSpawnWorldPosition();
+        Vector2 direction = (targetPosition - spawnPos);
+        float distance = direction.magnitude;
+
+        if (distance < 0.01f) return false;
+
+        RaycastHit2D hit = Physics2D.Raycast(spawnPos, direction.normalized, distance, pc.groundLayer);
+        return hit.collider != null;
+    }
+
     public void StartGrapple()
     {
         if (isGrappling || isBeingPulled) return;
@@ -203,7 +217,6 @@ public class GrappleGlove : MonoBehaviour
         }
 
         Transform enemyTf = caught.transform;
-
         Vector3 anchorOffset = caught.GetAnchorPosition() - enemyTf.position;
 
         while (Vector3.Distance(caught.GetAnchorPosition(), releasePoint) > 0.1f)
@@ -217,6 +230,9 @@ public class GrappleGlove : MonoBehaviour
                 lineRenderer.SetPosition(0, CurrentSpawnWorldPosition());
                 lineRenderer.SetPosition(1, caught.GetAnchorPosition());
             }
+
+            if (IsLineBlockedByGround(caught.GetAnchorPosition()))
+                break;
 
             yield return null;
         }
@@ -263,7 +279,31 @@ public class GrappleGlove : MonoBehaviour
         else
             animator.SetTrigger(facingRight ? "GetOverHereRight" : "GetOverHereLeft");
 
-        yield return StartCoroutine(block.PullTowardPlayer(transform, lineRenderer, activeHead, CurrentSpawnWorldPosition));
+        Coroutine monitor = StartCoroutine(MonitorBlockPull(block));
+
+        // run pull alongside hard timeout
+        float timeout = 1f;
+        float elapsed = 0f;
+        Coroutine pullCoroutine = StartCoroutine(block.PullTowardPlayer(transform, lineRenderer, activeHead, CurrentSpawnWorldPosition));
+
+        while (block.IsBeingPulled() && elapsed < timeout)
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (block.IsBeingPulled())
+        {
+            block.CancelPull();
+            yield return null;
+        }
+
+        if (pullCoroutine != null) StopCoroutine(pullCoroutine);
+        if (monitor != null) StopCoroutine(monitor);
+
+        Rigidbody2D blockRb = block.GetComponent<Rigidbody2D>();
+        if (blockRb != null)
+            blockRb.linearVelocity = new Vector2(0f, blockRb.linearVelocity.y);
 
         isBeingPulled = false;
         isCatchingEnemy = false;
@@ -292,6 +332,41 @@ public class GrappleGlove : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
 
         isGrappling = false;
+    }
+
+    IEnumerator MonitorBlockPull(GrappleableBlock block)
+    {
+        Vector3 lastPosition = block.transform.position;
+        int stallFrames = 0;
+        int stallFrameThreshold = 3;
+        float stallDistance = 0.005f;
+
+        while (block != null && block.IsBeingPulled())
+        {
+            if (IsLineBlockedByGround(block.transform.position))
+            {
+                block.CancelPull();
+                yield break;
+            }
+
+            float moved = Vector3.Distance(block.transform.position, lastPosition);
+            if (moved < stallDistance)
+            {
+                stallFrames++;
+                if (stallFrames >= stallFrameThreshold)
+                {
+                    block.CancelPull();
+                    yield break;
+                }
+            }
+            else
+            {
+                stallFrames = 0;
+            }
+
+            lastPosition = block.transform.position;
+            yield return null;
+        }
     }
 
     IEnumerator PullToTarget(Vector3 target)
