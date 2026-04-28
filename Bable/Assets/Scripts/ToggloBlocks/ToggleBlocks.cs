@@ -49,13 +49,6 @@ public class ToggleBlocks : MonoBehaviour
 				renderer.sprite = onSprite;
 				changed = true;
 			}
-
-			if (changed && SoundManager.instance != null)
-				SoundManager.instance.PlayWorldClip(
-					SoundManager.instance.switchDoorSound,
-					transform,
-					1f
-				);
 		}
 		if (!setYellowOn && isBlueOn)
 		{
@@ -76,13 +69,6 @@ public class ToggleBlocks : MonoBehaviour
 				renderer.sprite = offSprite;
 				changed = true;
 			}
-
-			if (changed && SoundManager.instance != null)
-				SoundManager.instance.PlayWorldClip(
-					SoundManager.instance.switchDoorSound,
-					transform,
-					1f
-				);
 		}
 	}
 }
