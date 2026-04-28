@@ -30,6 +30,11 @@ public class GrappleGlove : MonoBehaviour
     public bool isGroundedGrappling = false;
     public bool isCatchingEnemy = false;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource soundFXObject;
+    [SerializeField] private AudioClip grappleShootSFX;
+    [SerializeField] private AudioClip grappleRetractSFX;
+
     private PlayerController pc;
     private Animator animator;
     private Rigidbody2D rb;
@@ -46,6 +51,11 @@ public class GrappleGlove : MonoBehaviour
         pc = GetComponent<PlayerController>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+
+        if (soundFXObject == null)
+            soundFXObject = gameObject.AddComponent<AudioSource>();
+
+        soundFXObject.playOnAwake = false;
 
         if (lineRenderer != null)
             lineRenderer.enabled = false;
@@ -142,6 +152,11 @@ public class GrappleGlove : MonoBehaviour
         Vector2 dir = pc.facingRight ? Vector2.right : Vector2.left;
 
         GameObject headObj = Instantiate(grappleHeadPrefab, spawnPos, Quaternion.identity);
+
+        // play grapple shoot sound
+        if (soundFXObject != null && grappleShootSFX != null)
+            SoundManager.instance.PlayWorldClip(grappleShootSFX, transform, 1f);
+        
         activeHead = headObj.GetComponent<GrappleHead>();
         activeHead.Launch(dir, this);
 
@@ -163,16 +178,25 @@ public class GrappleGlove : MonoBehaviour
 
     public void OnGrappleHit(Vector3 hitPosition)
     {
+        // play grapple retract sound
+        if (soundFXObject != null && grappleRetractSFX != null)
+            SoundManager.instance.PlayWorldClip(grappleRetractSFX, transform, 1f);
         StartCoroutine(PullToTarget(hitPosition));
     }
 
     public void OnGrappleHitEnemy(GrappleCatchable caught)
     {
+        // play grapple retract sound
+        if (soundFXObject != null && grappleRetractSFX != null)
+            SoundManager.instance.PlayWorldClip(grappleRetractSFX, transform, 1f);
         StartCoroutine(PullEnemyToPlayer(caught));
     }
 
     public void OnGrappleHitBlock(GrappleableBlock block)
     {
+        // play grapple retract sound
+        if (soundFXObject != null && grappleRetractSFX != null)
+            SoundManager.instance.PlayWorldClip(grappleRetractSFX, transform, 1f);
         StartCoroutine(PullBlockToPlayer(block));
     }
 
@@ -299,6 +323,18 @@ public class GrappleGlove : MonoBehaviour
         isBeingPulled = true;
         animator.SetBool("GrappleGetPulled", true);
 
+        // play grapple retract loop sound
+        if (soundFXObject == null)
+        {
+            soundFXObject = SoundManager.instance.PlayWorldClip(
+                grappleRetractSFX,
+                transform,
+                1f
+            );
+
+            soundFXObject.loop = true;
+        }
+
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
 
@@ -321,6 +357,9 @@ public class GrappleGlove : MonoBehaviour
         isBeingPulled = false;
         isGroundedGrappling = false;
         startedFromAir = false;
+
+
+        
         animator.SetBool("GrappleGetPulled", false);
         animator.SetTrigger("GrappleShootEnd");
 
@@ -350,6 +389,11 @@ public class GrappleGlove : MonoBehaviour
             lineRenderer.enabled = false;
 
         animator.SetTrigger("GrappleShootEnd");
+        if (soundFXObject != null)
+        {
+            Destroy(soundFXObject.gameObject);
+            soundFXObject = null;
+        }
 
         animator.ResetTrigger("GrappleShoot");
         animator.ResetTrigger("GrappleShootAir");

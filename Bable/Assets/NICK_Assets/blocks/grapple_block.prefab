@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8512746476425183134}
   - component: {fileID: 4085822915770242339}
   - component: {fileID: 4153413522677121074}
+  - component: {fileID: 134203246445980990}
   m_Layer: 11
   m_Name: grapple_block
   m_TagString: Untagged
@@ -182,3 +183,23 @@ MonoBehaviour:
   blockRb: {fileID: 8512746476425183134}
   pullSpeed: 8
   stopDistanceFromPlayer: 1
+--- !u!114 &134203246445980990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8795226024515315490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8820688a3135ce140adb9d3929abbf91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlockDragAudio
+  rb: {fileID: 8512746476425183134}
+  blockPushLoop: {fileID: 8300000, guid: c4b04c186b2ad674aaab3d9c734bbc59, type: 3}
+  minSpeedForSound: 0.15
+  maxSpeedForPitch: 8
+  maxVolume: 1
+  pitchRange: 0.25
+  pitchJitterAmount: 0.04
+  pitchJitterSpeed: 2

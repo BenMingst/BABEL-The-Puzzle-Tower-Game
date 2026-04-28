@@ -41,6 +41,9 @@ public class Bomb : MonoBehaviour
 
     IEnumerator FuseSequence()
     {
+        // play fuse sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldClip(PlayerAudio.instance.bomb.fuseSound, transform, 1f, 0f);
         yield return new WaitForSeconds(fuseTime);
         Explode();
     }
@@ -51,7 +54,7 @@ public class Bomb : MonoBehaviour
         hasExploded = true;
 
         // play explosion sound
-        SoundManager.instance.PlayWorldRandom(PlayerAudio.BombSounds.explosionSounds, transform, 1f, 0f);
+        SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.bomb.explosionSounds, transform, 1f, 0f);
 
         Debug.DrawRay(transform.position, Vector3.up * explosionRadius, Color.red, 2f);
         Debug.DrawRay(transform.position, Vector3.down * explosionRadius, Color.red, 2f);

@@ -110,6 +110,9 @@ public class BombAttack : MonoBehaviour
         isWindingUp = false;
         bombActive = true;
 
+        // play throw sound
+        SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.bomb.throwSounds, transform, 1f);
+
         if (upwardThrow)
         {
             animator.SetTrigger("BombLobUp");

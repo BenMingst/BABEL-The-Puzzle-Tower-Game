@@ -145,7 +145,10 @@ public class PlayerHealth : MonoBehaviour
         playerController.isHurt = true;
 
         // play hurt sound
-        SoundManager.instance.PlayWorldRandom(PlayerAudio.HealthSounds.hurtSounds, transform, 1f);
+       if (PlayerAudio.instance != null)
+        {
+            SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.health.hurtSounds, transform, 1f);
+        }
 
         float knockbackDirection = transform.position.x > enemyPosition.x ? 1f : -1f;
         playerRb.linearVelocity = new Vector2(knockbackDirection * knockbackForce, playerRb.linearVelocity.y);
@@ -164,7 +167,7 @@ public class PlayerHealth : MonoBehaviour
         playerController.isHurt = true;
 
         // play hurt sound
-        SoundManager.instance.PlayWorldRandom(PlayerAudio.HealthSounds.hurtSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.health.hurtSounds, transform, 1f);
 
         playerRb.linearVelocity = new Vector2(0, playerRb.linearVelocity.y);
 
