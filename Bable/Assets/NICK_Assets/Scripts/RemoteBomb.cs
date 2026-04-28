@@ -38,7 +38,8 @@ public class RemoteBomb : MonoBehaviour
         // play detonation click sound
         if (SoundManager.instance != null)
             SoundManager.instance.PlayWorldClip(PlayerAudio.instance.bomb.detonatorClickSound, transform, 1f);
-        Explode();
+        // delay explosion slightly
+        Invoke(nameof(Explode), 0.3f);
     }
 
     void Explode()
