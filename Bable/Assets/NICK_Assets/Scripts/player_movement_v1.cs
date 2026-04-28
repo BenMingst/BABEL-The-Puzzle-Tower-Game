@@ -194,6 +194,10 @@ public class PlayerController : MonoBehaviour
     public void OnDeath()
     {
         isDead = true;
+
+        // play death sound
+        SoundManager.instance.PlayWorldRandom(PlayerAudio.HealthSounds.deathSounds, transform, 1f);
+
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0f;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -456,7 +460,8 @@ public class PlayerController : MonoBehaviour
             footstepTimer -= Time.deltaTime;
             if (footstepTimer <= 0f)
             {
-                SoundManager.instance.PlayWorldRandom(playerAudio.walkSounds, transform, 1f);
+                // play footstep sound
+                SoundManager.instance.PlayWorldRandom(PlayerAudio.WalkingSounds.gravelSounds, transform, 1f);
                 footstepTimer = footstepRate;
             }
         }
@@ -476,7 +481,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 // play jump sound
-                SoundManager.instance.PlayWorldRandom(playerAudio.jumpSounds, transform, 1f);
+                SoundManager.instance.PlayWorldRandom(PlayerAudio.MovementSounds.jumpSounds, transform, 1f);
                 jumpTimer = 0f;
                 // update stats
                 StatManager.Instance.jumps++;
@@ -734,7 +739,7 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(rb.linearVelocity.x, downAttackBounceForce);
         animator.SetBool("DownAttack", true);
         // play bounce sound
-        SoundManager.instance.PlayWorldRandom(playerAudio.swordDownAttackSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(PlayerAudio.CombatSounds.swordDownAttackBounceSounds, transform, 1f);
     }
 
     void HandleAnimations()

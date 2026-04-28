@@ -50,6 +50,9 @@ public class Bomb : MonoBehaviour
         if (hasExploded) return;
         hasExploded = true;
 
+        // play explosion sound
+        SoundManager.instance.PlayWorldRandom(PlayerAudio.BombSounds.explosionSounds, transform, 1f, 0f);
+
         Debug.DrawRay(transform.position, Vector3.up * explosionRadius, Color.red, 2f);
         Debug.DrawRay(transform.position, Vector3.down * explosionRadius, Color.red, 2f);
         Debug.DrawRay(transform.position, Vector3.left * explosionRadius, Color.red, 2f);

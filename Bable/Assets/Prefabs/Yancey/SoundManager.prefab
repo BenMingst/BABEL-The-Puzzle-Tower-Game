@@ -75,7 +75,7 @@ MonoBehaviour:
   doorHurtSounds:
   - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
   doorBreakSound: {fileID: 8300000, guid: 71c052a78a9dd84428110b893ea2642b, type: 3}
-  chestOpenSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
+  chestOpenSound: {fileID: 8300000, guid: fe13ff4bfece495418c151d19eafc231, type: 3}
   chestLockedSound: {fileID: 8300000, guid: 55d90ed8523c0a44bbdb0d4ca609a8bc, type: 3}
   chestUnlockSound: {fileID: 8300000, guid: 6a9313f3487e82f4ca1a8b1f105ab314, type: 3}
   arrowShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}

@@ -407,7 +407,6 @@ MonoBehaviour:
   deathCanvas: {fileID: 0}
   pausePanel: {fileID: 7964353206513682092, guid: 37be0fd953f378045bc28e724ae4a60b, type: 3}
   optionsPanel: {fileID: 2469513643874604947, guid: 7ca00c62193e4e149b32069caa6117a2, type: 3}
-  isPaused: 0
   moveSpeed: 2
   jumpForce: 5
   groundCheck: {fileID: 4937548766268005794}
@@ -677,10 +676,12 @@ MonoBehaviour:
   normalArrowSpawnSound: {fileID: 0}
   iceArrowSpawnSound: {fileID: 0}
   fireArrowSpawnSound: {fileID: 0}
-  arrowHitWallSounds: []
+  arrowHitWallSounds:
+  - {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
   bombThrowSounds:
   - {fileID: 8300000, guid: 41f0899738ea94946ae04046c231c3bf, type: 3}
-  bombExplosionSounds: []
+  bombExplosionSounds:
+  - {fileID: 8300000, guid: 45e1b6ae94d705c4c8badd99aff8ab0c, type: 3}
   walkSounds:
   - {fileID: 8300000, guid: 2e5bcd1b3303cc84ea452fe700f60f65, type: 3}
   - {fileID: 8300000, guid: 3892b70954637674e9becc4794e0719f, type: 3}
@@ -695,7 +696,10 @@ MonoBehaviour:
   dropDownSounds: []
   rollSounds:
   - {fileID: 8300000, guid: 25c4a084f89155c43a3ff41f38e091d7, type: 3}
-  jumpSounds: []
+  - {fileID: 8300000, guid: 25c4a084f89155c43a3ff41f38e091d7, type: 3}
+  jumpSounds:
+  - {fileID: 8300000, guid: d0e27576f07fdb8489ad03bf84368d00, type: 3}
+  - {fileID: 8300000, guid: f1cd3117ebd956d4ab0aa23a1d649845, type: 3}
 --- !u!81 &-5197810492749634059
 AudioListener:
   m_ObjectHideFlags: 0
