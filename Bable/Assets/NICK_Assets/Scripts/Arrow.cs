@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
 
     public float speed = 1.5f;
     public float maxDistance = 15f;
-    public float stickDuration = 1f;
+    public float stickDuration = 3f;
     public int damage = 1;
     public float spawnIgnoreTime = 0.1f;
     public bool isPlayerArrow = false;
@@ -32,7 +32,6 @@ public class Arrow : MonoBehaviour
 
     void Start()
     {
-        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowShotSound, transform, 1f);
         rb.linearVelocity = travelDirection * speed;
         StartCoroutine(EnableGroundCollision());
     }
@@ -88,13 +87,17 @@ public class Arrow : MonoBehaviour
     {
         if (isStuck) return;
         if (ignoreGround) return;
+
         if (isPlayerArrow)
         {
             if (other.CompareTag("Player")) return;
 
-            if (other.CompareTag("Target"))
+            // breakable vase
+            BreakableVase vase = other.GetComponentInParent<BreakableVase>();
+            if (vase != null && !vase.IsBroken())
             {
-                other.GetComponent<Target>()?.TakeHit();
+                vase.Break();
+                StartCoroutine(HitAndDestroy());
                 return;
             }
 
@@ -200,7 +203,6 @@ public class Arrow : MonoBehaviour
         isStuck = true;
         yield return new WaitForSeconds(bounceDestroyDelay);
         Destroy(gameObject);
-        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowBounceSound, transform, 1f);
     }
 
     IEnumerator HitAndDestroy()
@@ -218,8 +220,6 @@ public class Arrow : MonoBehaviour
     IEnumerator StickToWall()
     {
         isStuck = true;
-        // play stick sound
-        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowStuckSound, transform, 1f);
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
         DisableAllColliders();

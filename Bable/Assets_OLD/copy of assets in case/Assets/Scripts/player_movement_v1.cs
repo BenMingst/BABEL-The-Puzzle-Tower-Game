@@ -110,30 +110,47 @@ public class PlayerController : MonoBehaviour
     }
 
     IEnumerator SlashAttack()
+{
+    isAttacking = true;
+    animator.SetBool("IsSlashing", true);
+
+    float lungeDirection = facingRight ? 1f : -1f;
+    rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
+
+    slashHitbox.SetActive(true);
+
+    yield return new WaitForSeconds(0.1f);
+
+    // check for breakable vases in slash hitbox area
+    Collider2D hitboxCol = slashHitbox.GetComponent<Collider2D>();
+    if (hitboxCol != null)
     {
-        isAttacking = true;
-        animator.SetBool("IsSlashing", true);
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            slashHitbox.transform.position,
+            hitboxCol.bounds.size,
+            0f);
 
-        float lungeDirection = facingRight ? 1f : -1f;
-        rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
-
-        slashHitbox.SetActive(true);
-
-        yield return new WaitForSeconds(0.1f);
-
-        rb.linearVelocity = new Vector2(lungeDirection * 0.75f, rb.linearVelocity.y);
-
-        yield return new WaitForSeconds(0.1f);
-
-        slashHitbox.SetActive(false);
-
-        rb.linearVelocity = new Vector2(lungeDirection * 0.25f, rb.linearVelocity.y);
-
-        yield return new WaitForSeconds(0.375f);
-
-        animator.SetBool("IsSlashing", false);
-        isAttacking = false;
+        foreach (var hit in hits)
+        {
+            BreakableVase vase = hit.GetComponentInParent<BreakableVase>();
+            if (vase != null && !vase.IsBroken())
+                vase.Break();
+        }
     }
+
+    rb.linearVelocity = new Vector2(lungeDirection * 0.75f, rb.linearVelocity.y);
+
+    yield return new WaitForSeconds(0.1f);
+
+    slashHitbox.SetActive(false);
+
+    rb.linearVelocity = new Vector2(lungeDirection * 0.25f, rb.linearVelocity.y);
+
+    yield return new WaitForSeconds(0.375f);
+
+    animator.SetBool("IsSlashing", false);
+    isAttacking = false;
+}
 
     IEnumerator Roll()
     {
