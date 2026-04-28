@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7504774122564158592}
   - component: {fileID: 5998764828522251543}
   - component: {fileID: 409406428813146156}
+  - component: {fileID: -474349669873138691}
   m_Layer: 3
   m_Name: Armored_Skelly
   m_TagString: Enemy
@@ -266,6 +267,93 @@ MonoBehaviour:
   slowDuration: 2
   slowMultiplier: 0.1
   stunnedIndicator: {fileID: 7861950735864641688}
+--- !u!114 &-474349669873138691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931650629627962251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  evilEye:
+    bombLaunchSound: {fileID: 0}
+    shieldUpSound: {fileID: 0}
+    shieldDownSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  necromancer:
+    summonWindupSounds: []
+    summonCastSounds: []
+    spawnImpactSounds: []
+    barrierBreakSounds: []
+    staggerSounds: []
+    teleportOutSounds: []
+    teleportInSounds: []
+    vulnerableHitSounds: []
+    barrierUpSounds: []
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  serpent:
+    serpentTauntSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  stalker:
+    stalkerAppearSound: {fileID: 0}
+    stalkerDisappearSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  spider:
+    spiderAppearSound: {fileID: 0}
+    spiderDisappearSound: {fileID: 0}
+    webDropSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  skelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  armoredSkelly:
+    attackSounds:
+    - {fileID: 8300000, guid: e175814a65f0d604391f69aba98e2794, type: 3}
+    hurtSounds:
+    - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+    deathSound: {fileID: 8300000, guid: d2fd1a2dc4f498049933686a911042f0, type: 3}
+    ineffectiveSounds:
+    - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+    blockedSounds:
+    - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  archer:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  attackSounds: []
+  hurtSounds: []
+  deathSound: {fileID: 0}
+  ineffectiveSounds: []
+  blockedSounds: []
 --- !u!1 &1549113777090637515
 GameObject:
   m_ObjectHideFlags: 0

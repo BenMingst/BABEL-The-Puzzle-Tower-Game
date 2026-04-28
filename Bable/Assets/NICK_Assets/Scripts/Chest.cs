@@ -67,7 +67,10 @@ public class Chest : MonoBehaviour
     {
         isOpened = true;
         inCutscene = true;
-
+        
+        // play chest opening sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.chestOpenSound, transform, 1f, 0f);
+        
         chestRenderer.sprite = openedSprite;
         Time.timeScale = 0f;
 

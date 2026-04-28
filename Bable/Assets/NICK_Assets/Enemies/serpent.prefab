@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 8219890233299770078}
   - component: {fileID: 5252675767328577989}
   - component: {fileID: 2545126087507547374}
+  - component: {fileID: -9068522099588089023}
   m_Layer: 3
   m_Name: serpent
   m_TagString: Enemy
@@ -393,6 +394,46 @@ MonoBehaviour:
   slowDuration: 2
   slowMultiplier: 0.1
   stunnedIndicator: {fileID: 283915663500915809}
+--- !u!114 &-9068522099588089023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2503178802898919249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  evilEye:
+    bombLaunchSound: {fileID: 0}
+    shieldUpSound: {fileID: 0}
+    shieldDownSound: {fileID: 0}
+  necromancer:
+    summonWindupSounds: []
+    summonCastSounds: []
+    spawnImpactSounds: []
+    barrierBreakSounds: []
+    staggerSounds: []
+    teleportOutSounds: []
+    teleportInSounds: []
+    vulnerableHitSounds: []
+    barrierUpSounds: []
+  serpent:
+    serpentTauntSound: {fileID: 0}
+  stalker:
+    stalkerAppearSound: {fileID: 0}
+    stalkerDisappearSound: {fileID: 0}
+  spider:
+    spiderAppearSound: {fileID: 0}
+    spiderDisappearSound: {fileID: 0}
+    webDropSound: {fileID: 0}
+  attackSounds: []
+  hurtSounds: []
+  deathSound: {fileID: 8300000, guid: 5c91bcfb749b8b1489857a864afa1f86, type: 3}
+  ineffectiveSounds: []
+  blockedSounds: []
 --- !u!1 &2926428067086069855
 GameObject:
   m_ObjectHideFlags: 0

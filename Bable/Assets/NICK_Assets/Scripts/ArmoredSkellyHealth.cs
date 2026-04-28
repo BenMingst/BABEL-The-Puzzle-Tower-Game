@@ -92,6 +92,8 @@ public class ArmoredSkellyHealth : MonoBehaviour
     IEnumerator HurtNoKnockback()
     {
         isHurt = true;
+        // play hurt sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.hurtSounds, transform, 1f);
         enemyAnimator.SetBool("IsHurt", true);
 
         yield return new WaitForSeconds(0.15f);

@@ -265,6 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  enemyType: 0
   maxHealth: 2
   knockbackForce: 3
   enemyHitbox: {fileID: 2571927437160875523}
@@ -376,22 +377,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
-  universal:
-    attackSounds: []
-    hurtSounds:
-    - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
-    deathSound: {fileID: 8300000, guid: 86316873cf9b0d44cb9772f4726cebdf, type: 3}
   evilEye:
     bombLaunchSound: {fileID: 0}
     shieldUpSound: {fileID: 0}
     shieldDownSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   necromancer:
-    necromancerSummonSound: {fileID: 0}
+    summonWindupSounds: []
+    summonCastSounds: []
+    spawnImpactSounds: []
+    barrierBreakSounds: []
+    staggerSounds: []
+    teleportOutSounds: []
+    teleportInSounds: []
+    vulnerableHitSounds: []
+    barrierUpSounds: []
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   serpent:
     serpentTauntSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   stalker:
     stalkerAppearSound: {fileID: 0}
     stalkerDisappearSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  spider:
+    spiderAppearSound: {fileID: 0}
+    spiderDisappearSound: {fileID: 0}
+    webDropSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  skelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  armoredSkelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  archer:
+    attackSounds:
+    - {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+    hurtSounds:
+    - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+    deathSound: {fileID: 8300000, guid: 86316873cf9b0d44cb9772f4726cebdf, type: 3}
+    ineffectiveSounds:
+    - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+    blockedSounds:
+    - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  attackSounds: []
+  hurtSounds: []
+  deathSound: {fileID: 0}
+  ineffectiveSounds: []
+  blockedSounds: []
 --- !u!1 &3247150508916688906
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,6 +580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  enemyType: 0
   maxHealth: 2
   knockbackForce: 2
   enemyHitbox: {fileID: 2571927437160875523}

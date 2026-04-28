@@ -168,8 +168,6 @@ public class SaveSlotUI : MonoBehaviour
             return;
         }
 
-        PlayButtonSound();
-
         if (SoundManager.instance != null)
             SoundManager.instance.PlayUIClip(SoundManager.instance.menuEnterSound, 1f);
 

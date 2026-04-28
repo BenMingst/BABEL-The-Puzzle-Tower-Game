@@ -2113,6 +2113,9 @@ MonoBehaviour:
   isBeingPulled: 0
   isGroundedGrappling: 0
   isCatchingEnemy: 0
+  soundFXObject: {fileID: 456598269487561052, guid: 850049122f3ee054bb66c9094d1c8514, type: 3}
+  grappleShootSFX: {fileID: 8300000, guid: c4fd33f76646976428a6ed62a3242407, type: 3}
+  grappleRetractSFX: {fileID: 8300000, guid: 40db1d5f072b82e46a1ab19b7102cab2, type: 3}
 --- !u!4 &8940010370918419919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}

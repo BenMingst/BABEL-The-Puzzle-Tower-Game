@@ -117,8 +117,12 @@ public class NecromancerAI : MonoBehaviour
 
         if (necroBarrier != null)
             necroBarrier.SetActive(false);
-
+            // play barrier break sound
+            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.barrierBreakSounds, transform, 1f);
         animator.SetTrigger("Stagger");
+
+        // play stagger/dazed sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.staggerSounds, transform, 1f);
 
         float elapsed = 0f;
         while (elapsed < staggerDuration)
@@ -137,6 +141,9 @@ public class NecromancerAI : MonoBehaviour
         if (!isStaggered) return;
 
         staggerHitCount++;
+
+        // play heavY sound for vulnerable hit
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.vulnerableHitSounds, transform, 1f);
 
         if (damage > 1 || staggerHitCount >= 2)
         {
@@ -165,6 +172,9 @@ public class NecromancerAI : MonoBehaviour
         if (teleportOutPrefab != null)
             Instantiate(teleportOutPrefab, transform.position, Quaternion.identity);
 
+        // play teleport disappear sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.teleportOutSounds, transform, 1f);
+
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
@@ -187,6 +197,9 @@ public class NecromancerAI : MonoBehaviour
         if (teleportInPrefab != null)
             Instantiate(teleportInPrefab, transform.position, Quaternion.identity);
 
+        // play teleport reappear sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.teleportInSounds, transform, 1f);
+
         yield return new WaitForSeconds(teleportDisappearDuration);
 
         if (rb != null)
@@ -202,6 +215,9 @@ public class NecromancerAI : MonoBehaviour
             necroBarrier.SetActive(true);
 
         animator.SetTrigger("StaggerEnd");
+
+        // play shield up sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.barrierUpSounds, transform, 1f);
     }
 
     Vector2? GetTeleportPosition()
@@ -282,14 +298,23 @@ public class NecromancerAI : MonoBehaviour
         }
 
         animator.SetTrigger("SummonWindup");
+
+        // play summon windup sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.summonWindupSounds, transform, 1f);
+
         yield return new WaitForSeconds(GetAnimationLength("SummonWindup") / grappleSlowMultiplier);
 
         animator.SetTrigger("Summon");
+
+        // play summon execution sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.summonCastSounds, transform, 1f);
 
         foreach (Vector2 pos in spawnPositions)
         {
             if (spawnEffectPrefab != null)
                 Instantiate(spawnEffectPrefab, pos, Quaternion.identity);
+                // play spawn effect/poof sound at position
+                SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.spawnImpactSounds, transform, 0.8f);
         }
 
         yield return new WaitForSeconds(spawnEffectDuration / grappleSlowMultiplier);

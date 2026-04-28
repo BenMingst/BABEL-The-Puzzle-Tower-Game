@@ -258,6 +258,7 @@ GameObject:
   - component: {fileID: 4907665440946141984}
   - component: {fileID: 6730097255137018398}
   - component: {fileID: 7768023949827973684}
+  - component: {fileID: 8266488805377472821}
   m_Layer: 3
   m_Name: necromancer
   m_TagString: Enemy
@@ -490,6 +491,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  enemyType: 0
   maxHealth: 5
   knockbackForce: 3
   enemyHitbox: {fileID: 0}
@@ -541,6 +543,92 @@ MonoBehaviour:
   slowDuration: 2
   slowMultiplier: 0.1
   stunnedIndicator: {fileID: 2194119828680842609}
+--- !u!114 &8266488805377472821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6020507599463098003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  evilEye:
+    bombLaunchSound: {fileID: 0}
+    shieldUpSound: {fileID: 0}
+    shieldDownSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  necromancer:
+    summonWindupSounds: []
+    summonCastSounds: []
+    spawnImpactSounds: []
+    barrierBreakSounds:
+    - {fileID: 8300000, guid: b9fd1374580caea4da3e86ca8c10337b, type: 3}
+    staggerSounds: []
+    teleportOutSounds: []
+    teleportInSounds: []
+    vulnerableHitSounds: []
+    barrierUpSounds:
+    - {fileID: 8300000, guid: 7dd1ff46ed66e854d9533c0f25e78b2e, type: 3}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds:
+    - {fileID: 8300000, guid: c2dcb62bf0adcff408b61b32b52e65d1, type: 3}
+  serpent:
+    serpentTauntSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  stalker:
+    stalkerAppearSound: {fileID: 0}
+    stalkerDisappearSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  spider:
+    spiderAppearSound: {fileID: 0}
+    spiderDisappearSound: {fileID: 0}
+    webDropSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  skelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  armoredSkelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  archer:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  attackSounds: []
+  hurtSounds: []
+  deathSound: {fileID: 0}
+  ineffectiveSounds: []
+  blockedSounds: []
 --- !u!1 &6699107874593498266
 GameObject:
   m_ObjectHideFlags: 0

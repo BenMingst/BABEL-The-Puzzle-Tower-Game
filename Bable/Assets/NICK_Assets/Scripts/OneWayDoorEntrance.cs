@@ -142,6 +142,8 @@ public class OneWayDoorEntrance : MonoBehaviour
         inCutscene = true;
 
         player.transform.position = transform.position;
+        // play door open sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorOpenSound, transform, 1f);
         doorAnimator.SetBool("Select2", false);
 
         playerAnimator.runtimeAnimatorController = pc.swordAnimator;
@@ -196,7 +198,8 @@ public class OneWayDoorEntrance : MonoBehaviour
         playerAnimator.runtimeAnimatorController = pc.swordAnimator;
         playerAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
         playerAnimator.SetTrigger("EnterDoor");
-
+        // play door open sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorOpenSound, transform, 1f);
         yield return new WaitForSecondsRealtime(0.4f);
 
         if (playerSprite != null)
