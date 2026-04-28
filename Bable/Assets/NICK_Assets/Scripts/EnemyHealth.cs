@@ -242,7 +242,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
-        SoundManager.instance.PlayWorldClip(EnemyAudio.instance.deathSound, transform, 1f);
+        SoundManager.instance.PlayWorldClip(GetEnemyDeathSound(), transform, 1f);
         isDead = true;
         StopAllCoroutines();
 
