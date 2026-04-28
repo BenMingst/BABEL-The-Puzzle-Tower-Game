@@ -22,6 +22,14 @@ public class Arrow : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D[] allColliders;
     private Animator animator;
+    
+    // sounds for non player arrows are played on start, player arrow sounds are played in player script when shooting
+    [SerializeField]
+    public AudioClip normalShotSound;
+    [SerializeField]
+    public AudioClip iceShotSound;
+    [SerializeField]
+    public AudioClip fireShotSound;
 
     void Awake()
     {
@@ -32,6 +40,22 @@ public class Arrow : MonoBehaviour
 
     void Start()
     {
+        // play shoot sound if not player arrow
+        if (!isPlayerArrow)
+        {
+            switch (arrowType)
+            {
+                case ArrowType.Normal:
+                    SoundManager.instance.PlayWorldClip(normalShotSound, transform, 1f);
+                    break;
+                case ArrowType.Ice:
+                    SoundManager.instance.PlayWorldClip(iceShotSound, transform, 1f);
+                    break;
+                case ArrowType.Fire:
+                    SoundManager.instance.PlayWorldClip(fireShotSound, transform, 1f);
+                    break;
+            }
+        }
         rb.linearVelocity = travelDirection * speed;
         StartCoroutine(EnableGroundCollision());
     }
@@ -60,6 +84,10 @@ public class Arrow : MonoBehaviour
         rb.angularVelocity = Random.Range(-300f, 300f);
         rb.gravityScale = 1f;
         DisableAllColliders();
+
+        // play bounce off sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldClip(PlayerAudio.instance.arrow.bounceOffSound, transform, 1f);
         StartCoroutine(BounceDestroy());
     }
 
@@ -203,6 +231,8 @@ public class Arrow : MonoBehaviour
         isStuck = true;
         yield return new WaitForSeconds(bounceDestroyDelay);
         Destroy(gameObject);
+        // play bounce sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowBounceSound, transform, 1f);
     }
 
     IEnumerator HitAndDestroy()

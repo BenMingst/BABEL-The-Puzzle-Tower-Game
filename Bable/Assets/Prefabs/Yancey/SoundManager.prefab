@@ -52,11 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SoundFXManager
   arrowSwitchTypeSounds:
-  - {fileID: 8300000, guid: 6cfd455a2d107a84ba82263f76e04c8e, type: 3}
-  - {fileID: 8300000, guid: c018f2f6c1967d74ab6494dc2f5b28df, type: 3}
-  - {fileID: 8300000, guid: dbcd67d5cf8c87944bbe14e49b92d456, type: 3}
+  - {fileID: 8300000, guid: 0d5d59a3347a9d641b4e306c60ed3252, type: 3}
   hotbarSwitchSounds:
-  - {fileID: 8300000, guid: c31b88f3fa64cae418f4d431ef47124b, type: 3}
+  - {fileID: 0}
   dialogueBlipSound: {fileID: 8300000, guid: 1113fe09333f4434fa8aa4c9e2bc838a, type: 3}
   dialogueConfirmSound: {fileID: 8300000, guid: 1113fe09333f4434fa8aa4c9e2bc838a, type: 3}
   gameOverSound: {fileID: 8300000, guid: abe154774de80fb4bb3047f7a156ce65, type: 3}
@@ -68,21 +66,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 691098816f1199d488c72f38dffd7f8a, type: 3}
   doorOpenSound: {fileID: 8300000, guid: 7e4cc314097751245a472a12ddff9ed5, type: 3}
   doorCloseSound: {fileID: 8300000, guid: 14646e7f4fb1c684885c80c24b80eaf3, type: 3}
-  doorEnterSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
+  doorEnterSound: {fileID: 8300000, guid: 7e4cc314097751245a472a12ddff9ed5, type: 3}
   doorLockedSounds:
   - {fileID: 8300000, guid: fd058d5182dfa3b459b970859cbf40fb, type: 3}
-  doorUnlockSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
+  doorUnlockSound: {fileID: 8300000, guid: 90ba60d5b458c64488c9c690eb78a6c0, type: 3}
   doorHurtSounds:
   - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
   doorBreakSound: {fileID: 8300000, guid: 71c052a78a9dd84428110b893ea2642b, type: 3}
-  chestOpenSound: {fileID: 8300000, guid: 9aa551611669fa4439b6cf3a7b1c574f, type: 3}
-  chestLockedSound: {fileID: 8300000, guid: 55d90ed8523c0a44bbdb0d4ca609a8bc, type: 3}
+  chestOpenSound: {fileID: 8300000, guid: fe13ff4bfece495418c151d19eafc231, type: 3}
+  chestLockedSound: {fileID: 8300000, guid: fd058d5182dfa3b459b970859cbf40fb, type: 3}
   chestUnlockSound: {fileID: 8300000, guid: 6a9313f3487e82f4ca1a8b1f105ab314, type: 3}
+  switchSound: {fileID: 8300000, guid: d57a824cbcfe3fb49969f1bd43e3d0f7, type: 3}
+  switchDoorSound: {fileID: 8300000, guid: 8ce1d3ab1da0a9c4d83eba3660e48f45, type: 3}
   arrowShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
   arrowStuckSound: {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
   arrowBounceSound: {fileID: 0}
   stalkerVanishSound: {fileID: 0}
   stalkerAppearSound: {fileID: 0}
+  doinkSound: {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  itemPickupSound: {fileID: 8300000, guid: 89d23be6bd3db7e42884f617d7281b8f, type: 3}
+  detonatorSound: {fileID: 8300000, guid: bfaf92fa8f206de48a84e24e607d549a, type: 3}
+  buttonPressSound: {fileID: 8300000, guid: 374b6140576c52b4e968c50d964a5dfb, type: 3}
   soundFXObject: {fileID: 456598269487561052, guid: 850049122f3ee054bb66c9094d1c8514, type: 3}
 --- !u!114 &8193082332978435
 MonoBehaviour:
@@ -121,7 +125,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2269163977221501584}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 82eb2bb1e1e817d4398eb95d6da656d3, type: 3}
   m_Name: 

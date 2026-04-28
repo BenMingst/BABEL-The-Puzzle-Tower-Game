@@ -31,6 +31,11 @@ public class SoundManager : MonoBehaviour
     [SerializeField] public AudioClip chestOpenSound;
     [SerializeField] public AudioClip chestLockedSound;
     [SerializeField] public AudioClip chestUnlockSound;
+    [SerializeField] public AudioClip switchSound;
+    [SerializeField] public AudioClip switchDoorSound;
+
+
+
     [SerializeField] public AudioClip arrowShotSound;
     [SerializeField] public AudioClip arrowStuckSound;
     [SerializeField] public AudioClip arrowBounceSound;
@@ -39,6 +44,14 @@ public class SoundManager : MonoBehaviour
     [Header("Stalker Sounds")]
     [SerializeField] public AudioClip stalkerVanishSound;
     [SerializeField] public AudioClip stalkerAppearSound;
+
+    [Header("Other")]
+    [SerializeField] public AudioClip doinkSound;
+    [SerializeField] public AudioClip itemPickupSound;
+    [SerializeField] public AudioClip detonatorSound;
+    [SerializeField] public AudioClip buttonPressSound;
+
+
 
     public static SoundManager instance;
 
@@ -57,23 +70,25 @@ public class SoundManager : MonoBehaviour
     return player != null ? player.transform : transform;
 }
 
-    public void PlayRandomSoundFXClip(AudioClip[] clips, Transform spawnTransform, float volume, float delay)
+    public AudioSource PlayRandomSoundFXClip(AudioClip[] clips, Transform spawnTransform, float volume, float delay)
+{
+    if (clips == null || clips.Length == 0 || soundFXObject == null) return null;
+
+    int rand = Random.Range(0, clips.Length);
+
+    AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
+    audioSource.clip = clips[rand];
+    audioSource.volume = volume;
+    audioSource.PlayDelayed(delay);
+
+    Destroy(audioSource.gameObject, audioSource.clip.length + delay);
+
+    return audioSource;
+}
+
+    public AudioSource PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume, float delay)
     {
-        if (clips == null || clips.Length == 0 || soundFXObject == null) return;
-
-        int rand = Random.Range(0, clips.Length);
-
-        AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
-        audioSource.clip = clips[rand];
-        audioSource.volume = volume;
-        audioSource.PlayDelayed(delay);
-
-        Destroy(audioSource.gameObject, audioSource.clip.length + delay);
-    }
-
-    public void PlaySoundFXClip(AudioClip clip, Transform spawnTransform, float volume, float delay)
-    {
-        if (clip == null || soundFXObject == null) return;
+        if (clip == null || soundFXObject == null) return null;
 
         AudioSource audioSource = Instantiate(soundFXObject, spawnTransform.position, Quaternion.identity);
         audioSource.clip = clip;
@@ -81,10 +96,12 @@ public class SoundManager : MonoBehaviour
         audioSource.PlayDelayed(delay);
 
         Destroy(audioSource.gameObject, clip.length + delay);
+
+        return audioSource;
     }
-    public void PlayWorldClip(AudioClip clip, Transform emitter, float volume = 1f, float delay = 0f)
+    public AudioSource PlayWorldClip(AudioClip clip, Transform emitter, float volume = 1f, float delay = 0f)
     {
-        PlaySoundFXClip(clip, emitter, volume, delay);
+        return PlaySoundFXClip(clip, emitter, volume, delay);
     }
 
     public void PlayWorldRandom(AudioClip[] clips, Transform emitter, float volume = 1f, float delay = 0f)

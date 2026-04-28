@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ToggleBlocks : MonoBehaviour {
+public class ToggleBlocks : MonoBehaviour
+{
 
-    public bool isBlue;
+	public bool isBlue;
 	private bool isBlueOn;
 	private Collider2D collider;
 	private SpriteRenderer renderer;
@@ -15,42 +16,59 @@ public class ToggleBlocks : MonoBehaviour {
 	private bool setYellowOn;
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
 		collider = GetComponent<Collider2D>();
-		renderer = GetComponent<SpriteRenderer> ();
+		renderer = GetComponent<SpriteRenderer>();
 		// semiVisible = new Color(1, 1, 1, 0.5f);
 		setBlueOn = false;
 		setYellowOn = false;
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
+	void Update()
+	{
 		isBlueOn = SwitchController.instance.isBlueOn;
 
-		if (!setBlueOn && !isBlueOn) {
-            setBlueOn = true;
-            setYellowOn = false;
-            if (isBlue) {
-                collider.enabled = false;
-                renderer.sprite = offSprite;
-            }
-            else {
-                collider.enabled = true;
-                renderer.sprite = onSprite;
-            }
+		if (!setBlueOn && !isBlueOn)
+		{
+			setBlueOn = true;
+			setYellowOn = false;
 
-		} if (!setYellowOn && isBlueOn) {
-            setBlueOn = false;
-            setYellowOn = true;
-            if (isBlue) {
-                collider.enabled = true;
-                renderer.sprite = onSprite;
-            }
-            else
-            {
-                collider.enabled = false;
-                renderer.sprite = offSprite;
-            }
+			bool changed = false;
+
+			if (isBlue)
+			{
+				collider.enabled = false;
+				renderer.sprite = offSprite;
+				changed = true;
+			}
+			else
+			{
+				collider.enabled = true;
+				renderer.sprite = onSprite;
+				changed = true;
+			}
+		}
+		if (!setYellowOn && isBlueOn)
+		{
+			setBlueOn = false;
+			setYellowOn = true;
+
+			bool changed = false;
+
+			if (isBlue)
+			{
+				collider.enabled = true;
+				renderer.sprite = onSprite;
+				changed = true;
+			}
+			else
+			{
+				collider.enabled = false;
+				renderer.sprite = offSprite;
+				changed = true;
+			}
 		}
 	}
 }

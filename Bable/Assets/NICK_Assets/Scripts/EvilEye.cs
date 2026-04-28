@@ -142,16 +142,25 @@ public class EvilEye : MonoBehaviour
 
     public void SpawnProjectile()
     {
+        // play attack sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
         SpawnProjectileOfType(projectilePrefab);
     }
 
     public void SpawnIceProjectile()
     {
+        // play attack sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
         SpawnProjectileOfType(iceProjectilePrefab);
     }
 
     public void SpawnFireProjectile()
     {
+        // play attack sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
         SpawnProjectileOfType(fireProjectilePrefab);
     }
 
@@ -164,6 +173,9 @@ public class EvilEye : MonoBehaviour
         GameObject proj = Instantiate(prefab, projectileSpawnPoint.position, Quaternion.identity);
         EvilEyeProjectile projectile = proj.GetComponent<EvilEyeProjectile>();
         projectile.Launch(player.position);
+        // play bomb launch sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldClip(EnemyAudio.instance.evilEye.bombLaunchSound, transform, 1f);
     }
 
     IEnumerator EnterDefend()

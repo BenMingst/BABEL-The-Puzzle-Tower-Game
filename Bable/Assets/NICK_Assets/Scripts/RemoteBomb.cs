@@ -33,8 +33,12 @@ public class RemoteBomb : MonoBehaviour
         rb.linearVelocity = velocity;
     }
 
-    public void Detonate()
+    public IEnumerable Detonate()
     {
+        // play detonation click sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldClip(PlayerAudio.instance.bomb.detonatorClickSound, transform, 1f);
+        yield return new WaitForSeconds(0.2f); // small delay before explosion
         Explode();
     }
 

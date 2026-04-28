@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class GrappleHead : MonoBehaviour
 {
+
+    [Header("Audio")]
+    public AudioClip grappleRetractLoop;
+    public float maxDistanceForPitch = 10f;
+
+    private AudioSource retractLoopSource;
+
+    public float maxPitchDistance = 10f;
     public float travelSpeed = 20f;
     public float maxRange = 10f;
     public LayerMask groundLayer;
@@ -36,17 +44,19 @@ public class GrappleHead : MonoBehaviour
         }
         else if (state == State.Retracting)
         {
-            if (owner == null || owner.grappleSpawnPoint == null)
-            {
-                Destroy(gameObject);
-                return;
-            }
 
             Vector3 target = owner.grappleSpawnPoint.position;
             transform.position = Vector3.MoveTowards(transform.position, target, travelSpeed * Time.deltaTime);
 
+            if (retractLoopSource != null)
+            {
+                float t = Vector2.Distance(transform.position, target);
+                retractLoopSource.pitch = Mathf.Lerp(0.9f, 1.3f, t / maxDistanceForPitch);
+            }
+
             if (Vector3.Distance(transform.position, target) < 0.1f)
             {
+                StopRetractSound();
                 owner.OnGrappleRetracted();
                 Destroy(gameObject);
             }
@@ -103,5 +113,21 @@ public class GrappleHead : MonoBehaviour
     public void StartRetract()
     {
         state = State.Retracting;
+
+        if (retractLoopSource == null && grappleRetractLoop != null)
+        {
+            retractLoopSource = SoundManager.instance.PlayWorldClip(grappleRetractLoop, transform, 1f);
+            retractLoopSource.loop = true;
+        }
+    }
+
+    private void StopRetractSound()
+    {
+        if (retractLoopSource != null)
+        {
+            retractLoopSource.Stop();
+            Destroy(retractLoopSource.gameObject);
+            retractLoopSource = null;
+        }
     }
 }
