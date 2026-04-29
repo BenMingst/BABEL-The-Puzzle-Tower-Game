@@ -73,16 +73,23 @@ public class LockedDoor : MonoBehaviour
         Time.timeScale = 0f;
 
         cutscenePanel.SetActive(true);
+        // play door locked sound
+        SoundManager.instance.PlayWorldRandom(SoundManager.instance.doorLockedSounds, transform, 1f);
         int currentLine = 0;
         dialogueText.text = noKeyDialogue[currentLine];
-
+        
         Coroutine flashCoroutine = StartCoroutine(FlashPrompt());
+
+        // play dialogue blip sound
+        SoundManager.instance.PlayWorldClip(SoundManager.instance.dialogueBlipSound, transform, 1f);
 
         while (currentLine < noKeyDialogue.Length)
         {
             yield return null;
             if (Input.GetKeyDown(KeyCode.E))
             {
+                // play dialogue confirm sound
+                SoundManager.instance.PlayWorldClip(SoundManager.instance.dialogueConfirmSound, transform, 1f);
                 currentLine++;
                 if (currentLine < noKeyDialogue.Length)
                     dialogueText.text = noKeyDialogue[currentLine];
@@ -112,6 +119,8 @@ public class LockedDoor : MonoBehaviour
 
         if (doorAnimator != null)
         {
+            // play door unlock/open sound
+            SoundManager.instance.PlayWorldClip(SoundManager.instance.doorUnlockSound, transform, 1f);
             doorAnimator.SetBool("Select", false);
             doorAnimator.SetTrigger("Unlock");
         }

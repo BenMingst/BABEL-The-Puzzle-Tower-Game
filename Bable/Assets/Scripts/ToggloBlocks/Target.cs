@@ -35,6 +35,8 @@ public class Target : MonoBehaviour {
 	public void TakeHit()
 	{
 		switchController.ToggleSwitch();
-
+		// play switch sound
+		if (SoundManager.instance != null)
+			SoundManager.instance.PlayWorldClip(SoundManager.instance.switchSound, transform, 1f);
 	}
 }

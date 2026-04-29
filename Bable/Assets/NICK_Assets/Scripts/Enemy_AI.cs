@@ -42,6 +42,24 @@ public class EnemyAI : MonoBehaviour
     private bool canSee;
     private bool groundAhead;
 
+    AudioClip[] GetEnemyAttackSounds()
+    {
+        if (enemyHealth == null) return EnemyAudio.instance.attackSounds;
+
+        return enemyHealth.enemyType switch
+        {
+            EnemyHealth.EnemyType.Archer => EnemyAudio.instance.archer.attackSounds,
+            EnemyHealth.EnemyType.Skelly => EnemyAudio.instance.skelly.attackSounds,
+            EnemyHealth.EnemyType.ArmoredSkelly => EnemyAudio.instance.armoredSkelly.attackSounds,
+            EnemyHealth.EnemyType.EvilEye => EnemyAudio.instance.evilEye.attackSounds,
+            EnemyHealth.EnemyType.Spider => EnemyAudio.instance.spider.attackSounds,
+            EnemyHealth.EnemyType.Necromancer => EnemyAudio.instance.necromancer.attackSounds,
+            EnemyHealth.EnemyType.Serpent => EnemyAudio.instance.serpent.attackSounds,
+            EnemyHealth.EnemyType.Stalker => EnemyAudio.instance.stalker.attackSounds,
+            _ => EnemyAudio.instance.attackSounds
+        };
+    }
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -134,7 +152,8 @@ public class EnemyAI : MonoBehaviour
         if (enemyHealth.isHurt) { isAttacking = false; yield break; }
 
         animator.SetTrigger("AttackRight");
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.universal.attackSounds, transform, 1f);
+        // play attack sound
+        SoundManager.instance.PlayWorldRandom(GetEnemyAttackSounds(), transform, 1f);
         yield return new WaitForSeconds(hitboxDelay);
 
         if (enemyHealth.isHurt)

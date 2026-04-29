@@ -148,6 +148,9 @@ public class SpiderAI : MonoBehaviour
         currentState = SpiderState.Dropping;
         animator.SetTrigger("Webbing");
 
+        // play drop sound
+        SoundManager.instance.PlayWorldClip(EnemyAudio.instance.spider.webDropSound, transform, 1f);
+
         yield return new WaitForSeconds(GetAnimLength("Webbing") / grappleSlowMultiplier);
 
         float dropTargetY = FindGroundYBelow();
@@ -160,6 +163,7 @@ public class SpiderAI : MonoBehaviour
 
         currentState = SpiderState.Attacking;
         animator.SetTrigger("Attack");
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
         if (gasHitbox != null) gasHitbox.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(attackDuration / grappleSlowMultiplier);
@@ -207,6 +211,9 @@ public class SpiderAI : MonoBehaviour
     {
         currentState = SpiderState.Hurt;
         animator.SetBool("IsHurt", true);
+
+        // play hurt sound
+        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.hurtSounds, transform, 1f);
 
         yield return new WaitForSeconds(hurtDuration);
 
