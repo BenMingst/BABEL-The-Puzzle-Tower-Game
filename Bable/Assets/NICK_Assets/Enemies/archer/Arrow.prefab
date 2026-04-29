@@ -188,6 +188,10 @@ MonoBehaviour:
   spawnIgnoreTime: 0.1
   isPlayerArrow: 0
   hitStopDuration: 0
+  bounceDestroyDelay: 2
+  normalShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  iceShotSound: {fileID: 0}
+  fireShotSound: {fileID: 0}
 --- !u!61 &5098012253307374289
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -103,22 +103,29 @@ public class ArcherAI : MonoBehaviour
     }
 
     public void SpawnArrow()
+{
+    Debug.Log("=== SpawnArrow called ===");
+    Debug.Log("isHurt: " + enemyHealth.isHurt + " isDead: " + enemyHealth.isDead);
+    Debug.Log("arrowPrefab null: " + (arrowPrefab == null) + " arrowSpawnPoint null: " + (arrowSpawnPoint == null));
+
+    if (enemyHealth.isHurt || enemyHealth.isDead) return;
+    if (arrowPrefab == null || arrowSpawnPoint == null) return;
+
+    Debug.Log("Instantiating arrow at: " + arrowSpawnPoint.position);
+    GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+    Debug.Log("Arrow instantiated: " + (arrow != null));
+
+    Arrow arrowScript = arrow.GetComponent<Arrow>();
+    if (arrowScript != null)
+        arrowScript.SetDirection(facingRight);
+
+    if (!facingRight)
     {
-        if (enemyHealth.isHurt || enemyHealth.isDead) return;
-        if (arrowPrefab == null || arrowSpawnPoint == null) return;
-
-        GameObject arrow = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-        Arrow arrowScript = arrow.GetComponent<Arrow>();
-        if (arrowScript != null)
-            arrowScript.SetDirection(facingRight);
-
-        if (!facingRight)
-        {
-            Vector3 scale = arrow.transform.localScale;
-            scale.x = -Mathf.Abs(scale.x);
-            arrow.transform.localScale = scale;
-        }
+        Vector3 scale = arrow.transform.localScale;
+        scale.x = -Mathf.Abs(scale.x);
+        arrow.transform.localScale = scale;
     }
+}
 
     IEnumerator ShootSequence()
     {
