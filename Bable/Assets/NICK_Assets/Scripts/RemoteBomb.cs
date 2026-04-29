@@ -37,7 +37,7 @@ public class RemoteBomb : MonoBehaviour
     {
         // play detonation click sound
         if (SoundManager.instance != null)
-            SoundManager.instance.PlayWorldClip(PlayerAudio.instance.bomb.detonatorClickSound, transform, 1f);
+            SoundManager.instance.PlayUIClip(PlayerAudio.instance.bomb.detonatorClickSound, 1f);
         // delay explosion slightly
         Invoke(nameof(Explode), 0.3f);
     }
@@ -125,7 +125,10 @@ public class RemoteBomb : MonoBehaviour
         explosionChild.SetActive(true);
 
         // play explosion sound
-        SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.bomb.explosionSounds, transform, 1f, 0f);
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.bomb.explosionSounds, transform, 1f, 0f);
+        }
         yield return new WaitForSeconds(explosionDuration);
 
         explosionChild.SetActive(false);

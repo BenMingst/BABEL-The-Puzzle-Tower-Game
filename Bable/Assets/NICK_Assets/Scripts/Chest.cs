@@ -7,7 +7,7 @@ public class Chest : MonoBehaviour
    public enum ChestItemType { Sword, Bow, SmallKey, FireArrows, IceArrows, Bomb, RemoteBomb }
 
     public string persistentID;
-
+    private AudioSource humSource; // dedicated source for the looping hum
     [Header("Sprites")]
     public SpriteRenderer chestRenderer;
     public Sprite closedSprite;
@@ -69,8 +69,10 @@ public class Chest : MonoBehaviour
         inCutscene = true;
         
         // play chest opening sound
-        SoundManager.instance.PlayWorldClip(SoundManager.instance.chestOpenSound, transform, 1f, 0f);
-        
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(SoundManager.instance.chestOpenSound, transform, 1f, 0f);
+        }
         chestRenderer.sprite = openedSprite;
         Time.timeScale = 0f;
 
@@ -132,6 +134,20 @@ public class Chest : MonoBehaviour
             }
 
             cutscenePanel.SetActive(true);
+
+            // play pickup hum until player exits cutscene
+            if (SoundManager.instance != null)
+            {
+                SoundManager.instance.PlayUIClip(SoundManager.instance.itemPickupSound, 1f);
+
+                GameObject humObject = new GameObject("PickupHum");
+                humSource = humObject.AddComponent<AudioSource>();
+                humSource.clip = SoundManager.instance.itemHumSound;
+                humSource.loop = true;
+                humSource.volume = 1f;
+                humSource.Play();
+            }
+
             int currentLine = 0;
             dialogueText.text = dialogueLines[currentLine];
 
@@ -154,6 +170,13 @@ public class Chest : MonoBehaviour
             StopCoroutine(flashCoroutine);
             promptText.enabled = true;
             cutscenePanel.SetActive(false);
+
+            // stop pickup hum
+            if (humSource != null)
+            {
+                humSource.Stop();
+                Destroy(humSource.gameObject);
+            }
 
             PlayerController pcEquip = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
             if (itemType == ChestItemType.Sword)

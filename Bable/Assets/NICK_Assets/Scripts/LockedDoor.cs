@@ -123,6 +123,8 @@ public class LockedDoor : MonoBehaviour
             SoundManager.instance.PlayWorldClip(SoundManager.instance.doorUnlockSound, transform, 1f);
             doorAnimator.SetBool("Select", false);
             doorAnimator.SetTrigger("Unlock");
+            // play door slide sound
+            SoundManager.instance.PlayWorldClip(SoundManager.instance.doorSlideSound, transform, 1f, 1.4f);
         }
 
         yield return new WaitForSeconds(1f);

@@ -41,30 +41,13 @@ public class EnemyAI : MonoBehaviour
     private float distanceToPlayer;
     private bool canSee;
     private bool groundAhead;
-
-    AudioClip[] GetEnemyAttackSounds()
-    {
-        if (enemyHealth == null) return EnemyAudio.instance.attackSounds;
-
-        return enemyHealth.enemyType switch
-        {
-            EnemyHealth.EnemyType.Archer => EnemyAudio.instance.archer.attackSounds,
-            EnemyHealth.EnemyType.Skelly => EnemyAudio.instance.skelly.attackSounds,
-            EnemyHealth.EnemyType.ArmoredSkelly => EnemyAudio.instance.armoredSkelly.attackSounds,
-            EnemyHealth.EnemyType.EvilEye => EnemyAudio.instance.evilEye.attackSounds,
-            EnemyHealth.EnemyType.Spider => EnemyAudio.instance.spider.attackSounds,
-            EnemyHealth.EnemyType.Necromancer => EnemyAudio.instance.necromancer.attackSounds,
-            EnemyHealth.EnemyType.Serpent => EnemyAudio.instance.serpent.attackSounds,
-            EnemyHealth.EnemyType.Stalker => EnemyAudio.instance.stalker.attackSounds,
-            _ => EnemyAudio.instance.attackSounds
-        };
-    }
-
+    private EnemyAudio audioData;
     void Start()
     {
         animator = GetComponent<Animator>();
         player = GameObject.FindWithTag("Player").transform;
         enemyHealth = GetComponent<EnemyHealth>();
+        audioData = GetComponent<EnemyAudio>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -152,10 +135,12 @@ public class EnemyAI : MonoBehaviour
         if (enemyHealth.isHurt) { isAttacking = false; yield break; }
 
         animator.SetTrigger("AttackRight");
-        // play attack sound
-        SoundManager.instance.PlayWorldRandom(GetEnemyAttackSounds(), transform, 1f);
-        yield return new WaitForSeconds(hitboxDelay);
 
+        yield return new WaitForSeconds(hitboxDelay);
+        // play attack sound
+        if (SoundManager.instance != null && !enemyHealth.isHurt && !enemyHealth.isDead)
+            SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
+            
         if (enemyHealth.isHurt)
         {
             enemyHitbox.GetComponent<Collider2D>().enabled = false;

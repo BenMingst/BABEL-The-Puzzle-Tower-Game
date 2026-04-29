@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8993348822313230435}
   - component: {fileID: -2679485886012925969}
   - component: {fileID: -6990901285383372142}
-  - component: {fileID: -5279546393878807013}
   m_Layer: 6
   m_Name: heavy_block
   m_TagString: Untagged
@@ -340,28 +339,3 @@ MonoBehaviour:
   pitchRange: 0.25
   pitchJitterAmount: 0.04
   pitchJitterSpeed: 2
---- !u!169 &-5279546393878807013
-AudioLowPassFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6405046069208846745}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_LowpassResonanceQ: 1
-  lowpassLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.22727273
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4

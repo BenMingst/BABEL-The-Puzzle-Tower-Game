@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 6644243252105871122}
   - component: {fileID: 8375685506820095405}
   - component: {fileID: -276462683867260017}
+  - component: {fileID: -5554922276869834638}
   m_Layer: 3
   m_Name: Evil_Eye
   m_TagString: Untagged
@@ -225,7 +226,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  enemyType: 0
   maxHealth: 3
   knockbackForce: 3
   enemyHitbox: {fileID: 0}
@@ -302,7 +302,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2446464754789755977}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
   m_Name: 
@@ -382,6 +382,29 @@ MonoBehaviour:
   deathSound: {fileID: 8300000, guid: fb818cc35d7e1da479335ee0281db6a9, type: 3}
   ineffectiveSounds: []
   blockedSounds: []
+--- !u!114 &-5554922276869834638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2446464754789755977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f403d251bd3ec04e8713c9d20a222f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EvilEyeAudio
+  attackSounds: []
+  hurtSounds:
+  - {fileID: 8300000, guid: 3974a939bca74b44e9664c2b0dab7ca4, type: 3}
+  deathSound: {fileID: 8300000, guid: fb818cc35d7e1da479335ee0281db6a9, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  bombLaunchSound: {fileID: 8300000, guid: a9ed9ff8ff147554096ec0d1d90bb4c0, type: 3}
+  shieldUpSound: {fileID: 0}
+  shieldDownSound: {fileID: 0}
 --- !u!1 &3269803915461611908
 GameObject:
   m_ObjectHideFlags: 0

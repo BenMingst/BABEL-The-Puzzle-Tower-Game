@@ -11,16 +11,19 @@ public class EvilEyeProjectile : MonoBehaviour
     public Animator explosionAnimator;
     public Collider2D explosionCollider;
     public float explosionDuration = 0.5f;
+    [SerializeField] public AudioClip normalExplosionSound;
 
     [Header("Fire")]
     public bool isFireProjectile = false;
     public GameObject groundFirePrefab;
     public float fireSpreadRadius = 2f;
+    [SerializeField] public AudioClip fireExplosionSound;
 
     [Header("Ice")]
     public bool isIceProjectile = false;
     public GameObject groundIcePrefab;
     public float iceSpreadRadius = 2f;
+    [SerializeField] public AudioClip iceExplosionSound;
 
     [Header("Detection")]
     public LayerMask groundLayer;
@@ -92,7 +95,11 @@ public class EvilEyeProjectile : MonoBehaviour
     IEnumerator Explode()
     {
         hasExploded = true;
-
+        // play explosion sound
+        if (SoundManager.instance != null && !isFireProjectile && !isIceProjectile)
+        {
+            SoundManager.instance.PlayWorldClip(normalExplosionSound, transform, 1f);
+        }
         if (spriteRenderer != null)
             spriteRenderer.enabled = false;
         if (projectileCollider != null)
@@ -105,11 +112,24 @@ public class EvilEyeProjectile : MonoBehaviour
             explosionCollider.enabled = true;
 
         if (isFireProjectile && groundFirePrefab != null)
+        {
+            // play fire explosion sound
+            if (SoundManager.instance != null)
+            {
+                SoundManager.instance.PlayWorldClip(fireExplosionSound, transform, 1f);
+            }
             SpawnGroundFire();
+        }
 
         if (isIceProjectile && groundIcePrefab != null)
+        {
+            // play ice explosion sound
+            if (SoundManager.instance != null)
+            {
+                SoundManager.instance.PlayWorldClip(iceExplosionSound, transform, 1f);
+            }
             SpawnGroundIce();
-
+        }
         yield return null;
 
         if (explosionCollider != null)

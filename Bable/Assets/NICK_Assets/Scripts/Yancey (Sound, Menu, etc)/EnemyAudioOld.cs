@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class EnemyAudio : MonoBehaviour
+public class EnemyAudioOld : MonoBehaviour
 {
 
-    public static EnemyAudio instance;
+    public static EnemyAudioOld instance;
 
     public EvilEyeSounds evilEye;
     public NecromancerSounds necromancer;

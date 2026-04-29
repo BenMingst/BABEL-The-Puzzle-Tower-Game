@@ -19,10 +19,12 @@ public class ArmoredSkellyHealth : MonoBehaviour
     public bool isHurt = false;
     public bool isDead = false;
 
+    private ArmoredSkellyAudio audioData;
+
     void Awake()
     {
         currentHealth = maxHealth;
-
+        audioData = GetComponent<ArmoredSkellyAudio>();
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
 
@@ -93,7 +95,8 @@ public class ArmoredSkellyHealth : MonoBehaviour
     {
         isHurt = true;
         // play hurt sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.hurtSounds, transform, 1f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(audioData.hurtSounds, transform, 1f);
         enemyAnimator.SetBool("IsHurt", true);
 
         yield return new WaitForSeconds(0.15f);
@@ -113,7 +116,9 @@ public class ArmoredSkellyHealth : MonoBehaviour
     {
         isHurt = true;
         enemyAnimator.SetBool("IsHurt", true);
-
+        // play hurt sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(audioData.hurtSounds, transform, 1f);
         rb.linearVelocity = new Vector2(direction * knockbackForce, rb.linearVelocity.y);
 
         yield return new WaitForSeconds(0.15f);

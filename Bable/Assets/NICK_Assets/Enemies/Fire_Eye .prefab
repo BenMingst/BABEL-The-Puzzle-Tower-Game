@@ -370,6 +370,7 @@ GameObject:
   - component: {fileID: 5639930715315873341}
   - component: {fileID: 3921430465153546541}
   - component: {fileID: -2864717442850307109}
+  - component: {fileID: -6332008698133519189}
   m_Layer: 3
   m_Name: 'Fire_Eye '
   m_TagString: Untagged
@@ -623,7 +624,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7423117235930434874}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
   m_Name: 
@@ -632,6 +633,11 @@ MonoBehaviour:
     bombLaunchSound: {fileID: 8300000, guid: a9ed9ff8ff147554096ec0d1d90bb4c0, type: 3}
     shieldUpSound: {fileID: 0}
     shieldDownSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   necromancer:
     summonWindupSounds: []
     summonCastSounds: []
@@ -642,21 +648,82 @@ MonoBehaviour:
     teleportInSounds: []
     vulnerableHitSounds: []
     barrierUpSounds: []
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   serpent:
     serpentTauntSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   stalker:
     stalkerAppearSound: {fileID: 0}
     stalkerDisappearSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   spider:
     spiderAppearSound: {fileID: 0}
     spiderDisappearSound: {fileID: 0}
     webDropSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  skelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  armoredSkelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  archer:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   attackSounds: []
   hurtSounds:
   - {fileID: 8300000, guid: 3974a939bca74b44e9664c2b0dab7ca4, type: 3}
   deathSound: {fileID: 8300000, guid: fb818cc35d7e1da479335ee0281db6a9, type: 3}
   ineffectiveSounds: []
   blockedSounds: []
+--- !u!114 &-6332008698133519189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7423117235930434874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f403d251bd3ec04e8713c9d20a222f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EvilEyeAudio
+  attackSounds: []
+  hurtSounds:
+  - {fileID: 8300000, guid: 3974a939bca74b44e9664c2b0dab7ca4, type: 3}
+  deathSound: {fileID: 8300000, guid: fb818cc35d7e1da479335ee0281db6a9, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  bombLaunchSound: {fileID: 8300000, guid: a9ed9ff8ff147554096ec0d1d90bb4c0, type: 3}
+  shieldUpSound: {fileID: 0}
+  shieldDownSound: {fileID: 0}
 --- !u!1 &9060559215617373247
 GameObject:
   m_ObjectHideFlags: 0

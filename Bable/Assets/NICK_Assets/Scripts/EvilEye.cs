@@ -40,6 +40,7 @@ public class EvilEye : MonoBehaviour
     private bool isDefending = false;
     private bool playerInDefendRange = false;
     private Rigidbody2D rb;
+    private EvilEyeAudio audioData;
 
     void Start()
     {
@@ -47,6 +48,7 @@ public class EvilEye : MonoBehaviour
         enemyHealth = GetComponent<EnemyHealth>();
         eyeAnimator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        audioData = GetComponent<EvilEyeAudio>();
     }
 
     bool CanSeePlayer()
@@ -144,7 +146,7 @@ public class EvilEye : MonoBehaviour
     {
         // play attack sound
         if (SoundManager.instance != null)
-            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
+            SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
         SpawnProjectileOfType(projectilePrefab);
     }
 
@@ -152,7 +154,7 @@ public class EvilEye : MonoBehaviour
     {
         // play attack sound
         if (SoundManager.instance != null)
-            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
+            SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
         SpawnProjectileOfType(iceProjectilePrefab);
     }
 
@@ -160,7 +162,7 @@ public class EvilEye : MonoBehaviour
     {
         // play attack sound
         if (SoundManager.instance != null)
-            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
+            SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
         SpawnProjectileOfType(fireProjectilePrefab);
     }
 
@@ -175,7 +177,7 @@ public class EvilEye : MonoBehaviour
         projectile.Launch(player.position);
         // play bomb launch sound
         if (SoundManager.instance != null)
-            SoundManager.instance.PlayWorldClip(EnemyAudio.instance.evilEye.bombLaunchSound, transform, 1f);
+            SoundManager.instance.PlayWorldClip(audioData.bombLaunchSound, transform, 1f);
     }
 
     IEnumerator EnterDefend()

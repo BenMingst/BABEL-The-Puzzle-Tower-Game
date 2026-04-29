@@ -61,14 +61,14 @@ public class NecromancerAI : MonoBehaviour
     private EnemyHealth necroHealth;
     private GameObject player;
     private CapsuleCollider2D capsuleCollider;
-
+    private NecromancerAudio necroAudio;
     void Start()
     {
         animator = GetComponent<Animator>();
         necroHealth = GetComponent<EnemyHealth>();
         player = GameObject.FindWithTag("Player");
         capsuleCollider = GetComponent<CapsuleCollider2D>();
-
+        necroAudio = GetComponent<NecromancerAudio>();
         if (necroBarrier != null)
             necroBarrier.SetActive(true);
     }
@@ -118,11 +118,11 @@ public class NecromancerAI : MonoBehaviour
         if (necroBarrier != null)
             necroBarrier.SetActive(false);
             // play barrier break sound
-            SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.barrierBreakSounds, transform, 1f);
+            SoundManager.instance.PlayWorldRandom(necroAudio.barrierBreakSounds, transform, 1f);
         animator.SetTrigger("Stagger");
 
         // play stagger/dazed sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.staggerSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(necroAudio.staggerSounds, transform, 1f);
 
         float elapsed = 0f;
         while (elapsed < staggerDuration)
@@ -143,7 +143,7 @@ public class NecromancerAI : MonoBehaviour
         staggerHitCount++;
 
         // play heavY sound for vulnerable hit
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.vulnerableHitSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(necroAudio.vulnerableHitSounds, transform, 1f);
 
         if (damage > 1 || staggerHitCount >= 2)
         {
@@ -173,7 +173,7 @@ public class NecromancerAI : MonoBehaviour
             Instantiate(teleportOutPrefab, transform.position, Quaternion.identity);
 
         // play teleport disappear sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.teleportOutSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(necroAudio.teleportOutSounds, transform, 1f);
 
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         CapsuleCollider2D col = GetComponent<CapsuleCollider2D>();
@@ -198,7 +198,7 @@ public class NecromancerAI : MonoBehaviour
             Instantiate(teleportInPrefab, transform.position, Quaternion.identity);
 
         // play teleport reappear sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.teleportInSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(necroAudio.teleportInSounds, transform, 1f);
 
         yield return new WaitForSeconds(teleportDisappearDuration);
 
@@ -217,7 +217,7 @@ public class NecromancerAI : MonoBehaviour
         animator.SetTrigger("StaggerEnd");
 
         // play shield up sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.barrierUpSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(necroAudio.barrierUpSounds, transform, 1f);
     }
 
     Vector2? GetTeleportPosition()
@@ -300,21 +300,21 @@ public class NecromancerAI : MonoBehaviour
         animator.SetTrigger("SummonWindup");
 
         // play summon windup sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.summonWindupSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(necroAudio.summonWindupSounds, transform, 1f);
 
         yield return new WaitForSeconds(GetAnimationLength("SummonWindup") / grappleSlowMultiplier);
 
         animator.SetTrigger("Summon");
 
         // play summon execution sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.summonCastSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(necroAudio.summonCastSounds, transform, 1f);
 
         foreach (Vector2 pos in spawnPositions)
         {
             if (spawnEffectPrefab != null)
                 Instantiate(spawnEffectPrefab, pos, Quaternion.identity);
                 // play spawn effect/poof sound at position
-                SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.necromancer.spawnImpactSounds, transform, 0.8f);
+                SoundManager.instance.PlayWorldRandom(necroAudio.spawnImpactSounds, transform, 0.8f);
         }
 
         yield return new WaitForSeconds(spawnEffectDuration / grappleSlowMultiplier);

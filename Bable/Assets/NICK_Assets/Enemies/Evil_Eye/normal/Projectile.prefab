@@ -106,6 +106,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   damage: 1
+  damageCooldown: 1
+  isIceExplosion: 0
+  isFireExplosion: 0
 --- !u!212 &7761830546987648575
 SpriteRenderer:
   serializedVersion: 2
@@ -220,6 +223,18 @@ MonoBehaviour:
   explosionAnimator: {fileID: 2545296925091120563}
   explosionCollider: {fileID: 1767284878571684290}
   explosionDuration: 0.5
+  normalExplosionSound: {fileID: 8300000, guid: 45e1b6ae94d705c4c8badd99aff8ab0c, type: 3}
+  isFireProjectile: 0
+  groundFirePrefab: {fileID: 0}
+  fireSpreadRadius: 2
+  fireExplosionSound: {fileID: 0}
+  isIceProjectile: 0
+  groundIcePrefab: {fileID: 0}
+  iceSpreadRadius: 2
+  iceExplosionSound: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!212 &3507782444004822980
 SpriteRenderer:
   serializedVersion: 2
