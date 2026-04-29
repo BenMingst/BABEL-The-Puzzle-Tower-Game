@@ -48,12 +48,14 @@ public class ArmoredSkellyAI : MonoBehaviour
     private bool canSee;
     private bool groundAhead;
 
+    private ArmoredSkellyAudio audioData;
     void Start()
     {
         animator = GetComponent<Animator>();
         player = GameObject.FindWithTag("Player").transform;
         armoredHealth = GetComponent<ArmoredSkellyHealth>();
         rb = GetComponent<Rigidbody2D>();
+        audioData = GetComponent<ArmoredSkellyAudio>();
     }
 
     bool CanSeePlayer()
@@ -146,6 +148,11 @@ public class ArmoredSkellyAI : MonoBehaviour
         if (!isArmored) return;
         isArmored = false;
 
+        // play armor break sound
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldRandom(audioData.armorBreakSounds, transform, 1f, 0f);
+        }
         if (armorBreakEffect != null)
             Instantiate(armorBreakEffect, transform.position, Quaternion.identity);
 
@@ -179,6 +186,11 @@ public class ArmoredSkellyAI : MonoBehaviour
 
         yield return new WaitForSeconds(hitboxDelay / grappleSlowMultiplier);
 
+        // play attack sound
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f, 0f);
+        }
         if (armoredHealth.isHurt)
         {
             enemyHitbox.GetComponent<Collider2D>().enabled = false;

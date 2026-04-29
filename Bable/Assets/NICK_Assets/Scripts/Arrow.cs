@@ -23,13 +23,11 @@ public class Arrow : MonoBehaviour
     private Collider2D[] allColliders;
     private Animator animator;
     
-    // sounds for non player arrows are played on start, player arrow sounds are played in player script when shooting
-    [SerializeField]
-    public AudioClip normalShotSound;
-    [SerializeField]
-    public AudioClip iceShotSound;
-    [SerializeField]
-    public AudioClip fireShotSound;
+    [SerializeField] public AudioClip normalShotSound;
+    [SerializeField] public AudioClip iceShotSound;
+    [SerializeField] public AudioClip fireShotSound;
+    [SerializeField] public AudioClip arrowBounceSound;
+    [SerializeField] public AudioClip arrowStuckSound;
 
     void Awake()
     {
@@ -40,8 +38,8 @@ public class Arrow : MonoBehaviour
 
     void Start()
     {
-        // play shoot sound if not player arrow
-        if (!isPlayerArrow)
+        // play shoot sound
+        if (SoundManager.instance != null)
         {
             switch (arrowType)
             {
@@ -84,10 +82,6 @@ public class Arrow : MonoBehaviour
         rb.angularVelocity = Random.Range(-300f, 300f);
         rb.gravityScale = 1f;
         DisableAllColliders();
-
-        // play bounce off sound
-        if (SoundManager.instance != null)
-            SoundManager.instance.PlayWorldClip(PlayerAudio.instance.arrow.bounceOffSound, transform, 1f);
         StartCoroutine(BounceDestroy());
     }
 
@@ -228,7 +222,10 @@ public class Arrow : MonoBehaviour
         yield return new WaitForSeconds(bounceDestroyDelay);
         Destroy(gameObject);
         // play bounce sound
-        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowBounceSound, transform, 1f);
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(arrowBounceSound, transform, 1f);
+        }
     }
 
     IEnumerator HitAndDestroy()
@@ -247,7 +244,10 @@ public class Arrow : MonoBehaviour
     {
         isStuck = true;
         // play stick sound
-        SoundManager.instance.PlayWorldClip(SoundManager.instance.arrowStuckSound, transform, 1f);
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(arrowStuckSound, transform, 1f);
+        }
         rb.linearVelocity = Vector2.zero;
         rb.bodyType = RigidbodyType2D.Kinematic;
         DisableAllColliders();

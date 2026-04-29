@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 5252675767328577989}
   - component: {fileID: 2545126087507547374}
   - component: {fileID: -9068522099588089023}
+  - component: {fileID: 756373181765383611}
   m_Layer: 3
   m_Name: serpent
   m_TagString: Enemy
@@ -410,6 +411,11 @@ MonoBehaviour:
     bombLaunchSound: {fileID: 0}
     shieldUpSound: {fileID: 0}
     shieldDownSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   necromancer:
     summonWindupSounds: []
     summonCastSounds: []
@@ -420,20 +426,79 @@ MonoBehaviour:
     teleportInSounds: []
     vulnerableHitSounds: []
     barrierUpSounds: []
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   serpent:
     serpentTauntSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   stalker:
     stalkerAppearSound: {fileID: 0}
     stalkerDisappearSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   spider:
     spiderAppearSound: {fileID: 0}
     spiderDisappearSound: {fileID: 0}
     webDropSound: {fileID: 0}
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  skelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  armoredSkelly:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
+  archer:
+    attackSounds: []
+    hurtSounds: []
+    deathSound: {fileID: 0}
+    ineffectiveSounds: []
+    blockedSounds: []
   attackSounds: []
   hurtSounds: []
   deathSound: {fileID: 8300000, guid: 5c91bcfb749b8b1489857a864afa1f86, type: 3}
   ineffectiveSounds: []
   blockedSounds: []
+--- !u!114 &756373181765383611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2503178802898919249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 849d3d1fe78c9ad458290002a8d6341e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SerpentAudio
+  attackSounds: []
+  hurtSounds:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  deathSound: {fileID: 8300000, guid: 5c91bcfb749b8b1489857a864afa1f86, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  serpentTauntSound: {fileID: 0}
 --- !u!1 &2926428067086069855
 GameObject:
   m_ObjectHideFlags: 0

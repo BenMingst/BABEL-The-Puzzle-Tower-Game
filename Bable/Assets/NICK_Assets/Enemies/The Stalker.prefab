@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  enemyType: 0
+  enemyType: 7
   maxHealth: 3
   knockbackForce: 2
   enemyHitbox: {fileID: 0}

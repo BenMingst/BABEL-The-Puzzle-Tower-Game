@@ -91,8 +91,15 @@ public class EnemyDoor : MonoBehaviour
             doorAnimator.updateMode = AnimatorUpdateMode.UnscaledTime;
             doorAnimator.SetTrigger("Unlock");
         }
+        
+        // wait 2 seconds for unlock animation before playing evil laugh
+        yield return new WaitForSecondsRealtime(1f);
+            if (SoundManager.instance != null)
+            {
+                    SoundManager.instance.PlayWorldClip(SoundManager.instance.enemyDoorLaugh, transform, 1f);
+            }
 
-        yield return new WaitForSecondsRealtime(5f);
+        yield return new WaitForSecondsRealtime(3f);
 
         if (doorCollider != null)
             doorCollider.enabled = false;
@@ -113,6 +120,13 @@ public class EnemyDoor : MonoBehaviour
             doorAnimator.updateMode = AnimatorUpdateMode.Normal;
 
         Time.timeScale = 1f;
+
+        // play door slide sound
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(SoundManager.instance.doorSlideLongSound, transform, 1f);
+        }
+
         pc.isDead = false;
     }
 }

@@ -6,7 +6,7 @@ public class ItemPickup : MonoBehaviour
 {
     public enum ItemType { Sword, Bow }
     public ItemType itemType;
-
+    private AudioSource humSource; // dedicated source for the looping hum
     [Header("Cutscene")]
     public GameObject cutscenePanel;
     public TextMeshProUGUI dialogueText;
@@ -46,6 +46,19 @@ public class ItemPickup : MonoBehaviour
     IEnumerator StartCutscene()
     {
         inCutscene = true;
+
+        // play pickup hum until player exits cutscene
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayUIClip(SoundManager.instance.itemPickupSound, 1f);
+            
+            GameObject humObject = new GameObject("PickupHum");
+            humSource = humObject.AddComponent<AudioSource>();
+            humSource.clip = SoundManager.instance.itemHumSound;
+            humSource.loop = true;
+            humSource.volume = 1f;
+            humSource.Play();
+        }
 
         GetComponent<SpriteRenderer>().enabled = false;
         GetComponent<Collider2D>().enabled = false;
@@ -106,6 +119,13 @@ public class ItemPickup : MonoBehaviour
             playerController.EquipBow();
 
         cutscenePanel.SetActive(false);
+
+        // stop pickup sound
+        if (humSource != null)
+        {
+            humSource.Stop();
+            Destroy(humSource.gameObject);
+        }
 
         if (playerAnimator != null)
         {
