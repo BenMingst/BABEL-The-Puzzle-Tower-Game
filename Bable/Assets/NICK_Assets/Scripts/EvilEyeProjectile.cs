@@ -126,7 +126,7 @@ public class EvilEyeProjectile : MonoBehaviour
             // play ice explosion sound
             if (SoundManager.instance != null)
             {
-                SoundManager.instance.PlayWorldClip(iceExplosionSound, transform, 1f);
+                SoundManager.instance.PlayWorldClip(iceExplosionSound, transform, .6f);
             }
             SpawnGroundIce();
         }
