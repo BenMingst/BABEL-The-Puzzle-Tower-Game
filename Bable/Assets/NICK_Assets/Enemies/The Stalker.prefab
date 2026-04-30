@@ -1998,6 +1998,10 @@ PrefabInstance:
       propertyPath: remoteBombPrefab
       value: 
       objectReference: {fileID: 3901332806808906027, guid: d6e3c289446da40a4853bc26bc8da8a3, type: 3}
+    - target: {fileID: 7674077241353923265, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7716424762460086005, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: heartAnimators.Array.size
       value: 6
@@ -2124,6 +2128,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6382934404474534495, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6987399085683638241}
+    - targetCorrespondingSourceObject: {fileID: 6382934404474534495, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9014294350058596118}
   m_SourcePrefab: {fileID: 100100000, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
 --- !u!4 &3236950075239500985 stripped
 Transform:
@@ -2152,7 +2159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  enemyType: 7
   maxHealth: 5
   knockbackForce: 3
   enemyHitbox: {fileID: 0}
@@ -2195,6 +2201,10 @@ MonoBehaviour:
   bombExplosionRadius: 2
   animSpeedMultiplier: 1.07
   rageHitThreshold: 3
+  bombThreatSenseRadius: 6.5
+  bombFleeIfFuseRemainingBelow: 1.35
+  bombFleeSpeedScale: 1.45
+  approachBlendVsStrafe: 0.28
   attackRange: 1.5
   attackCooldown: 1
   hitboxDelay: 0.45
@@ -2207,6 +2217,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 0}
   meleeAnimatorController: {fileID: 0}
   rangedAnimatorController: {fileID: 0}
+  audioData: {fileID: 0}
 --- !u!114 &3486543858412408607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2311,3 +2322,28 @@ MonoBehaviour:
   slowDuration: 2
   slowMultiplier: 0.1
   stunnedIndicator: {fileID: 0}
+--- !u!114 &9014294350058596118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3748306970879301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bea1275d6db60f49944a98ee631fca4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StalkerAudio
+  attackSounds:
+  - {fileID: 8300000, guid: f4e8bf21cd6387a4aa09a963415896ed, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: af7125689ae71ac41ab8e7bc4e7128bc, type: 3}
+  - {fileID: 8300000, guid: 035f492011ec9b646aba4907a4cd229e, type: 3}
+  - {fileID: 8300000, guid: 7b46057ae6a89674ab15c3e6640bb93e, type: 3}
+  deathSound: {fileID: 8300000, guid: abe154774de80fb4bb3047f7a156ce65, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  stalkerAppearSound: {fileID: 8300000, guid: 1c194926ecce51c46aca3b6068802c83, type: 3}
+  stalkerDisappearSound: {fileID: 8300000, guid: 1c194926ecce51c46aca3b6068802c83, type: 3}

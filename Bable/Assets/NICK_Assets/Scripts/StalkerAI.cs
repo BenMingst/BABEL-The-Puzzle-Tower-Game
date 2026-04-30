@@ -134,6 +134,8 @@ public class StalkerAI : MonoBehaviour
     // FIX: track whether we created the hitbox at runtime so we don't double-process it
     bool dynamicHitboxCreated;
 
+    public StalkerAudio audioData;
+
     #endregion
 
     #region Level 1 state
@@ -171,6 +173,7 @@ public class StalkerAI : MonoBehaviour
         animator    = GetComponent<Animator>();
         enemyHealth = GetComponent<EnemyHealth>();
         rb          = GetComponent<Rigidbody2D>();
+        audioData = GetComponent<StalkerAudio>();
         baseDashSpeed       = dashSpeed;
         baseAttackCooldown  = attackCooldown;
 
@@ -772,7 +775,7 @@ public class StalkerAI : MonoBehaviour
             if (b == null) b = h.GetComponentInParent<Bomb>();
             if (b == null) continue;
 
-            float rem = b.FuseTimeRemaining;
+            float rem = b.fuseTime;
             if (rem <= 0.01f || rem > bombFleeIfFuseRemainingBelow) continue;
 
             Vector2 fromBomb = (Vector2)transform.position - (Vector2)b.transform.position;
@@ -889,7 +892,7 @@ public class StalkerAI : MonoBehaviour
         yield return null;
 
         PlayMeleeStrikeAnimations();
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.stalker.attackSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
 
         yield return new WaitForSeconds(hitboxDelay);
 

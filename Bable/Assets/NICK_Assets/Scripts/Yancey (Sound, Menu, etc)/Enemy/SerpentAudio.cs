@@ -3,5 +3,11 @@ using UnityEngine;
 public class SerpentAudio : EnemyAudio
 {
     [Header("Serpent Specific")]
-    public AudioClip serpentTauntSound;
+    public AudioClip fireInhale;
+    public AudioClip fireExhale;
+    public AudioClip[] footsteps;
+    public AudioClip serpentTaunt;
+    public AudioClip upwardsAttack;
+    public AudioClip swallow;
+    public AudioClip muffledExplosion;
 }

@@ -329,6 +329,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65
   crawlSpeed: 1
+  footstepInterval: 0.7
   idleHurtbox: {fileID: 4010010067628556003}
   crawlHurtbox: {fileID: 180248594917078853}
   windupHurtbox: {fileID: 4263588249426241246}
@@ -353,6 +354,7 @@ MonoBehaviour:
   isInSequence: 0
   stateBeforeHurt: Idle
   stateTimeBeforeHurt: 0
+  audioData: {fileID: 0}
 --- !u!114 &5252675767328577989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,7 +404,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2503178802898919249}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
   m_Name: 
@@ -498,7 +500,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
   blockedSounds:
   - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
-  serpentTauntSound: {fileID: 0}
+  fireInhale: {fileID: 8300000, guid: d62906a462b2cb94eae991491b0313bd, type: 3}
+  fireExhale: {fileID: 8300000, guid: 30fbfe16c938fcf4393ee06188e5eaa1, type: 3}
+  footsteps:
+  - {fileID: 8300000, guid: 0583647fc6b59cd47b81aa59e888ea15, type: 3}
+  - {fileID: 8300000, guid: aab24b14b40fc0c459cd0eeca19465ac, type: 3}
+  - {fileID: 8300000, guid: b578de82b8c05714e852c12df82f3991, type: 3}
+  - {fileID: 8300000, guid: 6efc62ac5049cbf4a825a3dff433bc31, type: 3}
+  serpentTaunt: {fileID: 0}
+  upwardsAttack: {fileID: 8300000, guid: 30fbfe16c938fcf4393ee06188e5eaa1, type: 3}
+  swallow: {fileID: 8300000, guid: 0c1e94dc266cee0478c75a5e8c04fef8, type: 3}
+  muffledExplosion: {fileID: 8300000, guid: 6bfd95d9060ed704db9e1dd6773cb673, type: 3}
 --- !u!1 &2926428067086069855
 GameObject:
   m_ObjectHideFlags: 0

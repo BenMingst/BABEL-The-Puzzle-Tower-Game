@@ -148,4 +148,16 @@ public class SoundManager : MonoBehaviour
             Debug.LogWarning("Attempted to play from null or empty UI clips array");
         }
     }
+
+    public AudioSource PlayWorldLoop(AudioClip clip, Transform emitter, float volume = 1f)
+    {
+        if (clip == null || soundFXObject == null && emitter == null) return null;
+
+        AudioSource src = Instantiate(soundFXObject, emitter.position, Quaternion.identity, emitter);
+        src.clip = clip;
+        src.volume = volume;
+        src.loop = true;
+        src.Play();
+        return src;
+    }
 }
