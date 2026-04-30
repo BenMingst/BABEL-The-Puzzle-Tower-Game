@@ -25,6 +25,9 @@ public class GrappleGlove : MonoBehaviour
     [Header("Line Renderer")]
     public LineRenderer lineRenderer;
 
+    [Header("Cooldown UI")]
+    public GrappleCooldownUI cooldownUI;
+
     public bool isGrappling = false;
     public bool isBeingPulled = false;
     public bool isGroundedGrappling = false;
@@ -142,6 +145,7 @@ public class GrappleGlove : MonoBehaviour
     public void StartGrapple()
     {
         if (isGrappling || isBeingPulled) return;
+        if (cooldownUI != null && cooldownUI.IsOnCooldown()) return;
 
         isGrappling = true;
 
@@ -289,6 +293,9 @@ public class GrappleGlove : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.linearVelocity = Vector2.zero;
 
+        if (cooldownUI != null)
+            cooldownUI.StartCooldown();
+
         isGrappling = false;
     }
 
@@ -354,6 +361,9 @@ public class GrappleGlove : MonoBehaviour
 
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.linearVelocity = Vector2.zero;
+
+        if (cooldownUI != null)
+            cooldownUI.StartCooldown();
 
         isGrappling = false;
     }
@@ -455,6 +465,9 @@ public class GrappleGlove : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Dynamic;
         rb.linearVelocity = Vector2.zero;
 
+        if (cooldownUI != null)
+            cooldownUI.StartCooldown();
+
         isGrappling = false;
     }
 
@@ -484,5 +497,8 @@ public class GrappleGlove : MonoBehaviour
         startedFromAir = false;
         isCatchingEnemy = false;
         activeHead = null;
+
+        if (cooldownUI != null)
+            cooldownUI.StartCooldown();
     }
 }
