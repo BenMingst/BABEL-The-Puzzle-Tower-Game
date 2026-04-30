@@ -68,7 +68,7 @@ public class GrappleHead : MonoBehaviour
     {
         if (state != State.Flying) return;
 
-        // check enemy layer first
+        // enemy layer
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
             GrappleCatchable catchable = other.GetComponentInParent<GrappleCatchable>();
@@ -80,13 +80,12 @@ public class GrappleHead : MonoBehaviour
             }
         }
 
-        // check block layer
+        // block layer
         if (((1 << other.gameObject.layer) & blockLayer) != 0)
         {
             GrappleableBlock block = other.GetComponentInParent<GrappleableBlock>();
             if (block != null && !block.IsBeingPulled())
             {
-                // use grapple head's current position as the anchor point
                 block.SetHitPoint(transform.position);
                 state = State.Hit;
                 owner.OnGrappleHitBlock(block);
@@ -94,7 +93,17 @@ public class GrappleHead : MonoBehaviour
             }
         }
 
-        // check ground layer
+        // breakable vase
+        BreakableVase vase = other.GetComponentInParent<BreakableVase>();
+        if (vase != null && !vase.IsBroken())
+        {
+            vase.Break();
+            state = State.Hit;
+            StartRetract();
+            return;
+        }
+
+        // ground
         if (((1 << other.gameObject.layer) & groundLayer) != 0)
         {
             state = State.Hit;

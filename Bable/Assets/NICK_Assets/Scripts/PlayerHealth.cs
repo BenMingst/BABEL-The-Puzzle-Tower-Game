@@ -20,13 +20,17 @@ public class PlayerHealth : MonoBehaviour
     private bool isInvincible = false;
     public float invincibilityDuration = 1f;
 
-    void Start()
+ void Start()
 {
     // set max hearts based on scene
     string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
     int buildIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
 
-    if (sceneName == "Level_3")
+    if (sceneName == "Level_5")
+        maxHearts = 7;
+    else if (sceneName == "Level_4")
+        maxHearts = 6;
+    else if (sceneName == "Level_3")
         maxHearts = 5;
     else if (sceneName == "new_level2")
         maxHearts = 4;

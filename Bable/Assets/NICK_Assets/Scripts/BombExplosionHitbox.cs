@@ -8,6 +8,16 @@ public class BombExplosionHitbox : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+            Debug.Log("Bomb hit: " + other.name + " (layer: " + LayerMask.LayerToName(other.gameObject.layer) + ", isTrigger: " + other.isTrigger + ")");
+
+        // check breakable vase
+        BreakableVase vase = other.GetComponentInParent<BreakableVase>();
+        if (vase != null && !vase.IsBroken())
+        {
+            vase.Break();
+            return;
+        }
+
         // check destructible block
         DestructibleBlock block = other.GetComponentInParent<DestructibleBlock>();
         if (block != null)

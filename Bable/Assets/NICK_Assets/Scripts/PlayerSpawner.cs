@@ -25,7 +25,17 @@ public class PlayerSpawner : MonoBehaviour
         string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
         // re-apply level-specific auto-equips after checkpoint restore (overrides saved state)
-        if (sceneName == "Level_4" || sceneName == "Level_5")
+        if (sceneName == "Level_3")
+        {
+            GameManager.hasBow = true;
+        }
+        else if (sceneName == "Level_4")
+        {
+            GameManager.hasBow = true;
+            GameManager.hasBomb = true;
+            GameManager.hasRemoteBomb = true;
+        }
+        else if (sceneName == "Level_5")
         {
             GameManager.hasBow = true;
             GameManager.hasBomb = true;

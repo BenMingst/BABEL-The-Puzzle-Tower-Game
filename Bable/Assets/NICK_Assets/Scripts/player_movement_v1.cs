@@ -641,35 +641,61 @@ public class PlayerController : MonoBehaviour
     }
 
     IEnumerator SlashAttack()
-    {
-        isAttacking = true;
-        animator.SetBool("IsSlashing", true);
+{
+    isAttacking = true;
+    animator.SetBool("IsSlashing", true);
 
         // play slash sound
         
         if (SoundManager.instance != null)
             SoundManager.instance.PlayWorldRandom(PlayerAudio.instance.combat.swordSlashAttackSounds, transform, 1f);
 
-        float lungeDirection = facingRight ? 1f : -1f;
-        rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
+    float lungeDirection = facingRight ? 1f : -1f;
+    rb.linearVelocity = new Vector2(lungeDirection * 1.5f, rb.linearVelocity.y);
 
-        slashHitbox.SetActive(true);
+    slashHitbox.SetActive(true);
 
-        yield return new WaitForSeconds(0.1f);
+    yield return new WaitForSeconds(0.1f);
 
-        rb.linearVelocity = new Vector2(lungeDirection * 0.75f, rb.linearVelocity.y);
+    // check for breakable vases in slash hitbox area
+    Collider2D hitboxCol = slashHitbox.GetComponent<Collider2D>();
+    Debug.Log("=== SLASH DEBUG === hitboxCol exists: " + (hitboxCol != null));
+    if (hitboxCol != null)
+    {
+        Debug.Log("hitbox bounds size: " + hitboxCol.bounds.size + " position: " + slashHitbox.transform.position);
 
-        yield return new WaitForSeconds(0.1f);
+        Collider2D[] hits = Physics2D.OverlapBoxAll(
+            slashHitbox.transform.position,
+            hitboxCol.bounds.size,
+            0f);
 
-        slashHitbox.SetActive(false);
+        Debug.Log("Total hits: " + hits.Length);
+        foreach (var hit in hits)
+        {
+            Debug.Log("  Hit: " + hit.name + " (layer: " + LayerMask.LayerToName(hit.gameObject.layer) + ", isTrigger: " + hit.isTrigger + ")");
+        }
 
-        rb.linearVelocity = new Vector2(lungeDirection * 0.25f, rb.linearVelocity.y);
-
-        yield return new WaitForSeconds(0.375f);
-
-        animator.SetBool("IsSlashing", false);
-        isAttacking = false;
+        foreach (var hit in hits)
+        {
+            BreakableVase vase = hit.GetComponentInParent<BreakableVase>();
+            if (vase != null && !vase.IsBroken())
+                vase.Break();
+        }
     }
+
+    rb.linearVelocity = new Vector2(lungeDirection * 0.75f, rb.linearVelocity.y);
+
+    yield return new WaitForSeconds(0.1f);
+
+    slashHitbox.SetActive(false);
+
+    rb.linearVelocity = new Vector2(lungeDirection * 0.25f, rb.linearVelocity.y);
+
+    yield return new WaitForSeconds(0.375f);
+
+    animator.SetBool("IsSlashing", false);
+    isAttacking = false;
+}
 
     IEnumerator BowAttack()
     {
