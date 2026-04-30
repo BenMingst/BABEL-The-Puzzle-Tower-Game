@@ -690,7 +690,8 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 43d5411f374700a49bcf9ab0f610cfeb, type: 3}
     burnSounds:
     - {fileID: 8300000, guid: 4ef4112973440004a8479f2d7d80ee72, type: 3}
-    healSounds: []
+    healSounds:
+    - {fileID: 8300000, guid: 3d21d17831a101a4690daf5022d77488, type: 3}
     hurtSounds:
     - {fileID: 8300000, guid: af7125689ae71ac41ab8e7bc4e7128bc, type: 3}
     - {fileID: 8300000, guid: 035f492011ec9b646aba4907a4cd229e, type: 3}

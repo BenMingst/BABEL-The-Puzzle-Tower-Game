@@ -135,6 +135,11 @@ public class PlayerHealth : MonoBehaviour
         int previousHearts = currentHearts;
         currentHearts = Mathf.Min(maxHearts * 2, currentHearts + 1);
 
+        // play heal sound
+        if(SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayUIRandom(PlayerAudio.instance.health.healSounds, 1f);
+        }
         int heartIndex = (currentHearts - 1) / 2;
         bool isHalfToFull = currentHearts % 2 == 0;
 

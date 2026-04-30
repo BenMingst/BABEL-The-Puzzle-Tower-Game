@@ -507,10 +507,6 @@ PrefabInstance:
       propertyPath: remoteBombPrefab
       value: 
       objectReference: {fileID: 3901332806808906027, guid: d6e3c289446da40a4853bc26bc8da8a3, type: 3}
-    - target: {fileID: 6951580352166716869, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8901306041131791240, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_Enabled
       value: 1

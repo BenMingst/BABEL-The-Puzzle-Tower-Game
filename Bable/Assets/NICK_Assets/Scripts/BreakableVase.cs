@@ -50,7 +50,10 @@ public class BreakableVase : MonoBehaviour
         if (animator != null)
             animator.SetTrigger("Break");
             // play break sound
-            SoundManager.instance.PlayWorldRandom(breakSound, transform, 1f);
+            if (SoundManager.instance != null)
+            {
+                SoundManager.instance.PlayWorldRandom(breakSound, transform, 1f);
+            }
 
         // optional break effect (particles, dust cloud, etc.)
         if (breakEffectPrefab != null)
