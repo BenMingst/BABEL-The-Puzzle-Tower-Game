@@ -259,6 +259,7 @@ GameObject:
   - component: {fileID: 6730097255137018398}
   - component: {fileID: 7768023949827973684}
   - component: {fileID: 8266488805377472821}
+  - component: {fileID: 6452173127583455076}
   m_Layer: 3
   m_Name: necromancer
   m_TagString: Enemy
@@ -491,7 +492,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  enemyType: 0
   maxHealth: 5
   knockbackForce: 3
   enemyHitbox: {fileID: 0}
@@ -550,7 +550,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6020507599463098003}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
   m_Name: 
@@ -629,6 +629,45 @@ MonoBehaviour:
   deathSound: {fileID: 0}
   ineffectiveSounds: []
   blockedSounds: []
+--- !u!114 &6452173127583455076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6020507599463098003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19c0ea8072aa08e44bce2497ce6cb1cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NecromancerAudio
+  attackSounds:
+  - {fileID: 8300000, guid: 0115db3a8422daa408e017ed5cde2677, type: 3}
+  - {fileID: 8300000, guid: e66641971343f194291d9e7da78e95ee, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 7fd913010f8e772439cbc46ae869b23f, type: 3}
+  deathSound: {fileID: 8300000, guid: cf2d537e5b6eab44faa0331dea6d266f, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: a1a572c2adecf3849872a57dc5f31e00, type: 3}
+  summonWindupSounds:
+  - {fileID: 8300000, guid: e2e56ef10bd878643a89d52629644abe, type: 3}
+  summonCastSounds: []
+  spawnImpactSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  barrierBreakSounds:
+  - {fileID: 8300000, guid: 4cc34f1008e758746b7527d570a963a1, type: 3}
+  staggerSounds:
+  - {fileID: 8300000, guid: 4cc34f1008e758746b7527d570a963a1, type: 3}
+  teleportOutSounds:
+  - {fileID: 8300000, guid: 1c194926ecce51c46aca3b6068802c83, type: 3}
+  teleportInSounds:
+  - {fileID: 8300000, guid: 1c194926ecce51c46aca3b6068802c83, type: 3}
+  vulnerableHitSounds:
+  - {fileID: 8300000, guid: 3318da2e8a52ebb42aceba8ae2141a4e, type: 3}
+  barrierUpSounds:
+  - {fileID: 8300000, guid: 7dd1ff46ed66e854d9533c0f25e78b2e, type: 3}
 --- !u!1 &6699107874593498266
 GameObject:
   m_ObjectHideFlags: 0

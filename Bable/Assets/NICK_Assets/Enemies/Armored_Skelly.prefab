@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 5998764828522251543}
   - component: {fileID: 409406428813146156}
   - component: {fileID: -474349669873138691}
+  - component: {fileID: -4807541595209659924}
+  - component: {fileID: 8459362299541180864}
   m_Layer: 3
   m_Name: Armored_Skelly
   m_TagString: Enemy
@@ -274,7 +276,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 931650629627962251}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
   m_Name: 
@@ -331,7 +333,8 @@ MonoBehaviour:
     attackSounds: []
     hurtSounds: []
     deathSound: {fileID: 0}
-    ineffectiveSounds: []
+    ineffectiveSounds:
+    - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
     blockedSounds: []
   armoredSkelly:
     attackSounds:
@@ -350,6 +353,52 @@ MonoBehaviour:
     ineffectiveSounds: []
     blockedSounds: []
   attackSounds: []
+  hurtSounds: []
+  deathSound: {fileID: 0}
+  ineffectiveSounds: []
+  blockedSounds: []
+--- !u!114 &-4807541595209659924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931650629627962251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 273aa9b15235fea4cbbaf548f6b2004b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ArmoredSkellyAudio
+  attackSounds:
+  - {fileID: 8300000, guid: f4e8bf21cd6387a4aa09a963415896ed, type: 3}
+  - {fileID: 8300000, guid: 91c5a1b882f98dd4994301365787aff1, type: 3}
+  - {fileID: 8300000, guid: 5969517683b13dd43a0a2b665abd4806, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 502b0d355a0edab4f896a0df066dbfa2, type: 3}
+  - {fileID: 8300000, guid: 6d7d9ef6e71de0342b2de3736a1ce1e9, type: 3}
+  deathSound: {fileID: 8300000, guid: 45eeece7a58bb9e44baac00ef4e1f6f4, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  armorBreakSounds:
+  - {fileID: 8300000, guid: d2fd1a2dc4f498049933686a911042f0, type: 3}
+--- !u!114 &8459362299541180864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931650629627962251}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3dd673aa346c446951909290802474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  attackSounds:
+  - {fileID: 8300000, guid: f4e8bf21cd6387a4aa09a963415896ed, type: 3}
+  - {fileID: 8300000, guid: 91c5a1b882f98dd4994301365787aff1, type: 3}
+  - {fileID: 8300000, guid: 5969517683b13dd43a0a2b665abd4806, type: 3}
   hurtSounds: []
   deathSound: {fileID: 0}
   ineffectiveSounds: []

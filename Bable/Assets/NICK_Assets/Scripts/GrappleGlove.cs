@@ -172,7 +172,7 @@ public class GrappleGlove : MonoBehaviour
         GameObject headObj = Instantiate(grappleHeadPrefab, spawnPos, Quaternion.identity);
 
         // play grapple shoot sound
-        if (soundFXObject != null && grappleShootSFX != null)
+        if (soundFXObject != null && grappleShootSFX != null && SoundManager.instance != null)
             SoundManager.instance.PlayWorldClip(grappleShootSFX, transform, 1f);
         
         activeHead = headObj.GetComponent<GrappleHead>();
@@ -197,7 +197,7 @@ public class GrappleGlove : MonoBehaviour
     public void OnGrappleHit(Vector3 hitPosition)
     {
         // play grapple retract sound
-        if (soundFXObject != null && grappleRetractSFX != null)
+        if (soundFXObject != null && grappleRetractSFX != null && SoundManager.instance != null)
             SoundManager.instance.PlayWorldClip(grappleRetractSFX, transform, 1f);
         StartCoroutine(PullToTarget(hitPosition));
     }
@@ -205,7 +205,7 @@ public class GrappleGlove : MonoBehaviour
     public void OnGrappleHitEnemy(GrappleCatchable caught)
     {
         // play grapple retract sound
-        if (soundFXObject != null && grappleRetractSFX != null)
+        if (soundFXObject != null && grappleRetractSFX != null && SoundManager.instance != null)
             SoundManager.instance.PlayWorldClip(grappleRetractSFX, transform, 1f);
         StartCoroutine(PullEnemyToPlayer(caught));
     }
@@ -213,7 +213,7 @@ public class GrappleGlove : MonoBehaviour
     public void OnGrappleHitBlock(GrappleableBlock block)
     {
         // play grapple retract sound
-        if (soundFXObject != null && grappleRetractSFX != null)
+        if (soundFXObject != null && grappleRetractSFX != null && SoundManager.instance != null)
             SoundManager.instance.PlayWorldClip(grappleRetractSFX, transform, 1f);
         StartCoroutine(PullBlockToPlayer(block));
     }
@@ -409,7 +409,7 @@ public class GrappleGlove : MonoBehaviour
         animator.SetBool("GrappleGetPulled", true);
 
         // play grapple retract loop sound
-        if (soundFXObject == null)
+        if (soundFXObject == null && grappleRetractSFX != null && SoundManager.instance != null)
         {
             soundFXObject = SoundManager.instance.PlayWorldClip(
                 grappleRetractSFX,
@@ -477,12 +477,6 @@ public class GrappleGlove : MonoBehaviour
             lineRenderer.enabled = false;
 
         animator.SetTrigger("GrappleShootEnd");
-        if (soundFXObject != null)
-        {
-            Destroy(soundFXObject.gameObject);
-            soundFXObject = null;
-        }
-
         animator.ResetTrigger("GrappleShoot");
         animator.ResetTrigger("GrappleShootAir");
 

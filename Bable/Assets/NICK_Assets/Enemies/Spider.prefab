@@ -358,6 +358,7 @@ GameObject:
   - component: {fileID: 3612975449812281002}
   - component: {fileID: 9163793550389532708}
   - component: {fileID: -1575516731219287004}
+  - component: {fileID: 2010804728087695482}
   m_Layer: 3
   m_Name: Spider
   m_TagString: Enemy
@@ -702,7 +703,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  enemyType: 0
   maxHealth: 3
   knockbackForce: 3
   enemyHitbox: {fileID: 7721388909314258327}
@@ -861,3 +861,28 @@ MonoBehaviour:
   deathSound: {fileID: 0}
   ineffectiveSounds: []
   blockedSounds: []
+--- !u!114 &2010804728087695482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7721388909314258327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79cb55251ed96e241972e9f195e50c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpiderAudio
+  attackSounds:
+  - {fileID: 8300000, guid: 7125a4c9341a1e94596336fae4cc36dc, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 0cedeacf6414f724983973bf0864c745, type: 3}
+  - {fileID: 8300000, guid: 24ca0c02ed35505438b894416844ee59, type: 3}
+  deathSound: {fileID: 8300000, guid: ed3aa42d075ad0f4c8cf92b75ea2f13d, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
+  spiderAppearSound: {fileID: 0}
+  spiderDisappearSound: {fileID: 0}
+  webDropSound: {fileID: 0}

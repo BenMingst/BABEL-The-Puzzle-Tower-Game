@@ -9,7 +9,7 @@ public class KeyManager : MonoBehaviour
     public GameObject keyUI;
     public TextMeshProUGUI keyCountText;
 
-    private int keyCount = 0;
+    [SerializeField] private int keyCount = 0;
 
     void Awake()
     {

@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 5191935925132361289}
   - component: {fileID: 7269744232961311551}
   - component: {fileID: 3301889814299977434}
-  - component: {fileID: -6718444223563714947}
   - component: {fileID: 4890217719205142829}
+  - component: {fileID: 4476030953860653524}
   m_Layer: 3
   m_Name: Skelly
   m_TagString: Enemy
@@ -232,7 +232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 093be205faf9c428982336b2d894d697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  enemyType: 0
   maxHealth: 3
   knockbackForce: 2
   enemyHitbox: {fileID: 1598112752036575456}
@@ -243,91 +242,6 @@ MonoBehaviour:
   arrowOnlyDamage: 0
   isHurt: 0
   isDead: 0
---- !u!114 &-6718444223563714947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 509796635320564794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 533d72ccc63ed304a9b5369bed792c3f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
-  evilEye:
-    bombLaunchSound: {fileID: 0}
-    shieldUpSound: {fileID: 0}
-    shieldDownSound: {fileID: 0}
-    attackSounds: []
-    hurtSounds: []
-    deathSound: {fileID: 0}
-    ineffectiveSounds: []
-    blockedSounds: []
-  necromancer:
-    summonWindupSounds: []
-    summonCastSounds: []
-    spawnImpactSounds: []
-    barrierBreakSounds: []
-    staggerSounds: []
-    teleportOutSounds: []
-    teleportInSounds: []
-    vulnerableHitSounds: []
-    barrierUpSounds: []
-    attackSounds: []
-    hurtSounds: []
-    deathSound: {fileID: 0}
-    ineffectiveSounds: []
-    blockedSounds: []
-  serpent:
-    serpentTauntSound: {fileID: 0}
-    attackSounds: []
-    hurtSounds: []
-    deathSound: {fileID: 0}
-    ineffectiveSounds: []
-    blockedSounds: []
-  stalker:
-    stalkerAppearSound: {fileID: 0}
-    stalkerDisappearSound: {fileID: 0}
-    attackSounds: []
-    hurtSounds: []
-    deathSound: {fileID: 0}
-    ineffectiveSounds: []
-    blockedSounds: []
-  spider:
-    spiderAppearSound: {fileID: 0}
-    spiderDisappearSound: {fileID: 0}
-    webDropSound: {fileID: 0}
-    attackSounds: []
-    hurtSounds: []
-    deathSound: {fileID: 0}
-    ineffectiveSounds: []
-    blockedSounds: []
-  skelly:
-    attackSounds: []
-    hurtSounds: []
-    deathSound: {fileID: 0}
-    ineffectiveSounds: []
-    blockedSounds: []
-  armoredSkelly:
-    attackSounds: []
-    hurtSounds: []
-    deathSound: {fileID: 0}
-    ineffectiveSounds: []
-    blockedSounds: []
-  archer:
-    attackSounds:
-    - {fileID: 8300000, guid: e175814a65f0d604391f69aba98e2794, type: 3}
-    hurtSounds:
-    - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
-    deathSound: {fileID: 8300000, guid: 241493ea4fd5cce4f93511012c324a87, type: 3}
-    ineffectiveSounds: []
-    blockedSounds: []
-  attackSounds: []
-  hurtSounds: []
-  deathSound: {fileID: 0}
-  ineffectiveSounds: []
-  blockedSounds: []
 --- !u!114 &4890217719205142829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -350,6 +264,27 @@ MonoBehaviour:
   slowDuration: 2
   slowMultiplier: 0.1
   stunnedIndicator: {fileID: 1280304262463392817}
+--- !u!114 &4476030953860653524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 509796635320564794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3dd673aa346c446951909290802474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAudio
+  attackSounds:
+  - {fileID: 8300000, guid: e175814a65f0d604391f69aba98e2794, type: 3}
+  hurtSounds:
+  - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
+  deathSound: {fileID: 8300000, guid: 241493ea4fd5cce4f93511012c324a87, type: 3}
+  ineffectiveSounds:
+  - {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
+  blockedSounds:
+  - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
 --- !u!1 &1598112752036575456
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ public class GrappleHead : MonoBehaviour
     public AudioClip grappleRetractLoop;
     public float maxDistanceForPitch = 10f;
 
-    private AudioSource retractLoopSource;
+    [SerializeField] private AudioSource retractLoopSource;
 
     public float maxPitchDistance = 10f;
     public float travelSpeed = 20f;
@@ -48,15 +48,16 @@ public class GrappleHead : MonoBehaviour
             Vector3 target = owner.grappleSpawnPoint.position;
             transform.position = Vector3.MoveTowards(transform.position, target, travelSpeed * Time.deltaTime);
 
+            // adjust pitch based on distance to player, pitch should increase as it gets closer, with a max distance for pitch adjustment
             if (retractLoopSource != null)
             {
                 float t = Vector2.Distance(transform.position, target);
                 retractLoopSource.pitch = Mathf.Lerp(0.9f, 1.3f, t / maxDistanceForPitch);
             }
-
+            
             if (Vector3.Distance(transform.position, target) < 0.1f)
             {
-                StopRetractSound();
+                // StopRetractSound();
                 owner.OnGrappleRetracted();
                 Destroy(gameObject);
             }
@@ -114,11 +115,21 @@ public class GrappleHead : MonoBehaviour
     {
         state = State.Retracting;
 
+        // start retract sound
+         if (retractLoopSource != null && grappleRetractLoop != null)
+         {
+             retractLoopSource.clip = grappleRetractLoop;
+             retractLoopSource.loop = true;
+             retractLoopSource.Play();
+         }
+
+        /*
         if (retractLoopSource == null && grappleRetractLoop != null)
         {
             retractLoopSource = SoundManager.instance.PlayWorldClip(grappleRetractLoop, transform, 1f);
             retractLoopSource.loop = true;
         }
+        */
     }
 
     private void StopRetractSound()

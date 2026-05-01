@@ -152,6 +152,9 @@ MonoBehaviour:
   vaseCollider: {fileID: 1005662975319051873}
   heartDropPrefab: {fileID: 473149016297637182, guid: 78070332487794d7f83e2f3ed31cd1c6, type: 3}
   breakEffectPrefab: {fileID: 0}
+  breakSound:
+  - {fileID: 8300000, guid: 8f19184f9efd03a4480ce288645ef452, type: 3}
+  - {fileID: 8300000, guid: ba1a7c65dccde694896c90f8ee5a88f6, type: 3}
 --- !u!50 &6467687965156013506
 Rigidbody2D:
   serializedVersion: 5

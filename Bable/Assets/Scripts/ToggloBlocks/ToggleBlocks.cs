@@ -35,19 +35,16 @@ public class ToggleBlocks : MonoBehaviour
 			setBlueOn = true;
 			setYellowOn = false;
 
-			bool changed = false;
 
 			if (isBlue)
 			{
 				collider.enabled = false;
 				renderer.sprite = offSprite;
-				changed = true;
 			}
 			else
 			{
 				collider.enabled = true;
 				renderer.sprite = onSprite;
-				changed = true;
 			}
 		}
 		if (!setYellowOn && isBlueOn)
@@ -55,19 +52,16 @@ public class ToggleBlocks : MonoBehaviour
 			setBlueOn = false;
 			setYellowOn = true;
 
-			bool changed = false;
 
 			if (isBlue)
 			{
 				collider.enabled = true;
 				renderer.sprite = onSprite;
-				changed = true;
 			}
 			else
 			{
 				collider.enabled = false;
 				renderer.sprite = offSprite;
-				changed = true;
 			}
 		}
 	}

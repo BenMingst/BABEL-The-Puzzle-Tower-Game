@@ -3,56 +3,7 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    public enum EnemyType { Archer, Skelly, ArmoredSkelly, EvilEye, Spider, Necromancer, Serpent, Stalker }
-    public EnemyType enemyType;
-
-    AudioClip[] GetEnemyBlockedSounds()
-    {
-        return enemyType switch
-        {
-            EnemyType.Archer => EnemyAudio.instance.archer.blockedSounds,
-            EnemyType.Skelly => EnemyAudio.instance.skelly.blockedSounds,
-            EnemyType.ArmoredSkelly => EnemyAudio.instance.armoredSkelly.blockedSounds,
-            EnemyType.EvilEye => EnemyAudio.instance.evilEye.blockedSounds,
-            EnemyType.Spider => EnemyAudio.instance.spider.blockedSounds,
-            EnemyType.Necromancer => EnemyAudio.instance.necromancer.blockedSounds,
-            EnemyType.Serpent => EnemyAudio.instance.serpent.blockedSounds,
-            EnemyType.Stalker => EnemyAudio.instance.stalker.blockedSounds,
-            _ => EnemyAudio.instance.blockedSounds
-        };
-    }
-
-    AudioClip[] GetEnemyHurtSounds()
-    {
-        return enemyType switch
-        {
-            EnemyType.Archer => EnemyAudio.instance.archer.hurtSounds,
-            EnemyType.Skelly => EnemyAudio.instance.skelly.hurtSounds,
-            EnemyType.ArmoredSkelly => EnemyAudio.instance.armoredSkelly.hurtSounds,
-            EnemyType.EvilEye => EnemyAudio.instance.evilEye.hurtSounds,
-            EnemyType.Spider => EnemyAudio.instance.spider.hurtSounds,
-            EnemyType.Necromancer => EnemyAudio.instance.necromancer.hurtSounds,
-            EnemyType.Serpent => EnemyAudio.instance.serpent.hurtSounds,
-            EnemyType.Stalker => EnemyAudio.instance.stalker.hurtSounds,
-            _ => EnemyAudio.instance.hurtSounds
-        };
-    }
-
-    AudioClip GetEnemyDeathSound()
-    {
-        return enemyType switch
-        {
-            EnemyType.Archer => EnemyAudio.instance.archer.deathSound,
-            EnemyType.Skelly => EnemyAudio.instance.skelly.deathSound,
-            EnemyType.ArmoredSkelly => EnemyAudio.instance.armoredSkelly.deathSound,
-            EnemyType.EvilEye => EnemyAudio.instance.evilEye.deathSound,
-            EnemyType.Spider => EnemyAudio.instance.spider.deathSound,
-            EnemyType.Necromancer => EnemyAudio.instance.necromancer.deathSound,
-            EnemyType.Serpent => EnemyAudio.instance.serpent.deathSound,
-            EnemyType.Stalker => EnemyAudio.instance.stalker.deathSound,
-            _ => EnemyAudio.instance.deathSound
-        };
-    }
+    private EnemyAudio audioData;
     public int maxHealth = 3;
     private int currentHealth;
 
@@ -76,6 +27,7 @@ public class EnemyHealth : MonoBehaviour
     void Awake()
     {
         currentHealth = maxHealth;
+        audioData = GetComponent<EnemyAudio>();
 
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
@@ -113,7 +65,7 @@ public class EnemyHealth : MonoBehaviour
         {
             // play blocked sound
             if (SoundManager.instance != null)
-                SoundManager.instance.PlayWorldRandom(GetEnemyBlockedSounds(), transform, 1f);
+                SoundManager.instance.PlayWorldRandom(audioData.blockedSounds, transform, 1f);
             return;
         }
 
@@ -136,7 +88,7 @@ public class EnemyHealth : MonoBehaviour
         {
             // play blocked sound
             if (SoundManager.instance != null)
-                SoundManager.instance.PlayWorldRandom(GetEnemyBlockedSounds(), transform, 1f);
+                SoundManager.instance.PlayWorldRandom(audioData.blockedSounds, transform, 1f);
             return;
         }
 
@@ -184,7 +136,8 @@ public class EnemyHealth : MonoBehaviour
     {
         isHurt = true;
         // play hurt sound
-        SoundManager.instance.PlayWorldRandom(GetEnemyHurtSounds(), transform, 1f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(audioData.hurtSounds, transform, 1f);
         enemyAnimator.SetBool("IsHurt", true);
 
         if (archerBottom != null)
@@ -212,7 +165,8 @@ public class EnemyHealth : MonoBehaviour
     {
         isHurt = true;
         // play hurt sound
-        SoundManager.instance.PlayWorldRandom(GetEnemyHurtSounds(), transform, 1f);
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(audioData.hurtSounds, transform, 1f);
         enemyAnimator.SetBool("IsHurt", true);
 
         if (archerBottom != null)
@@ -242,7 +196,7 @@ public class EnemyHealth : MonoBehaviour
 
     void Die()
     {
-        SoundManager.instance.PlayWorldClip(GetEnemyDeathSound(), transform, 1f);
+        SoundManager.instance.PlayWorldClip(audioData.deathSound, transform, 1f);
         isDead = true;
         StopAllCoroutines();
 

@@ -14,6 +14,8 @@ public class SerpentAI : MonoBehaviour
 
     [Header("Movement")]
     public float crawlSpeed = 2f;
+    private float footstepTimer = 0f;
+    public float footstepInterval = 0.5f;
 
     [Header("Hurtboxes")]
     public Collider2D idleHurtbox;
@@ -62,6 +64,7 @@ public class SerpentAI : MonoBehaviour
     public float stateTimeBeforeHurt = 0f;
 
     private float windupElapsed = 0f;
+    public SerpentAudio audioData;
 
     void Start()
     {
@@ -69,6 +72,7 @@ public class SerpentAI : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         serpentHealth = GetComponent<SerpentHealth>();
         player = GameObject.FindWithTag("Player").transform;
+        audioData = GetComponent<SerpentAudio>();
 
         if (mouthTrigger != null)
             mouthTrigger.enabled = false;
@@ -166,13 +170,24 @@ public class SerpentAI : MonoBehaviour
             animator.SetBool("IsCrawling", true);
             SetHurtbox("Crawl");
             stateBeforeHurt = "Crawl";
+
+            footstepTimer -= Time.deltaTime * grappleSlowMultiplier;
+            if (footstepTimer <= 0f)
+            {
+                if (SoundManager.instance != null && !serpentHealth.isHurt && !serpentHealth.isDead)
+                {
+                    SoundManager.instance.PlayWorldRandom(audioData.footsteps, transform, 1f);
+                }
+                footstepTimer = footstepInterval;
+            }
         }
-        else
-        {
-            animator.SetBool("IsCrawling", false);
-            SetHurtbox("Idle");
-            stateBeforeHurt = "Idle";
-        }
+else
+{
+    animator.SetBool("IsCrawling", false);
+    SetHurtbox("Idle");
+    stateBeforeHurt = "Idle";
+    footstepTimer = 0f; // reset so first step plays immediately when crawl resumes
+}
     }
 
     void FixedUpdate()
@@ -211,11 +226,20 @@ public class SerpentAI : MonoBehaviour
 
         float windupLength = GetAnimationLength("Windup");
         windupElapsed = 0f;
-
+        bool inhalePlayed = false;
         while (windupElapsed < windupLength)
         {
             if (!serpentHealth.isHurt)
                 windupElapsed += Time.deltaTime * grappleSlowMultiplier;
+            if (!inhalePlayed && windupElapsed >= windupLength / 3.3f)
+            {
+                // play fire inhale sound
+                if (SoundManager.instance != null && !serpentHealth.isHurt && !serpentHealth.isDead)
+                {
+                    SoundManager.instance.PlayWorldClip(audioData.fireInhale, transform, 1f);
+                }
+                inhalePlayed = true;
+            }
             yield return null;
         }
 
@@ -243,6 +267,11 @@ public class SerpentAI : MonoBehaviour
     IEnumerator NormalAttack()
     {
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        // play fire exhale sound
+        if (SoundManager.instance != null && !serpentHealth.isHurt && !serpentHealth.isDead)
+        {
+            SoundManager.instance.PlayWorldClip(audioData.fireExhale, transform, 1f);
+        }
 
         if (despawnFiresCoroutine != null)
         {
@@ -282,6 +311,12 @@ public class SerpentAI : MonoBehaviour
     IEnumerator UpwardAttack()
     {
         rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+
+        // play exhale sound
+        if (SoundManager.instance != null && !serpentHealth.isHurt && !serpentHealth.isDead)
+        {
+            SoundManager.instance.PlayWorldClip(audioData.fireExhale, transform, 1f);
+        }
 
         animator.SetBool("IsUpwardAttacking", true);
         animator.SetBool("IsAttacking", false);
@@ -405,10 +440,21 @@ public class SerpentAI : MonoBehaviour
         animator.SetBool("IsCrawling", false);
         animator.SetBool("IsAttacking", false);
         animator.SetBool("IsUpwardAttacking", false);
+        // play swallow sound
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(audioData.swallow, transform, 1f);
+        }
         animator.SetTrigger("BombSwallowed");
         SetHurtbox("Idle");
 
         yield return new WaitForSeconds(GetAnimationLength("BombSwallowed"));
+
+        // play muffled explosion
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(audioData.muffledExplosion, transform, 1f);
+        }
 
         serpentHealth.KillInstantly();
     }
