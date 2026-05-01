@@ -64,7 +64,10 @@ MonoBehaviour:
   menuExitSound: {fileID: 0}
   buttonSounds:
   - {fileID: 8300000, guid: 691098816f1199d488c72f38dffd7f8a, type: 3}
+  enemyDoorLaugh: {fileID: 8300000, guid: faa0060298850654f89264f8d0902c35, type: 3}
   doorOpenSound: {fileID: 8300000, guid: 7e4cc314097751245a472a12ddff9ed5, type: 3}
+  doorSlideSound: {fileID: 8300000, guid: 607e0dd83fa276c40b34529348d08354, type: 3}
+  doorSlideLongSound: {fileID: 8300000, guid: a4a64073c2e5daa4b82301baf21ed147, type: 3}
   doorCloseSound: {fileID: 8300000, guid: 14646e7f4fb1c684885c80c24b80eaf3, type: 3}
   doorEnterSound: {fileID: 8300000, guid: 7e4cc314097751245a472a12ddff9ed5, type: 3}
   doorLockedSounds:
@@ -73,18 +76,16 @@ MonoBehaviour:
   doorHurtSounds:
   - {fileID: 8300000, guid: 7a2a08a70b8a3d34db9504320dcfef90, type: 3}
   doorBreakSound: {fileID: 8300000, guid: 71c052a78a9dd84428110b893ea2642b, type: 3}
+  iceDoorMeltHalfSound: {fileID: 8300000, guid: 970e9eaee42a1634f86f67fba3c12820, type: 3}
+  iceDoorMeltFullSound: {fileID: 8300000, guid: 1ed508070b5d31b40877fe2aad976623, type: 3}
   chestOpenSound: {fileID: 8300000, guid: fe13ff4bfece495418c151d19eafc231, type: 3}
   chestLockedSound: {fileID: 8300000, guid: fd058d5182dfa3b459b970859cbf40fb, type: 3}
   chestUnlockSound: {fileID: 8300000, guid: 6a9313f3487e82f4ca1a8b1f105ab314, type: 3}
   switchSound: {fileID: 8300000, guid: d57a824cbcfe3fb49969f1bd43e3d0f7, type: 3}
   switchDoorSound: {fileID: 8300000, guid: 8ce1d3ab1da0a9c4d83eba3660e48f45, type: 3}
-  arrowShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
-  arrowStuckSound: {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
-  arrowBounceSound: {fileID: 0}
-  stalkerVanishSound: {fileID: 0}
-  stalkerAppearSound: {fileID: 0}
   doinkSound: {fileID: 8300000, guid: dbe21f0bc2a74154d8a1f55a30e2671f, type: 3}
-  itemPickupSound: {fileID: 8300000, guid: 89d23be6bd3db7e42884f617d7281b8f, type: 3}
+  itemPickupSound: {fileID: 8300000, guid: fa47988e55cf7a14e9b1d44eeae49b4e, type: 3}
+  itemHumSound: {fileID: 8300000, guid: 89d23be6bd3db7e42884f617d7281b8f, type: 3}
   detonatorSound: {fileID: 8300000, guid: bfaf92fa8f206de48a84e24e607d549a, type: 3}
   buttonPressSound: {fileID: 8300000, guid: 374b6140576c52b4e968c50d964a5dfb, type: 3}
   soundFXObject: {fileID: 456598269487561052, guid: 850049122f3ee054bb66c9094d1c8514, type: 3}

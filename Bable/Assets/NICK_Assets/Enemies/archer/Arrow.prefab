@@ -190,8 +190,10 @@ MonoBehaviour:
   hitStopDuration: 0
   bounceDestroyDelay: 2
   normalShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
-  iceShotSound: {fileID: 0}
-  fireShotSound: {fileID: 0}
+  iceShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  fireShotSound: {fileID: 8300000, guid: 49e13721776f8b0459b05a387e9d3c8c, type: 3}
+  arrowBounceSound: {fileID: 0}
+  arrowStuckSound: {fileID: 8300000, guid: c4213a2cfb9d34c429100cb4045c5939, type: 3}
 --- !u!61 &5098012253307374289
 BoxCollider2D:
   m_ObjectHideFlags: 0

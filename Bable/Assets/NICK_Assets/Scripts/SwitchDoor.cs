@@ -76,6 +76,12 @@ public class SwitchDoor : MonoBehaviour
         isOpen = true;
         doorAnimator.SetTrigger("Open");
 
+        // play door open sound
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(SoundManager.instance.doorSlideSound, transform, .8f);
+        }
+
         yield return new WaitForSeconds(GetAnimationLength("opening"));
         if (doorCollider != null) doorCollider.enabled = false;
     }
@@ -87,7 +93,10 @@ public class SwitchDoor : MonoBehaviour
         doorAnimator.SetTrigger("Close");
 
         // play door close sound
-        SoundManager.instance.PlayWorldClip(SoundManager.instance.doorCloseSound, transform, 1f);
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldClip(SoundManager.instance.doorCloseSound, transform, 1f);
+        }
 
         yield return new WaitForSeconds(GetAnimationLength("closing"));
         if (doorCollider != null) doorCollider.enabled = true;

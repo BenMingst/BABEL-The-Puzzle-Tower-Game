@@ -22,7 +22,7 @@ public class SerpentHealth : MonoBehaviour
     public bool isDead = false;
 
     private SerpentAI serpentAI;
-
+    private SerpentAudio audioData;
     void Awake()
     {
         currentHealth = maxHealth;
@@ -34,7 +34,7 @@ public class SerpentHealth : MonoBehaviour
             enemyAnimator = GetComponent<Animator>();
 
         serpentAI = GetComponent<SerpentAI>();
-
+        audioData = GetComponent<SerpentAudio>();
         if (serpentHurtEffect != null)
             serpentHurtEffect.SetActive(false);
     }
@@ -83,7 +83,11 @@ public class SerpentHealth : MonoBehaviour
         // hide main sprite show hurt effect
         if (mainSpriteRenderer != null) mainSpriteRenderer.enabled = false;
         if (serpentHurtEffect != null) serpentHurtEffect.SetActive(true);
-
+        // play hurt sound
+        if (SoundManager.instance)
+        {
+            SoundManager.instance.PlayWorldRandom(audioData.hurtSounds, transform, 1f);
+        }
         if (rb != null)
             rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
@@ -104,6 +108,12 @@ public class SerpentHealth : MonoBehaviour
     {
         isDead = true;
         StopAllCoroutines();
+
+        // play death sound
+        if (SoundManager.instance)
+        {
+            SoundManager.instance.PlayWorldClip(audioData.deathSound, transform, 1f);
+        }
 
         if (serpentHurtEffect != null) serpentHurtEffect.SetActive(false);
         if (mainSpriteRenderer != null) mainSpriteRenderer.enabled = true;

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class SpiderAI : MonoBehaviour
 {
+    private SpiderAudio audioData;
     public enum SpiderState { AtNest, Dropping, Attacking, Returning, Hurt, GrappledStun }
 
     [Header("References")]
@@ -48,7 +49,7 @@ public class SpiderAI : MonoBehaviour
         player = GameObject.FindWithTag("Player").transform;
         enemyHealth = GetComponent<EnemyHealth>();
         grappleCatchable = GetComponent<GrappleCatchable>();
-
+        audioData = GetComponent<SpiderAudio>();
         if (animator == null) animator = GetComponent<Animator>();
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (webRenderer == null) webRenderer = GetComponent<LineRenderer>();
@@ -149,7 +150,7 @@ public class SpiderAI : MonoBehaviour
         animator.SetTrigger("Webbing");
 
         // play drop sound
-        SoundManager.instance.PlayWorldClip(EnemyAudio.instance.spider.webDropSound, transform, 1f);
+        SoundManager.instance.PlayWorldClip(audioData.webDropSound, transform, 1f);
 
         yield return new WaitForSeconds(GetAnimLength("Webbing") / grappleSlowMultiplier);
 
@@ -163,7 +164,7 @@ public class SpiderAI : MonoBehaviour
 
         currentState = SpiderState.Attacking;
         animator.SetTrigger("Attack");
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.attackSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
         if (gasHitbox != null) gasHitbox.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(attackDuration / grappleSlowMultiplier);
@@ -213,7 +214,7 @@ public class SpiderAI : MonoBehaviour
         animator.SetBool("IsHurt", true);
 
         // play hurt sound
-        SoundManager.instance.PlayWorldRandom(EnemyAudio.instance.hurtSounds, transform, 1f);
+        SoundManager.instance.PlayWorldRandom(audioData.hurtSounds, transform, 1f);
 
         yield return new WaitForSeconds(hurtDuration);
 

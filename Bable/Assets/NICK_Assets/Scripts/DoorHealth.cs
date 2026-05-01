@@ -27,7 +27,9 @@ public class DoorHealth : MonoBehaviour
 
     public void TakeHit()
     {
-        SoundManager.instance.PlayWorldRandom(hurtSounds, transform, 1f);
+        // play door hit sound
+        if (SoundManager.instance != null)
+            SoundManager.instance.PlayWorldRandom(hurtSounds, transform, 1f);
         if (isDestroyed || isHit) return;
 
         hits++;
@@ -60,7 +62,10 @@ public class DoorHealth : MonoBehaviour
         isDestroyed = true;
         animator.SetTrigger("Destroyed");
         // play death sound
-        SoundManager.instance.PlayWorldRandom(deathSounds, transform, 1f);
+        if (SoundManager.instance != null)
+        {
+            SoundManager.instance.PlayWorldRandom(deathSounds, transform, 1f);
+        }
         col.enabled = false;
         rb.bodyType = RigidbodyType2D.Static;
         yield break;

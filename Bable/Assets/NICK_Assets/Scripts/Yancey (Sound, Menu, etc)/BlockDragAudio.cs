@@ -39,7 +39,7 @@ public class BlockDragAudio : MonoBehaviour
         {
             if (!isPlaying)
             {
-                activeSource = SoundManager.instance.PlayWorldClip(
+                activeSource = SoundManager.instance.PlayWorldLoop(
                     blockPushLoop,
                     transform,
                     maxVolume
@@ -76,10 +76,11 @@ public class BlockDragAudio : MonoBehaviour
     void StopAudio()
     {
         if (!isPlaying) return;
-
         if (activeSource != null)
+        {
             activeSource.Stop();
-
+            Destroy(activeSource.gameObject);
+        }
         activeSource = null;
         isPlaying = false;
     }

@@ -108,6 +108,7 @@ MonoBehaviour:
   damage: 1
   damageCooldown: 3
   isIceExplosion: 1
+  isFireExplosion: 0
 --- !u!212 &6645974588724552655
 SpriteRenderer:
   serializedVersion: 2
@@ -222,12 +223,15 @@ MonoBehaviour:
   explosionAnimator: {fileID: 4837656064690381229}
   explosionCollider: {fileID: 4574737546804707588}
   explosionDuration: 0.5
+  normalExplosionSound: {fileID: 0}
   isFireProjectile: 0
   groundFirePrefab: {fileID: 0}
   fireSpreadRadius: 2
+  fireExplosionSound: {fileID: 0}
   isIceProjectile: 1
   groundIcePrefab: {fileID: 4753258075296290238, guid: 3b2c96c2f49794b7bbc9cbb18b48ba61, type: 3}
   iceSpreadRadius: 0.25
+  iceExplosionSound: {fileID: 8300000, guid: 76ee42e68df9b3a4a97a7401c8878710, type: 3}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

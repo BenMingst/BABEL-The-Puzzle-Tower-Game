@@ -223,12 +223,15 @@ MonoBehaviour:
   explosionAnimator: {fileID: 2545296925091120563}
   explosionCollider: {fileID: 1767284878571684290}
   explosionDuration: 0.5
+  normalExplosionSound: {fileID: 0}
   isFireProjectile: 1
   groundFirePrefab: {fileID: 2719365638132209860, guid: 1ad7e4b683c1d43588d2265fa9ff2333, type: 3}
   fireSpreadRadius: 0.25
+  fireExplosionSound: {fileID: 8300000, guid: 0341470741a9eca458e1eb0bffd3bd62, type: 3}
   isIceProjectile: 0
   groundIcePrefab: {fileID: 0}
   iceSpreadRadius: 2
+  iceExplosionSound: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 64

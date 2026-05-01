@@ -15,6 +15,7 @@ public class BreakableVase : MonoBehaviour
 
     [Header("Optional Effects")]
     public GameObject breakEffectPrefab;
+    [SerializeField] public AudioClip[] breakSound;
 
     private bool isBroken = false;
 
@@ -48,6 +49,8 @@ public class BreakableVase : MonoBehaviour
         // play break animation
         if (animator != null)
             animator.SetTrigger("Break");
+            // play break sound
+            SoundManager.instance.PlayWorldRandom(breakSound, transform, 1f);
 
         // optional break effect (particles, dust cloud, etc.)
         if (breakEffectPrefab != null)
