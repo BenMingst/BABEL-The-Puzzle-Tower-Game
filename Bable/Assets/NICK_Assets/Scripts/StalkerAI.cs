@@ -7,16 +7,11 @@ using UnityEngine;
 /// Drives movement, visibility tint, teleport combat, and duel-phase behavior by <see cref="stalkerLevel"/> (1, 3, or 5).
 /// Does not inherit from <see cref="EnemyAI"/>; mirrors its combat/movement conventions only.
 /// </summary>
-/// <remarks>
-/// Keep stalker-specific logic and tuning in this script only. Do not modify shared gameplay scripts
-/// (for example <c>SlashHitbox</c>, <c>Bomb</c>, <c>Enemy_AI</c>) to adjust The Stalker — change this file instead.
-/// </remarks>
 public class StalkerAI : MonoBehaviour
 {
     #region Inspector — Stalker Config
 
     [Header("Stalker Config")]
-    /// <summary>Difficulty / behavior tier: 1 = Presence, 3 = Hunter, 5 = Duel.</summary>
     public int stalkerLevel = 5;
 
     #endregion
@@ -61,27 +56,47 @@ public class StalkerAI : MonoBehaviour
     public int rageHitThreshold = 3;
 
     [Header("Level 5 — Bomb avoidance")]
-    [Tooltip("How far out we scan for active Bomb components.")]
     public float bombThreatSenseRadius = 6.5f;
-    [Tooltip("When a bomb’s fuse has at most this many seconds left, try to run away.")]
     public float bombFleeIfFuseRemainingBelow = 1.35f;
-    [Tooltip("Horizontal flee speed multiplier while escaping an imminent blast.")]
     public float bombFleeSpeedScale = 1.45f;
 
     [Header("Level 5 — Movement pressure")]
     [Tooltip("Blends toward the player like basic EnemyAI — reduces pure orbit kiting.")]
     [Range(0f, 1f)]
     public float approachBlendVsStrafe = 0.28f;
+
+    [Header("Level 5 — Approach")]
+    [Tooltip("How many seconds between forced approach dashes when player is at bow range.")]
+    public float approachDashInterval = 1.8f;
+
+    [Header("Level 5 — Melee Charge")]
+    [Tooltip("Speed multiplier while winding up a sword swing (chasing the player).")]
+    public float meleeWindupSpeedMul = 1.15f;
+
     #endregion
 
     #region Inspector — Combat (all levels)
 
     [Header("Combat (all levels)")]
     public float attackRange = 1.5f;
-    public float attackCooldown = 1f;
-    public float hitboxDelay = 0.45f;
+    public float attackCooldown = 0.7f;
+    public float hitboxDelay = 0.3f;
     public float hitboxDuration = 0.1f;
     public float grappleSlowMultiplier = 1f;
+
+    #endregion
+
+    #region Inspector — Locomotion (matches PlayerController feel)
+
+    [Header("Locomotion (matches PlayerController feel)")]
+    public float moveSpeed = 7f;
+    public float jumpForce = 12f;
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
+    public LayerMask groundLayer;
+    public Transform ceilingCheck;
+    public float ceilingCheckRadius = 0.1f;
+    public LayerMask ceilingLayer;
 
     #endregion
 
@@ -113,8 +128,15 @@ public class StalkerAI : MonoBehaviour
     const float StrafeWalkSpeed = 2f;
     static readonly int TintId = Shader.PropertyToID("_TintAmount");
 
-    static readonly int AnimIsWalking  = Animator.StringToHash("IsWalking");
-    static readonly int AnimIsRunning  = Animator.StringToHash("Is_running");
+    // Animator parameters matching PlayerController.HandleAnimations()
+    static readonly int AnimSpeed              = Animator.StringToHash("Speed");
+    static readonly int AnimIsRunning          = Animator.StringToHash("Is_running");
+    static readonly int AnimHorizontalVelocity = Animator.StringToHash("Horizontal_Velocity");
+    static readonly int AnimFacingRight        = Animator.StringToHash("FacingRight");
+    static readonly int AnimIsJumping          = Animator.StringToHash("IsJumping");
+    static readonly int AnimIsFalling          = Animator.StringToHash("IsFalling");
+    static readonly int AnimIsCrouching        = Animator.StringToHash("IsCrouching");
+    static readonly int AnimIsWalking          = Animator.StringToHash("IsWalking");
 
     const float Level5BombRepeatInterval = 3f;
 
@@ -128,11 +150,13 @@ public class StalkerAI : MonoBehaviour
 
     bool facingRight = true;
     protected bool isAttacking;
+    bool isInAttackWindup;       // winding up — keep chasing
+    bool isInAttackActiveFrames; // hitbox is live — stand still briefly
     float distanceToPlayer;
     bool canSee;
 
-    // FIX: track whether we created the hitbox at runtime so we don't double-process it
     bool dynamicHitboxCreated;
+    bool isGrounded;
 
     public StalkerAudio audioData;
 
@@ -164,6 +188,8 @@ public class StalkerAI : MonoBehaviour
     float orbitFlipTimer;
     bool pendingSwordAfterDash;
     float level5BombCooldown;
+    float level5ApproachTimer;
+    float jumpCooldownTimer;
     #endregion
 
     #region Core lifecycle
@@ -173,7 +199,7 @@ public class StalkerAI : MonoBehaviour
         animator    = GetComponent<Animator>();
         enemyHealth = GetComponent<EnemyHealth>();
         rb          = GetComponent<Rigidbody2D>();
-        audioData = GetComponent<StalkerAudio>();
+        audioData   = GetComponent<StalkerAudio>();
         baseDashSpeed       = dashSpeed;
         baseAttackCooldown  = attackCooldown;
 
@@ -186,22 +212,15 @@ public class StalkerAI : MonoBehaviour
         facingRight = transform.localScale.x >= 0f;
     }
 
-    // -------------------------------------------------------------------------
-    // FIX: expanded to search multiple name variants and fall back to component
-    //      type detection, then finally creates a hitbox dynamically.
-    // -------------------------------------------------------------------------
     void AutoAssignMissingHierarchyReferences()
     {
-        // ── SpriteRenderer ──────────────────────────────────────────────────
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>(true);
 
-        // ── Sword hitbox ─────────────────────────────────────────────────────
         if (swordHitbox == null)
         {
-            // Try common name variants first
             string[] hitboxNames = { "SlashHitbox", "slashHitbox", "Slash_Hitbox",
                                      "SwordHitbox",  "sword_hitbox", "HitBox",
                                      "MeleeHitbox",  "AttackHitbox" };
@@ -219,14 +238,12 @@ public class StalkerAI : MonoBehaviour
             }
         }
 
-        // Fallback: find by SlashHitbox component on any child
         if (swordHitbox == null)
         {
             SlashHitbox sh = GetComponentInChildren<SlashHitbox>(true);
             if (sh != null) swordHitbox = sh.gameObject;
         }
 
-        // Last resort: create a runtime hitbox so attacks never silently fail
         if (swordHitbox == null && !dynamicHitboxCreated)
         {
             dynamicHitboxCreated = true;
@@ -234,16 +251,14 @@ public class StalkerAI : MonoBehaviour
             swordHitbox.transform.SetParent(transform);
             swordHitbox.transform.localPosition = new Vector3(0.8f, 0f, 0f);
             BoxCollider2D col = swordHitbox.AddComponent<BoxCollider2D>();
-            col.size    = new Vector2(1.2f, 1.0f);
+            col.size      = new Vector2(1.2f, 1.0f);
             col.isTrigger = true;
-            col.enabled   = false;          // starts disabled; SwordAttack enables it
+            col.enabled   = false;
             EnemyHitbox eh = swordHitbox.AddComponent<EnemyHitbox>();
             eh.damage = 1;
-            Debug.LogWarning("[StalkerAI] No sword hitbox found in hierarchy — created a runtime one. " +
-                             "Assign 'SlashHitbox' (or equivalent child) in the Prefab for reliable results.", this);
+            Debug.LogWarning("[StalkerAI] No sword hitbox found — created runtime one.", this);
         }
 
-        // ── Arrow spawn point ─────────────────────────────────────────────────
         if (arrowSpawnPoint == null)
         {
             string[] spawnNames = { "ArrowSpawnPoint", "arrowSpawnPoint",
@@ -262,7 +277,6 @@ public class StalkerAI : MonoBehaviour
                 if (arrowSpawnPoint != null) break;
             }
 
-            // Fallback: create a spawn point slightly in front of the stalker
             if (arrowSpawnPoint == null)
             {
                 GameObject sp = new GameObject("ArrowSpawnPoint_Runtime");
@@ -272,19 +286,36 @@ public class StalkerAI : MonoBehaviour
                 Debug.LogWarning("[StalkerAI] No ArrowSpawnPoint found — created runtime fallback.", this);
             }
         }
+
+        if (groundCheck == null)
+        {
+            foreach (Transform t in GetComponentsInChildren<Transform>(true))
+            {
+                if (t.name.Equals("GroundCheck", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    groundCheck = t;
+                    break;
+                }
+            }
+        }
+
+        if (ceilingCheck == null)
+        {
+            foreach (Transform t in GetComponentsInChildren<Transform>(true))
+            {
+                if (t.name.Equals("CeilingCheck", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    ceilingCheck = t;
+                    break;
+                }
+            }
+        }
     }
 
-    // -------------------------------------------------------------------------
-    // FIX: always overwrite animators from the player when the player is found,
-    //      not only when the stalker field is null.  The prefab ships with them
-    //      as None, so we must always copy on first run.
-    // -------------------------------------------------------------------------
     void TryCopyAnimatorAndWeaponsFromPlayer(PlayerController pc)
     {
         if (pc == null) return;
 
-        // Always copy animators — if the field was None we fill it; if somehow
-        // set already we still prefer the live player's assets for consistency.
         if (pc.swordAnimator != null)
             meleeAnimatorController = pc.swordAnimator;
         if (pc.bowAnimator != null)
@@ -293,27 +324,40 @@ public class StalkerAI : MonoBehaviour
         if (arrowPrefab == null && pc.playerArrowPrefab != null)
             arrowPrefab = pc.playerArrowPrefab;
 
-        // Bomb prefab: try BombAttack component on the Stalker itself
         if (bombPrefab == null)
         {
-            BombAttack bombAttack = GetComponent<BombAttack>();
-            if (bombAttack != null && bombAttack.bombPrefab != null)
-                bombPrefab = bombAttack.bombPrefab;
+            BombAttack playerBombAttack = pc.GetComponent<BombAttack>();
+            if (playerBombAttack != null && playerBombAttack.bombPrefab != null)
+            {
+                bombPrefab = playerBombAttack.bombPrefab;
+                Debug.Log("[StalkerAI] Copied bombPrefab from Player's BombAttack component.", this);
+            }
         }
+
+        if (bombPrefab == null)
+        {
+            BombAttack stalkerBombAttack = GetComponent<BombAttack>();
+            if (stalkerBombAttack != null && stalkerBombAttack.bombPrefab != null)
+                bombPrefab = stalkerBombAttack.bombPrefab;
+        }
+
+        if (bombPrefab == null)
+            Debug.LogWarning("[StalkerAI] bombPrefab is still null after player copy. " +
+                             "Assign it in the Stalker Inspector or add BombAttack to the Player.", this);
+
+        if (groundLayer.value == 0 && pc.groundLayer.value != 0)
+            groundLayer = pc.groundLayer;
+        if (ceilingLayer.value == 0 && pc.ceilingLayer.value != 0)
+            ceilingLayer = pc.ceilingLayer;
     }
 
     void ApplyMeleeAnimatorController()
     {
         if (animator != null && meleeAnimatorController != null)
-        {
             animator.runtimeAnimatorController = meleeAnimatorController;
-            Debug.Log("[StalkerAI] Applied melee animator: " + meleeAnimatorController.name, this);
-        }
         else if (animator != null && meleeAnimatorController == null)
-        {
-            Debug.LogWarning("[StalkerAI] meleeAnimatorController is still null after player copy. " +
-                             "Assign it in the Inspector or ensure PlayerController.swordAnimator is set.", this);
-        }
+            Debug.LogWarning("[StalkerAI] meleeAnimatorController is null. " +
+                             "Ensure PlayerController.swordAnimator is set.", this);
     }
 
     void Start()
@@ -334,7 +378,6 @@ public class StalkerAI : MonoBehaviour
             Debug.LogWarning("[StalkerAI] No GameObject tagged 'Player' found in scene.", this);
         }
 
-        // Apply melee animator AFTER copying from the player
         ApplyMeleeAnimatorController();
 
         if (sightBlockLayers.value == 0)
@@ -363,6 +406,10 @@ public class StalkerAI : MonoBehaviour
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
         canSee = CanSeePlayer();
 
+        UpdateGroundedFlag();
+
+        if (jumpCooldownTimer > 0f) jumpCooldownTimer -= Time.deltaTime;
+
         int level = GetEffectiveLevel();
         switch (level)
         {
@@ -375,9 +422,11 @@ public class StalkerAI : MonoBehaviour
             case 5:
                 Level5_UpdateRageTint();
                 Level5_UpdateBrain();
-                Level5_UpdateLocomotionAnimator();
                 break;
         }
+
+        if (level == 3 || level == 5)
+            DriveLocomotionAnimator();
 
         if (level == 3) Level3_UpdateTeleportEdgeFlag();
         if (level == 5)
@@ -398,6 +447,54 @@ public class StalkerAI : MonoBehaviour
             case 3: Level3_FixedUpdate(); break;
             case 5: Level5_FixedUpdate(); break;
         }
+    }
+
+    void UpdateGroundedFlag()
+    {
+        if (groundCheck != null)
+            isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        else
+            isGrounded = true;
+    }
+
+    bool HasRoomToStand()
+    {
+        if (ceilingCheck == null) return true;
+        return !Physics2D.OverlapCircle(ceilingCheck.position, ceilingCheckRadius, ceilingLayer);
+    }
+
+    /// <summary>
+    /// Drives the same animator parameters PlayerController.HandleAnimations() drives,
+    /// so the Stalker's animator (using the player's controller) plays the proper
+    /// run/walk/jump/fall/idle states based on actual physics state.
+    /// </summary>
+    void DriveLocomotionAnimator()
+    {
+        if (animator == null || rb == null) return;
+
+        // During hurt or the brief active-frames swing, suppress locomotion params.
+        // During windup, KEEP driving them so the Stalker visibly runs at the player.
+        if (enemyHealth.isHurt || isInAttackActiveFrames)
+        {
+            animator.SetFloat(AnimSpeed, 0f);
+            animator.SetBool(AnimIsRunning, false);
+            animator.SetBool(AnimIsWalking, false);
+            return;
+        }
+
+        float vx = rb.linearVelocity.x;
+        float vy = rb.linearVelocity.y;
+        float horizontalInput = Mathf.Clamp(vx / Mathf.Max(0.01f, moveSpeed), -1f, 1f);
+        float speedMag = Mathf.Abs(horizontalInput);
+
+        animator.SetFloat(AnimSpeed, speedMag);
+        animator.SetBool(AnimIsRunning, speedMag > 0.1f);
+        animator.SetBool(AnimIsWalking, speedMag > 0.1f);
+        animator.SetFloat(AnimHorizontalVelocity, horizontalInput);
+        animator.SetBool(AnimFacingRight, facingRight);
+        animator.SetBool(AnimIsJumping, !isGrounded);
+        animator.SetBool(AnimIsFalling, vy < -0.05f);
+        animator.SetBool(AnimIsCrouching, false);
     }
 
     #endregion
@@ -429,7 +526,8 @@ public class StalkerAI : MonoBehaviour
 
     void Level1_Update()
     {
-        UpdateTintAmount(Mathf.Clamp01(Mathf.InverseLerp(visibilityFadeEnd, visibilityFadeStart, distanceToPlayer)));
+        UpdateTintAmount(Mathf.Clamp01(
+            Mathf.InverseLerp(visibilityFadeEnd, visibilityFadeStart, distanceToPlayer)));
     }
 
     #endregion
@@ -547,6 +645,7 @@ public class StalkerAI : MonoBehaviour
         baseDashSpeed       = dashSpeed;
         baseAttackCooldown  = attackCooldown;
         orbitFlipTimer      = 3f;
+        level5ApproachTimer = Random.Range(0.5f, approachDashInterval);
     }
 
     void Level5_UpdateRageTint()
@@ -561,8 +660,8 @@ public class StalkerAI : MonoBehaviour
             }
         }
 
-        dashSpeed       = isRaging ? baseDashSpeed      * 1.3f : baseDashSpeed;
-        attackCooldown  = isRaging ? baseAttackCooldown * 0.7f : baseAttackCooldown;
+        dashSpeed      = isRaging ? baseDashSpeed      * 1.3f : baseDashSpeed;
+        attackCooldown = isRaging ? baseAttackCooldown * 0.7f : baseAttackCooldown;
     }
 
     void Level5_UpdateBrain()
@@ -579,11 +678,12 @@ public class StalkerAI : MonoBehaviour
         if (!enemyHealth.isHurt && canSee && !isAttacking)
             FacePlayerHorizontal();
 
-        if (!isAttacking && !enemyHealth.isHurt)
+        if (!isAttacking && !enemyHealth.isHurt && !isDashing)
         {
-            float meleeReach = Mathf.Max(attackRange * 1.35f, 2.75f);
+            // Be more permissive — start the swing earlier and let the windup chase close the gap
+            float swingStartRange = attackRange * 2.0f;
 
-            if (canSee && distanceToPlayer <= meleeReach)
+            if (canSee && distanceToPlayer <= swingStartRange)
             {
                 pendingSwordAfterDash = false;
                 StartCoroutine(SwordAttack());
@@ -593,8 +693,20 @@ public class StalkerAI : MonoBehaviour
                 pendingSwordAfterDash = false;
                 TryBeginDashTowardPlayer();
             }
-            else if (canSee && distanceToPlayer > meleeReach && distanceToPlayer <= sightRange)
+            else if (canSee && distanceToPlayer > swingStartRange && distanceToPlayer <= sightRange)
             {
+                level5ApproachTimer -= Time.deltaTime;
+                if (level5ApproachTimer <= 0f && dashCooldownTimer <= 0f)
+                {
+                    level5ApproachTimer = Random.Range(approachDashInterval * 0.7f,
+                                                       approachDashInterval * 1.3f);
+                    if (TryBeginDashTowardPlayer())
+                    {
+                        pendingSwordAfterDash = true;
+                        return;
+                    }
+                }
+
                 bool rollBomb = bombPrefab != null && level5BombCooldown <= 0f
                     && distanceToPlayer >= 2.5f && distanceToPlayer <= 9f
                     && Random.value < 0.38f;
@@ -614,41 +726,15 @@ public class StalkerAI : MonoBehaviour
         }
     }
 
-    void Level5_UpdateLocomotionAnimator()
-    {
-        if (animator == null) return;
-
-        if (enemyHealth.isHurt || isAttacking)
-        {
-            animator.SetBool(AnimIsRunning, false);
-            animator.SetBool(AnimIsWalking, false);
-            return;
-        }
-
-        if (rb == null) return;
-        bool moving = Mathf.Abs(rb.linearVelocity.x) > 0.08f;
-        animator.SetBool(AnimIsRunning, moving);
-        animator.SetBool(AnimIsWalking, moving);
-    }
-
-    // -------------------------------------------------------------------------
-    // FIX: more robust — if swordHitbox already has an EnemyHitbox and no
-    //      SlashHitbox remains, skip; otherwise do the swap correctly.
-    //      Also ignore the dynamically created hitbox (it was built right).
-    // -------------------------------------------------------------------------
     void EnsureSwordDamagesPlayer()
     {
         if (swordHitbox == null) return;
-
-        // Dynamic hitbox was already built with EnemyHitbox — nothing to do.
         if (dynamicHitboxCreated) return;
 
-        // Already correctly configured
         if (swordHitbox.GetComponent<EnemyHitbox>() != null &&
             swordHitbox.GetComponent<SlashHitbox>()  == null)
             return;
 
-        // Swap SlashHitbox → EnemyHitbox
         SlashHitbox slash = swordHitbox.GetComponent<SlashHitbox>();
         int dmg = 1;
         if (slash != null)
@@ -660,8 +746,9 @@ public class StalkerAI : MonoBehaviour
         EnemyHitbox eh = swordHitbox.GetComponent<EnemyHitbox>();
         if (eh == null) eh = swordHitbox.AddComponent<EnemyHitbox>();
         eh.damage = dmg;
-
-        // Make sure the sword collider doesn't clip with the stalker's own body
+// NEW: Force the hitbox onto your enemy attack layer so it can hit the player!
+// Replace "EnemyAttack" with whatever layer your normal enemies use for their hitboxes.
+//swordHitbox.layer = LayerMask.NameToLayer("Character");
         Collider2D swordCol = swordHitbox.GetComponent<Collider2D>();
         if (swordCol != null)
         {
@@ -670,10 +757,8 @@ public class StalkerAI : MonoBehaviour
                 if (bodyCol == null || bodyCol == swordCol) continue;
                 Physics2D.IgnoreCollision(swordCol, bodyCol, true);
             }
+            swordCol.isTrigger = true;
         }
-
-        // Ensure it's a trigger so it doesn't push the player around
-        if (swordCol != null) swordCol.isTrigger = true;
 
         Debug.Log("[StalkerAI] Sword hitbox configured: SlashHitbox → EnemyHitbox (damage=" + dmg + ")", this);
     }
@@ -704,9 +789,9 @@ public class StalkerAI : MonoBehaviour
             return;
         }
 
-        if (IsPlayerMeleeHitboxActive())
+        if (IsPlayerMeleeHitboxActive() && distanceToPlayer < attackRange * 3f)
         {
-            float dodgeDir   = playerController != null && playerController.facingRight ? -1f : 1f;
+            float dodgeDir       = playerController != null && playerController.facingRight ? -1f : 1f;
             predictiveDodgeVx    = dodgeDir * dashSpeed * 0.6f * grapple;
             predictiveDodgeTimer = 0.2f;
             rb.linearVelocity    = new Vector2(predictiveDodgeVx, rb.linearVelocity.y);
@@ -719,7 +804,7 @@ public class StalkerAI : MonoBehaviour
             if (dashBurstTimer <= 0f)
             {
                 isDashing           = false;
-                rb.linearVelocity   = Vector2.zero;
+                rb.linearVelocity   = new Vector2(0f, rb.linearVelocity.y);
                 dashCooldownTimer   = dashCooldown / grapple;
 
                 if (pendingSwordAfterDash)
@@ -729,34 +814,76 @@ public class StalkerAI : MonoBehaviour
                 }
             }
             else
-                rb.linearVelocity = dashDirection * dashSpeed * grapple;
+                rb.linearVelocity = new Vector2(dashDirection.x * dashSpeed * grapple, rb.linearVelocity.y);
             return;
         }
 
-        if (!isAttacking)
+        // Keep moving during windup; stand still only during the actual swing's active frames
+        bool canMove = !isInAttackActiveFrames;
+
+        if (canMove)
         {
             Vector2 toPlayer = (Vector2)(player.position - transform.position);
+            float horizontalInput = 0f;
+
             if (toPlayer.sqrMagnitude > 0.0001f)
             {
-                toPlayer.Normalize();
-                Vector2 tangent = new Vector2(-toPlayer.y, toPlayer.x);
-                float lateral = tangent.x;
-                if (Mathf.Abs(lateral) < 0.1f)
-                    lateral = strafeOrbitSign;
+                if (isInAttackWindup)
+                {
+                    // charge directly toward the player while raising the sword
+                    horizontalInput = Mathf.Sign(toPlayer.x);
+                }
                 else
-                    lateral = Mathf.Sign(lateral) * strafeOrbitSign;
+                {
+                    float tangentX = -Mathf.Sign(toPlayer.y);
+                    if (Mathf.Abs(toPlayer.y) < 0.3f) tangentX = 0f;
+                    float lateralSign = strafeOrbitSign;
 
-                float strafeX = lateral * StrafeWalkSpeed * 0.8f * grapple;
-                float towardX = Mathf.Sign(player.position.x - transform.position.x) * StrafeWalkSpeed * 1.05f * grapple;
-                float w = Mathf.Clamp01((distanceToPlayer - 2.5f) / 6f) * approachBlendVsStrafe;
-                float vx = Mathf.Lerp(strafeX, towardX, w);
-                rb.linearVelocity = new Vector2(vx, rb.linearVelocity.y);
+                    float towardPlayer = Mathf.Sign(toPlayer.x);
+                    float w = Mathf.Clamp01((distanceToPlayer - 1.5f) / 3.5f) * approachBlendVsStrafe;
+
+                    float strafeIntent  = lateralSign * 0.8f;
+                    float approachIntent = towardPlayer * 1.0f;
+                    horizontalInput = Mathf.Lerp(strafeIntent, approachIntent, w);
+                }
             }
-            else
-                rb.linearVelocity = Vector2.zero;
+
+            float speedMul = isInAttackWindup ? meleeWindupSpeedMul : 1.0f;
+            float targetVx = horizontalInput * moveSpeed * speedMul * grapple;
+            rb.linearVelocity = new Vector2(targetVx, rb.linearVelocity.y);
+
+            TryAutoJump();
         }
         else
+        {
             rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        }
+    }
+
+    void TryAutoJump()
+    {
+        if (!isGrounded) return;
+        if (jumpCooldownTimer > 0f) return;
+        if (!HasRoomToStand()) return;
+        if (player == null) return;
+
+        bool playerAbove = player.position.y > transform.position.y + 1.2f;
+        bool wallInFront = IsWallInFront();
+
+        if (playerAbove || wallInFront)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            jumpCooldownTimer = 0.5f;
+        }
+    }
+
+    bool IsWallInFront()
+    {
+        if (groundCheck == null) return false;
+        Vector2 origin = (Vector2)transform.position;
+        Vector2 dir = facingRight ? Vector2.right : Vector2.left;
+        RaycastHit2D hit = Physics2D.Raycast(origin, dir, 0.6f, groundLayer);
+        return hit.collider != null;
     }
 
     bool TryGetBombFleeVelocity(float grapple, out Vector2 horizontalVel)
@@ -782,17 +909,17 @@ public class StalkerAI : MonoBehaviour
             float dist = fromBomb.magnitude;
             if (dist < 0.01f) continue;
             fromBomb /= dist;
-            float blast = b.explosionRadius + 0.6f;
+            float blast   = b.explosionRadius + 0.6f;
             float urgency = (blast / Mathf.Max(0.35f, dist)) * (1f / Mathf.Max(0.15f, rem));
             if (urgency > bestUrgency)
             {
                 bestUrgency = urgency;
-                bestDir = fromBomb;
+                bestDir     = fromBomb;
             }
         }
 
         if (bestUrgency < 0.01f) return false;
-        horizontalVel = new Vector2(bestDir.x * StrafeWalkSpeed * bombFleeSpeedScale * grapple, 0f);
+        horizontalVel = new Vector2(bestDir.x * moveSpeed * bombFleeSpeedScale * grapple, 0f);
         return true;
     }
 
@@ -807,9 +934,9 @@ public class StalkerAI : MonoBehaviour
         if (dashDirection.sqrMagnitude < 0.01f)
             dashDirection = facingRight ? Vector2.right : Vector2.left;
 
-        isDashing         = true;
-        float g           = Mathf.Max(0.01f, grappleSlowMultiplier);
-        dashBurstTimer    = DashBurstDuration / g;
+        isDashing      = true;
+        float g        = Mathf.Max(0.01f, grappleSlowMultiplier);
+        dashBurstTimer = DashBurstDuration / g;
         return true;
     }
 
@@ -852,7 +979,8 @@ public class StalkerAI : MonoBehaviour
             if (c != null && c.enabled) return true;
         }
 
-        if (playerController.downAttackHitbox != null && playerController.downAttackHitbox.activeInHierarchy)
+        if (playerController.downAttackHitbox != null &&
+            playerController.downAttackHitbox.activeInHierarchy)
         {
             Collider2D c2 = playerController.downAttackHitbox.GetComponent<Collider2D>();
             if (c2 != null && c2.enabled) return true;
@@ -875,7 +1003,6 @@ public class StalkerAI : MonoBehaviour
 
     IEnumerator SwordAttack()
     {
-        // FIX: guard is now a warning, not a silent fail — so you can diagnose in console
         if (swordHitbox == null)
         {
             Debug.LogWarning("[StalkerAI] SwordAttack aborted: swordHitbox is null.", this);
@@ -884,16 +1011,20 @@ public class StalkerAI : MonoBehaviour
 
         FacePlayerHorizontal();
         isAttacking = true;
+        isInAttackWindup = true;
+        isInAttackActiveFrames = false;
         yield return null;
 
-        if (enemyHealth.isHurt || enemyHealth.isDead) { isAttacking = false; yield break; }
+        if (enemyHealth.isHurt || enemyHealth.isDead) { ResetAttackFlags(); yield break; }
 
         ApplyAnimatorForMelee();
         yield return null;
 
         PlayMeleeStrikeAnimations();
-        SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
+        if (audioData != null && audioData.attackSounds != null && audioData.attackSounds.Length > 0)
+            SoundManager.instance.PlayWorldRandom(audioData.attackSounds, transform, 1f);
 
+        // windup phase: keep chasing the player
         yield return new WaitForSeconds(hitboxDelay);
 
         if (enemyHealth.isHurt || enemyHealth.isDead)
@@ -901,11 +1032,15 @@ public class StalkerAI : MonoBehaviour
             ClearMeleeStrikeAnimations();
             Collider2D c0 = swordHitbox.GetComponent<Collider2D>();
             if (c0 != null) c0.enabled = false;
-            isAttacking = false;
+            ResetAttackFlags();
             yield break;
         }
 
-        // Position hitbox on the correct side
+        // active frames: face player, plant feet, swing
+        FacePlayerHorizontal();
+        isInAttackWindup = false;
+        isInAttackActiveFrames = true;
+
         Vector3 hp = swordHitbox.transform.localPosition;
         hp.x = facingRight ? Mathf.Abs(hp.x) : -Mathf.Abs(hp.x);
         swordHitbox.transform.localPosition = hp;
@@ -918,9 +1053,19 @@ public class StalkerAI : MonoBehaviour
         if (c != null) c.enabled = false;
         ClearMeleeStrikeAnimations();
 
+        isInAttackActiveFrames = false;
+
+        // recovery: short cooldown but stalker can move again
         yield return new WaitForSeconds(attackCooldown / Mathf.Max(0.01f, grappleSlowMultiplier));
 
+        ResetAttackFlags();
+    }
+
+    void ResetAttackFlags()
+    {
         isAttacking = false;
+        isInAttackWindup = false;
+        isInAttackActiveFrames = false;
     }
 
     IEnumerator BowAttack(float windupSeconds)
@@ -936,39 +1081,52 @@ public class StalkerAI : MonoBehaviour
 
         if (animator != null)
         {
-            // FIX: only fire a trigger that actually exists in the controller
             string trigger = facingRight ? "BowAttackRight" : "BowAttackLeft";
             if (StalkerAnimatorHasTrigger(trigger))
                 animator.SetTrigger(trigger);
-            else if (StalkerAnimatorHasTrigger("BowAttackRight"))     // universal fallback
+            else if (StalkerAnimatorHasTrigger("BowAttackRight"))
                 animator.SetTrigger("BowAttackRight");
         }
 
         yield return new WaitForSeconds(windupSeconds);
 
-        if (enemyHealth.isHurt || enemyHealth.isDead) { isAttacking = false; yield break; }
+        if (enemyHealth.isHurt || enemyHealth.isDead)
+        {
+            ApplyAnimatorForMelee();
+            isAttacking = false;
+            yield break;
+        }
 
         FacePlayerHorizontal();
 
-        if (arrowPrefab != null && arrowSpawnPoint != null)
-        {
-            GameObject arrowObj = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-            Arrow arrow = arrowObj.GetComponent<Arrow>();
-            if (arrow != null)
-            {
-                arrow.isPlayerArrow = false;
-                arrow.SetDirection(facingRight);
-            }
+       if (arrowPrefab != null && arrowSpawnPoint != null)
+{
+    GameObject arrowObj = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+    
+    // 1. CHANGE THE LAYER: Use the same layer as your Archer's arrow 
+    // so the Physics Matrix allows it to hit the Player.
+    arrowObj.layer = LayerMask.NameToLayer("Default"); 
 
-            if (!facingRight)
-            {
-                Vector3 sc = arrowObj.transform.localScale;
-                sc.x = -Mathf.Abs(sc.x);
-                arrowObj.transform.localScale = sc;
-            }
-        }
+    Arrow arrow = arrowObj.GetComponent<Arrow>();
+    if (arrow != null)
+    {
+        // 2. SET TO FALSE: This triggers the "else" block in Arrow.cs 
+        // which looks for PlayerHealth.
+        arrow.isPlayerArrow = false; 
+        arrow.SetDirection(facingRight);
+    }
+
+    if (!facingRight)
+    {
+        Vector3 sc = arrowObj.transform.localScale;
+        sc.x = -Mathf.Abs(sc.x);
+        arrowObj.transform.localScale = sc;
+    }
+}
 
         yield return new WaitForSeconds(attackCooldown / Mathf.Max(0.01f, grappleSlowMultiplier));
+
+        ApplyAnimatorForMelee();
         isAttacking = false;
     }
 
@@ -978,7 +1136,12 @@ public class StalkerAI : MonoBehaviour
         isAttacking = true;
         yield return null;
 
-        if (enemyHealth.isHurt || enemyHealth.isDead) { isAttacking = false; yield break; }
+        if (enemyHealth.isHurt || enemyHealth.isDead)
+        {
+            ApplyAnimatorForMelee();
+            isAttacking = false;
+            yield break;
+        }
 
         if (bombPrefab != null && player != null)
         {
@@ -995,12 +1158,18 @@ public class StalkerAI : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.35f / Mathf.Max(0.01f, grappleSlowMultiplier));
+
+        ApplyAnimatorForMelee();
         isAttacking = false;
     }
 
     #endregion
 
     #region Shared helpers
+
+    public void SpawnPlayerArrow() { }
+    public void SpawnIceArrow()    { }
+    public void SpawnFireArrow()   { }
 
     void ApplyAnimatorForMelee()
     {
@@ -1080,19 +1249,31 @@ public class StalkerAI : MonoBehaviour
         return hit.collider == null;
     }
 
-    void Flip()
-    {
-        facingRight = !facingRight;
-        Vector3 scale = transform.localScale;
-        scale.x *= -1f;
-        transform.localScale = scale;
-    }
+   void Flip()
+{
+    facingRight = !facingRight;
+    // Removed the localScale inversion to match how PlayerController handles facing!
+}
 
     void FacePlayerHorizontal()
     {
         if (player == null) return;
         if (player.position.x < transform.position.x && facingRight) Flip();
         else if (player.position.x > transform.position.x && !facingRight) Flip();
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = isGrounded ? Color.green : Color.red;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+        if (ceilingCheck != null)
+        {
+            Gizmos.color = HasRoomToStand() ? Color.green : Color.red;
+            Gizmos.DrawWireSphere(ceilingCheck.position, ceilingCheckRadius);
+        }
     }
 
     #endregion

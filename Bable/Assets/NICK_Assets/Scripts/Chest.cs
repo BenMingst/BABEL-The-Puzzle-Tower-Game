@@ -4,7 +4,7 @@ using TMPro;
 
 public class Chest : MonoBehaviour
 {
-   public enum ChestItemType { Sword, Bow, SmallKey, FireArrows, IceArrows, Bomb, RemoteBomb }
+    public enum ChestItemType { Sword, Bow, SmallKey, FireArrows, IceArrows, Bomb, RemoteBomb, Grapple }
 
     public string persistentID;
     private AudioSource humSource; // dedicated source for the looping hum
@@ -67,7 +67,7 @@ public class Chest : MonoBehaviour
     {
         isOpened = true;
         inCutscene = true;
-        
+
         // play chest opening sound
         if (SoundManager.instance != null)
         {
@@ -90,6 +90,8 @@ public class Chest : MonoBehaviour
             playerAnimator.ResetTrigger("BombPickupEnd");
             playerAnimator.ResetTrigger("RemoteBombPickup");
             playerAnimator.ResetTrigger("RemoteBombPickupEnd");
+            playerAnimator.ResetTrigger("GrapplePickup");
+            playerAnimator.ResetTrigger("GrapplePickupEnd");
             playerAnimator.ResetTrigger("ItemPickup");
             playerAnimator.ResetTrigger("ItemPickupEnd");
             playerAnimator.ResetTrigger("ChestOpenEnd");
@@ -108,6 +110,8 @@ public class Chest : MonoBehaviour
             else if (itemType == ChestItemType.Bomb)
                 playerAnimator.SetTrigger("ChestOpen");
             else if (itemType == ChestItemType.RemoteBomb)
+                playerAnimator.SetTrigger("ChestOpen");
+            else if (itemType == ChestItemType.Grapple)
                 playerAnimator.SetTrigger("ChestOpen");
 
             yield return new WaitForSecondsRealtime(1.4f);
@@ -131,6 +135,11 @@ public class Chest : MonoBehaviour
             {
                 Debug.Log("Setting RemoteBombPickup trigger - animator controller: " + playerAnimator.runtimeAnimatorController.name);
                 playerAnimator.SetTrigger("RemoteBombPickup");
+            }
+            else if (itemType == ChestItemType.Grapple)
+            {
+                Debug.Log("Setting GrapplePickup trigger - animator controller: " + playerAnimator.runtimeAnimatorController.name);
+                playerAnimator.SetTrigger("GrapplePickup");
             }
 
             cutscenePanel.SetActive(true);
@@ -187,6 +196,8 @@ public class Chest : MonoBehaviour
                 pcEquip.EquipBomb();
             else if (itemType == ChestItemType.RemoteBomb)
                 pcEquip.EquipRemoteBomb();
+            else if (itemType == ChestItemType.Grapple)
+                pcEquip.EquipGrapple();
             else if (itemType == ChestItemType.SmallKey)
                 KeyManager.Instance.AddKey();
             else if (itemType == ChestItemType.FireArrows)
@@ -202,6 +213,8 @@ public class Chest : MonoBehaviour
                 playerAnimator.SetTrigger("BombPickupEnd");
             else if (itemType == ChestItemType.RemoteBomb)
                 playerAnimator.SetTrigger("RemoteBombPickupEnd");
+            else if (itemType == ChestItemType.Grapple)
+                playerAnimator.SetTrigger("GrapplePickupEnd");
             else if (itemType == ChestItemType.SmallKey ||
                      itemType == ChestItemType.FireArrows ||
                      itemType == ChestItemType.IceArrows)
@@ -212,7 +225,8 @@ public class Chest : MonoBehaviour
             if (itemType != ChestItemType.Sword &&
                 itemType != ChestItemType.Bow &&
                 itemType != ChestItemType.Bomb &&
-                itemType != ChestItemType.RemoteBomb)
+                itemType != ChestItemType.RemoteBomb &&
+                itemType != ChestItemType.Grapple)
                 InventoryManager.Instance.SelectCurrentSlot();
         }
 

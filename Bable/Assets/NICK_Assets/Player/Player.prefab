@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 6847775717163442883}
   - component: {fileID: 6951580352166716869}
   - component: {fileID: -5197810492749634059}
+  - component: {fileID: 3369035135162690351}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -723,6 +724,19 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6382934404474534495}
   m_Enabled: 1
+--- !u!114 &3369035135162690351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382934404474534495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d079eaece8a5f425dadabf44e3725503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitbox
+  damage: 1
 --- !u!1 &7161130431338967928
 GameObject:
   m_ObjectHideFlags: 0
