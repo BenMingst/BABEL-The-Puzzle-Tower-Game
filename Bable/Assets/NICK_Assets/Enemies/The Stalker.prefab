@@ -2105,6 +2105,7 @@ PrefabInstance:
     - {fileID: 2054667115459649910, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
     - {fileID: 6847775717163442883, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
     - {fileID: 7304673619875108424, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+    - {fileID: 3369035135162690351, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4836977052720142726, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
@@ -2168,9 +2169,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6382934404474534495, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       insertIndex: -1
       addedObject: {fileID: 9014294350058596118}
-    - targetCorrespondingSourceObject: {fileID: 6382934404474534495, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5700694933479922388}
     - targetCorrespondingSourceObject: {fileID: 4218304765587284175, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1949708822583452374}
@@ -2419,19 +2417,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 2a5ef2cc4b29f4a449ae3f505528b730, type: 3}
   stalkerAppearSound: {fileID: 8300000, guid: 1c194926ecce51c46aca3b6068802c83, type: 3}
   stalkerDisappearSound: {fileID: 8300000, guid: 1c194926ecce51c46aca3b6068802c83, type: 3}
---- !u!114 &5700694933479922388
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3748306970879301038}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d079eaece8a5f425dadabf44e3725503, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitbox
-  damage: 1
 --- !u!4 &5239227813186844571 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2604608624754579562, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
