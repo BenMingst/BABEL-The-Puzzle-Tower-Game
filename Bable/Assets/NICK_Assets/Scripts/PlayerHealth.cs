@@ -70,10 +70,13 @@ public class PlayerHealth : MonoBehaviour
             int heartIndex = (previousHearts - 1) / 2;
             bool isFullToHalf = previousHearts % 2 == 0;
 
-            if (isFullToHalf)
-                heartAnimators[heartIndex].SetTrigger("HalfBreak");
-            else
-                heartAnimators[heartIndex].SetTrigger("FullBreak");
+            if (heartIndex >= 0 && heartIndex < heartAnimators.Length && heartAnimators[heartIndex] != null)
+            {
+                if (isFullToHalf)
+                    heartAnimators[heartIndex].SetTrigger("HalfBreak");
+                else
+                    heartAnimators[heartIndex].SetTrigger("FullBreak");
+            }
         }
         // update stats
         StatManager.Instance.damageTaken += damage;

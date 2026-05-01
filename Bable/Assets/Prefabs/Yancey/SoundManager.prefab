@@ -60,8 +60,8 @@ MonoBehaviour:
   gameOverSound: {fileID: 8300000, guid: abe154774de80fb4bb3047f7a156ce65, type: 3}
   pauseSound: {fileID: 8300000, guid: 523ce903e984cc0428bf19338bbdcfa5, type: 3}
   unpauseSound: {fileID: 8300000, guid: 523ce903e984cc0428bf19338bbdcfa5, type: 3}
-  menuEnterSound: {fileID: 0}
-  menuExitSound: {fileID: 0}
+  menuEnterSound: {fileID: 8300000, guid: 691098816f1199d488c72f38dffd7f8a, type: 3}
+  menuExitSound: {fileID: 8300000, guid: 691098816f1199d488c72f38dffd7f8a, type: 3}
   buttonSounds:
   - {fileID: 8300000, guid: 691098816f1199d488c72f38dffd7f8a, type: 3}
   enemyDoorLaugh: {fileID: 8300000, guid: faa0060298850654f89264f8d0902c35, type: 3}

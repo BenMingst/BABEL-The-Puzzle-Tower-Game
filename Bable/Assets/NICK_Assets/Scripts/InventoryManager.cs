@@ -128,21 +128,32 @@ public class InventoryManager : MonoBehaviour
     {
         currentSlot = index;
 
-        if (slotFilled[index] && slotAnimators[index] != null)
+        // re-acquire player if cached reference is stale (e.g. after scene transition)
+        if (playerController == null || playerController.animator == null)
         {
-            playerController.animator.runtimeAnimatorController = slotAnimators[index];
-        }
-        else
-        {
-            playerController.animator.runtimeAnimatorController = playerController.noSwordAnimator;
+            GameObject playerObj = GameObject.FindWithTag("Player");
+            if (playerObj != null)
+                playerController = playerObj.GetComponent<PlayerController>();
         }
 
-        playerController.animator.SetBool("FacingRight", playerController.facingRight);
+        if (playerController != null && playerController.animator != null)
+        {
+            if (slotFilled[index] && slotAnimators[index] != null)
+            {
+                playerController.animator.runtimeAnimatorController = slotAnimators[index];
+            }
+            else
+            {
+                playerController.animator.runtimeAnimatorController = playerController.noSwordAnimator;
+            }
 
-        if (!playerController.facingRight)
-            playerController.animator.Play("Idle_Left");
-        else
-            playerController.animator.Play("Idle_Right");
+            playerController.animator.SetBool("FacingRight", playerController.facingRight);
+
+            if (!playerController.facingRight)
+                playerController.animator.Play("Idle_Left");
+            else
+                playerController.animator.Play("Idle_Right");
+        }
 
         RefreshUI();
     }

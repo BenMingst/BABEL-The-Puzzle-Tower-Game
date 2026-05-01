@@ -5,7 +5,7 @@ public class ArrowTypeIndicator : MonoBehaviour
 {
     public static ArrowTypeIndicator Instance;
 
-    public SpriteRenderer indicatorRenderer;
+    [SerializeField] public SpriteRenderer indicatorRenderer;
     public Sprite fireArrowSprite;
     public Sprite normalArrowSprite;
     public Sprite iceArrowSprite;
@@ -22,7 +22,8 @@ public class ArrowTypeIndicator : MonoBehaviour
 
     void Start()
     {
-        indicatorRenderer.gameObject.SetActive(false);
+        if (indicatorRenderer != null)
+            indicatorRenderer.gameObject.SetActive(false);
     }
 
     public void ShowIndicator(ArrowTypeManager.ArrowType arrowType)

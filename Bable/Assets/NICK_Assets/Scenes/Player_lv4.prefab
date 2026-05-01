@@ -1918,7 +1918,7 @@ PrefabInstance:
       objectReference: {fileID: 3901332806808906027, guid: d6e3c289446da40a4853bc26bc8da8a3, type: 3}
     - target: {fileID: 7716424762460086005, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: heartAnimators.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8901306041131791240, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_Enabled
@@ -2109,6 +2109,7 @@ MonoBehaviour:
   enemyReleasePoint: {fileID: 2901561415563408023}
   enemyPullSpeed: 8
   lineRenderer: {fileID: 7520556431900648790}
+  cooldownUI: {fileID: 0}
   isGrappling: 0
   isBeingPulled: 0
   isGroundedGrappling: 0

@@ -2267,7 +2267,7 @@ MonoBehaviour:
   meleeWindupSpeedMul: 0
   attackRange: 1.5
   attackCooldown: 1
-  hitboxDelay: 0.45
+  hitboxDelay: 0.2
   hitboxDuration: 0.1
   grappleSlowMultiplier: 1
   moveSpeed: 4
