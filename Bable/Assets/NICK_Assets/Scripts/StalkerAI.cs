@@ -574,33 +574,63 @@ void DriveHurtAnimation()
 
     void Level3_Update()
     {
-        if (isTeleporting) return;
+        if (dashCooldownTimer > 0f) dashCooldownTimer -= Time.deltaTime;
 
-        bool hurtEdgeTeleport = enemyHealth.isHurt && !wasHurtLastFrameTeleport;
-
-        if (canSee)
+        orbitFlipTimer -= Time.deltaTime;
+        if (orbitFlipTimer <= 0f)
         {
-            if (!enemyHealth.isHurt && teleportCountdown > 0f)
-                teleportCountdown -= Time.deltaTime;
-
-            bool tooClose  = distanceToPlayer < TeleportProximity;
-            bool timerDone = teleportCountdown <= 0f;
-
-            if (timerDone || hurtEdgeTeleport || tooClose)
-            {
-                if (TryPickTeleportNode(out Transform node))
-                    StartCoroutine(TeleportDissolveRoutine(node));
-                teleportCountdown = Random.Range(teleportMinInterval, teleportMaxInterval);
-            }
+            strafeOrbitSign *= -1f;
+            orbitFlipTimer = Random.Range(2f, 5f);
         }
 
-        if (!isAttacking && !enemyHealth.isHurt && canSee && !isTeleporting)
-        {
+        if (!enemyHealth.isHurt && canSee && !isAttacking)
             FacePlayerHorizontal();
-            if (distanceToPlayer < meleeThreshold)
+
+        if (!isAttacking && !enemyHealth.isHurt && !isDashing)
+        {
+            // Be more permissive — start the swing earlier and let the windup chase close the gap
+            float swingStartRange = attackRange * 2.0f;
+
+            if (canSee && distanceToPlayer <= swingStartRange)
+            {
+                pendingSwordAfterDash = false;
                 StartCoroutine(SwordAttack());
-            else
-                StartCoroutine(BowAttack(bowWindupTime));
+            }
+            else if (IsPlayerBehindStalker())
+            {
+                pendingSwordAfterDash = false;
+                TryBeginDashTowardPlayer();
+            }
+            else if (canSee && distanceToPlayer > swingStartRange && distanceToPlayer <= sightRange)
+            {
+                level5ApproachTimer -= Time.deltaTime;
+                if (level5ApproachTimer <= 0f && dashCooldownTimer <= 0f)
+                {
+                    level5ApproachTimer = Random.Range(approachDashInterval * 0.7f,
+                                                       approachDashInterval * 1.3f);
+                    if (TryBeginDashTowardPlayer())
+                    {
+                        pendingSwordAfterDash = true;
+                        return;
+                    }
+                }
+
+                bool rollBomb = bombPrefab != null && level5BombCooldown <= 0f
+                    && distanceToPlayer >= 2.5f && distanceToPlayer <= 9f
+                    && Random.value < 0.38f;
+                if (rollBomb)
+                {
+                    level5BombCooldown = Level5BombRepeatInterval;
+                    StartCoroutine(BombAttack());
+                }
+                else
+                    StartCoroutine(BowAttack(bowWindupTime * 0.85f));
+            }
+            else if (distanceToPlayer > sightRange * 0.6f && IsPlayerDefensiveIdle() && canSee)
+            {
+                if (TryBeginDashTowardPlayer())
+                    pendingSwordAfterDash = true;
+            }
         }
     }
 
@@ -611,8 +641,99 @@ void DriveHurtAnimation()
 
     void Level3_FixedUpdate()
     {
-        if (enemyHealth.isHurt) return;
-        if (rb != null) rb.linearVelocity = Vector2.zero;
+        if (enemyHealth.isHurt)
+        {
+            isDashing           = false;
+            dashBurstTimer      = 0f;
+            rb.linearVelocity   = Vector2.zero;
+            predictiveDodgeTimer = 0f;
+            return;
+        }
+
+        float grapple = Mathf.Max(0.01f, grappleSlowMultiplier);
+
+        if (TryGetBombFleeVelocity(grapple, out Vector2 bombFlee))
+        {
+            rb.linearVelocity = new Vector2(bombFlee.x, rb.linearVelocity.y);
+            return;
+        }
+
+        if (predictiveDodgeTimer > 0f)
+        {
+            rb.linearVelocity    = new Vector2(predictiveDodgeVx * grapple, rb.linearVelocity.y);
+            predictiveDodgeTimer -= Time.fixedDeltaTime;
+            return;
+        }
+
+        if (IsPlayerMeleeHitboxActive() && distanceToPlayer < attackRange * 3f)
+        {
+            float dodgeDir       = playerController != null && playerController.facingRight ? -1f : 1f;
+            predictiveDodgeVx    = dodgeDir * dashSpeed * 0.6f * grapple;
+            predictiveDodgeTimer = 0.2f;
+            rb.linearVelocity    = new Vector2(predictiveDodgeVx, rb.linearVelocity.y);
+            return;
+        }
+
+        if (isDashing)
+        {
+            dashBurstTimer -= Time.fixedDeltaTime;
+            if (dashBurstTimer <= 0f)
+            {
+                isDashing           = false;
+                rb.linearVelocity   = new Vector2(0f, rb.linearVelocity.y);
+                dashCooldownTimer   = dashCooldown / grapple;
+
+                if (pendingSwordAfterDash)
+                {
+                    pendingSwordAfterDash = false;
+                    if (!enemyHealth.isDead) StartCoroutine(SwordAttack());
+                }
+            }
+            else
+                rb.linearVelocity = new Vector2(dashDirection.x * dashSpeed * grapple, rb.linearVelocity.y);
+            return;
+        }
+
+        // Keep moving during windup; stand still only during the actual swing's active frames
+        bool canMove = !isInAttackActiveFrames;
+
+        if (canMove)
+        {
+            Vector2 toPlayer = (Vector2)(player.position - transform.position);
+            float horizontalInput = 0f;
+
+            if (toPlayer.sqrMagnitude > 0.0001f)
+            {
+                if (isInAttackWindup)
+                {
+                    // charge directly toward the player while raising the sword
+                    horizontalInput = Mathf.Sign(toPlayer.x);
+                }
+                else
+                {
+                    float tangentX = -Mathf.Sign(toPlayer.y);
+                    if (Mathf.Abs(toPlayer.y) < 0.3f) tangentX = 0f;
+                    float lateralSign = strafeOrbitSign;
+
+                    float towardPlayer = Mathf.Sign(toPlayer.x);
+                    float w = Mathf.Clamp01((distanceToPlayer - 1.5f) / 3.5f) * approachBlendVsStrafe;
+
+                    float strafeIntent  = lateralSign * 0.8f;
+                    float approachIntent = towardPlayer * 1.0f;
+                    horizontalInput = Mathf.Lerp(strafeIntent, approachIntent, w);
+                }
+            }
+
+            float speedMul = isInAttackWindup ? meleeWindupSpeedMul : 1.0f;
+            float targetVx = horizontalInput * moveSpeed * speedMul * grapple;
+            rb.linearVelocity = new Vector2(targetVx, rb.linearVelocity.y);
+
+            TryAutoJump();
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(0f, rb.linearVelocity.y);
+        }
     }
 
     IEnumerator TeleportDissolveRoutine(Transform node)
