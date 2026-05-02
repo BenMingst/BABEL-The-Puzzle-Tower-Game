@@ -1198,6 +1198,8 @@ ResetAttackFlags();
 
 IEnumerator DeathSequence()
 {
+     if (EndCutscene.Instance != null)
+        EndCutscene.Instance.StartCutscene();
     // stop all motion
     if (rb != null)
     {
