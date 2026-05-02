@@ -3195,7 +3195,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 40.68, y: 8}
+  m_Size: {x: 40.68, y: 16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -8104,63 +8104,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8112728949798890030, guid: ee928d87469784976ad5ec4a2701cb74, type: 3}
   m_PrefabInstance: {fileID: 1931642790}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1333763566
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 33.385536
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.440237
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8413139691117509844, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8731498324563842225, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
-      propertyPath: m_Name
-      value: heart_vase (7)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 92edfe5fa42d54f35bd35e60b862a97e, type: 3}
 --- !u!1001 &1359981772
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9909,7 +9852,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 27.12, y: 8}
+  m_Size: {x: 27.12, y: 16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -213427,7 +213370,6 @@ SceneRoots:
   - {fileID: 2117668809}
   - {fileID: 37871824}
   - {fileID: 411998100}
-  - {fileID: 1333763566}
   - {fileID: 366816042}
   - {fileID: 1851687284}
   - {fileID: 252431092}
