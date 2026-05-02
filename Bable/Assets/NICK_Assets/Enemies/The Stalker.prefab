@@ -1880,7 +1880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4218304765587284175, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4218304765587284175, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_TagString
@@ -2021,6 +2021,10 @@ PrefabInstance:
     - target: {fileID: 8458060307974695922, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_Size.x
       value: 0.8293456
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458060307974695922, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8458060307974695922, guid: 8f67cf043551b413b93fec9aa3b50289, type: 3}
       propertyPath: m_Offset.x
@@ -2248,7 +2252,7 @@ MonoBehaviour:
   meleeThreshold: 4
   teleportMinInterval: 0
   teleportMaxInterval: 0
-  bowWindupTime: 1.5
+  bowWindupTime: 0.5
   dissolveTime: 0.1
   teleportNodes: []
   dashSpeed: 4
@@ -2287,6 +2291,8 @@ MonoBehaviour:
   spriteRenderer: {fileID: 1659704574186324490}
   meleeAnimatorController: {fileID: 9100000, guid: 54040aad9453841d3a5337a8804e1899, type: 2}
   rangedAnimatorController: {fileID: 9100000, guid: 627f04eb1a3194c67a8d148afbff7fbe, type: 2}
+  deathFadeDuration: 3
+  deathFadeDelay: 0.3
   audioData: {fileID: 9014294350058596118}
 --- !u!114 &3486543858412408607
 MonoBehaviour:
