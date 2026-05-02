@@ -178,6 +178,7 @@ bool deathSequenceStarted;
     float teleportCountdown;
     bool isTeleporting;
     bool wasHurtLastFrameTeleport;
+    float level3ApproachTimer;
     #endregion
 
     #region Level 5 state — rage & duel
@@ -567,9 +568,13 @@ void DriveHurtAnimation()
 
     void Level3_Start()
     {
-        if (rb != null && rb.bodyType == RigidbodyType2D.Kinematic)
-            rb.bodyType = RigidbodyType2D.Dynamic;
-        UpdateTintAmount(0.5f);
+        if (rb != null) rb.bodyType = RigidbodyType2D.Dynamic;
+        UpdateTintAmount(0.07f);
+        if (animator != null) animator.speed = animSpeedMultiplier;
+        baseDashSpeed       = dashSpeed;
+        baseAttackCooldown  = attackCooldown;
+        orbitFlipTimer      = 3f;
+        level3ApproachTimer = Random.Range(0.5f, approachDashInterval);
     }
 
     void Level3_Update()
@@ -603,33 +608,24 @@ void DriveHurtAnimation()
             }
             else if (canSee && distanceToPlayer > swingStartRange && distanceToPlayer <= sightRange)
             {
-                level5ApproachTimer -= Time.deltaTime;
-                if (level5ApproachTimer <= 0f && dashCooldownTimer <= 0f)
+                level3ApproachTimer -= Time.deltaTime;
+                if (level3ApproachTimer <= 0f && dashCooldownTimer <= 0f)
                 {
-                    level5ApproachTimer = Random.Range(approachDashInterval * 0.7f,
+                    level3ApproachTimer = Random.Range(approachDashInterval * 0.7f,
                                                        approachDashInterval * 1.3f);
                     if (TryBeginDashTowardPlayer())
                     {
-                        pendingSwordAfterDash = true;
+                        //pendingSwordAfterDash = true;
                         return;
                     }
                 }
 
-                bool rollBomb = bombPrefab != null && level5BombCooldown <= 0f
-                    && distanceToPlayer >= 2.5f && distanceToPlayer <= 9f
-                    && Random.value < 0.38f;
-                if (rollBomb)
-                {
-                    level5BombCooldown = Level5BombRepeatInterval;
-                    StartCoroutine(BombAttack());
-                }
-                else
-                    StartCoroutine(BowAttack(bowWindupTime * 0.85f));
+                StartCoroutine(BowAttack(bowWindupTime * 0.85f));
             }
             else if (distanceToPlayer > sightRange * 0.6f && IsPlayerDefensiveIdle() && canSee)
             {
-                if (TryBeginDashTowardPlayer())
-                    pendingSwordAfterDash = true;
+                if (TryBeginDashTowardPlayer()) {}
+                    //pendingSwordAfterDash = true;
             }
         }
     }
@@ -652,11 +648,11 @@ void DriveHurtAnimation()
 
         float grapple = Mathf.Max(0.01f, grappleSlowMultiplier);
 
-        if (TryGetBombFleeVelocity(grapple, out Vector2 bombFlee))
-        {
-            rb.linearVelocity = new Vector2(bombFlee.x, rb.linearVelocity.y);
-            return;
-        }
+        // if (TryGetBombFleeVelocity(grapple, out Vector2 bombFlee))
+        // {
+        //     rb.linearVelocity = new Vector2(bombFlee.x, rb.linearVelocity.y);
+        //     return;
+        // }
 
         if (predictiveDodgeTimer > 0f)
         {
@@ -683,11 +679,11 @@ void DriveHurtAnimation()
                 rb.linearVelocity   = new Vector2(0f, rb.linearVelocity.y);
                 dashCooldownTimer   = dashCooldown / grapple;
 
-                if (pendingSwordAfterDash)
-                {
-                    pendingSwordAfterDash = false;
-                    if (!enemyHealth.isDead) StartCoroutine(SwordAttack());
-                }
+                // if (pendingSwordAfterDash)
+                // {
+                //     pendingSwordAfterDash = false;
+                //     if (!enemyHealth.isDead) StartCoroutine(SwordAttack());
+                // }
             }
             else
                 rb.linearVelocity = new Vector2(dashDirection.x * dashSpeed * grapple, rb.linearVelocity.y);
@@ -1330,18 +1326,20 @@ IEnumerator DeathSequence()
     foreach (Collider2D col in GetComponentsInChildren<Collider2D>(true))
         if (col != null) col.enabled = false;
 
-    // make sure we're using the melee animator (death animations live there)
-    ApplyAnimatorForMelee();
+    if (stalkerLevel == 5) {
+        // make sure we're using the melee animator (death animations live there)
+        ApplyAnimatorForMelee();
 
-    // trigger the right-facing or left-facing death animation
-    if (animator != null)
-    {
-        if (facingRight && StalkerAnimatorHasTrigger("DeathRight"))
-            animator.SetTrigger("DeathRight");
-        else if (!facingRight && StalkerAnimatorHasTrigger("DeathLeft"))
-            animator.SetTrigger("DeathLeft");
-        else if (StalkerAnimatorHasTrigger("DeathRight"))
-            animator.SetTrigger("DeathRight"); // fallback
+        // trigger the right-facing or left-facing death animation
+        if (animator != null)
+        {
+            if (facingRight && StalkerAnimatorHasTrigger("DeathRight"))
+                animator.SetTrigger("DeathRight");
+            else if (!facingRight && StalkerAnimatorHasTrigger("DeathLeft"))
+                animator.SetTrigger("DeathLeft");
+            else if (StalkerAnimatorHasTrigger("DeathRight"))
+                animator.SetTrigger("DeathRight"); // fallback
+        }
     }
 
     // brief delay so the death animation plays before the fade starts
