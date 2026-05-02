@@ -133,11 +133,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6861006017107138740, guid: 9635310e7a76f4f7caa2749954147111, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 16.1261
+      value: 15.739
       objectReference: {fileID: 0}
     - target: {fileID: 6861006017107138740, guid: 9635310e7a76f4f7caa2749954147111, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.17683
+      value: -1.833
       objectReference: {fileID: 0}
     - target: {fileID: 6861006017107138740, guid: 9635310e7a76f4f7caa2749954147111, type: 3}
       propertyPath: m_LocalPosition.z
@@ -247252,6 +247252,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2001711468783576564, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
+      propertyPath: m_Name
+      value: GrappleGlove
+      objectReference: {fileID: 0}
+    - target: {fileID: 2279982877568058214, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
+      propertyPath: 'filledSprites.Array.data[3]'
+      value: 
+      objectReference: {fileID: -1201416406540497095, guid: 0f8a4ab5916324e118ddf39ba7ed74c8, type: 3}
+    - target: {fileID: 2279982877568058214, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
+      propertyPath: 'selectedSprites.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8237255738262752140, guid: b24424328af3a452da90d784e7825b18, type: 3}
+    - target: {fileID: 3201375335157170268, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
+      propertyPath: 'filledSprites.Array.data[3]'
+      value: 
+      objectReference: {fileID: -1201416406540497095, guid: 0f8a4ab5916324e118ddf39ba7ed74c8, type: 3}
+    - target: {fileID: 3201375335157170268, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
+      propertyPath: 'selectedSprites.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8237255738262752140, guid: b24424328af3a452da90d784e7825b18, type: 3}
     - target: {fileID: 5342654775208652429, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.23901
@@ -247292,13 +247312,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6272801501400342897, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7860614919263522460, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.887091
+      value: 8.49999
       objectReference: {fileID: 0}
     - target: {fileID: 7860614919263522460, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.62519
+      value: -2.28136
       objectReference: {fileID: 0}
     - target: {fileID: 7860614919263522460, guid: c38ee447e3777426bba7ffaaf7ce20f1, type: 3}
       propertyPath: m_LocalPosition.z
