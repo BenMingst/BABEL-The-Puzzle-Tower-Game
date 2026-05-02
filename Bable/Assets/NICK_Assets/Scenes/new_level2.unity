@@ -212130,6 +212130,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0.6
       objectReference: {fileID: 0}
+    - target: {fileID: 2812668121648539577, guid: 35fbb675f95ac42748861e6a0d226fb1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2939184238638572078, guid: 35fbb675f95ac42748861e6a0d226fb1, type: 3}
       propertyPath: m_Name
       value: UI/Canvas_Stuff
