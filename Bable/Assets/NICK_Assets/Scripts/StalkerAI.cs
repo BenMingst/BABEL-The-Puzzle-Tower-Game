@@ -122,11 +122,19 @@ public class StalkerAI : MonoBehaviour
     #endregion
 
     #region Constants & cached components
+    bool wasHurtLastFrameAnim;
 
     const float DashBurstDuration = 0.15f;
     const float TeleportProximity = 1.5f;
     const float StrafeWalkSpeed = 2f;
     static readonly int TintId = Shader.PropertyToID("_TintAmount");
+    [Header("Death Sequence")]
+[Tooltip("How long the fade-out takes after death animation triggers.")]
+public float deathFadeDuration = 2f;
+[Tooltip("Delay after death starts before fade begins (lets the death animation play first).")]
+public float deathFadeDelay = 0.3f;
+
+bool deathSequenceStarted;
 
     // Animator parameters matching PlayerController.HandleAnimations()
     static readonly int AnimSpeed              = Animator.StringToHash("Speed");
@@ -400,7 +408,15 @@ public class StalkerAI : MonoBehaviour
     void Update()
     {
         if (enemyHealth == null) return;
-        if (enemyHealth.isDead) { enabled = false; return; }
+if (enemyHealth.isDead)
+{
+    if (!deathSequenceStarted)
+    {
+        deathSequenceStarted = true;
+        StartCoroutine(DeathSequence());
+    }
+    return;
+}
         if (player == null) return;
 
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
@@ -425,8 +441,23 @@ public class StalkerAI : MonoBehaviour
                 break;
         }
 
-        if (level == 3 || level == 5)
-            DriveLocomotionAnimator();
+       if (level == 3 || level == 5)
+{
+    DriveLocomotionAnimator();
+    DriveHurtAnimation();
+}
+void DriveHurtAnimation()
+{
+    if (animator == null || enemyHealth == null) return;
+
+    bool isHurtNow = enemyHealth.isHurt;
+
+    if (isHurtNow != wasHurtLastFrameAnim)
+        animator.SetBool("Hurt", isHurtNow);
+
+    wasHurtLastFrameAnim = isHurtNow;
+}
+
 
         if (level == 3) Level3_UpdateTeleportEdgeFlag();
         if (level == 5)
@@ -1037,28 +1068,24 @@ public class StalkerAI : MonoBehaviour
         }
 
         // active frames: face player, plant feet, swing
-        FacePlayerHorizontal();
-        isInAttackWindup = false;
-        isInAttackActiveFrames = true;
+FacePlayerHorizontal();
+isInAttackWindup = false;
+isInAttackActiveFrames = true;
 
-        Vector3 hp = swordHitbox.transform.localPosition;
-        hp.x = facingRight ? Mathf.Abs(hp.x) : -Mathf.Abs(hp.x);
-        swordHitbox.transform.localPosition = hp;
+Collider2D c = swordHitbox.GetComponent<Collider2D>();
+if (c != null) c.enabled = true;
 
-        Collider2D c = swordHitbox.GetComponent<Collider2D>();
-        if (c != null) c.enabled = true;
+yield return new WaitForSeconds(hitboxDuration / Mathf.Max(0.01f, grappleSlowMultiplier));
 
-        yield return new WaitForSeconds(hitboxDuration / Mathf.Max(0.01f, grappleSlowMultiplier));
+if (c != null) c.enabled = false;
+ClearMeleeStrikeAnimations();
 
-        if (c != null) c.enabled = false;
-        ClearMeleeStrikeAnimations();
+isInAttackActiveFrames = false;
 
-        isInAttackActiveFrames = false;
+// recovery: short cooldown but stalker can move again
+yield return new WaitForSeconds(attackCooldown / Mathf.Max(0.01f, grappleSlowMultiplier));
 
-        // recovery: short cooldown but stalker can move again
-        yield return new WaitForSeconds(attackCooldown / Mathf.Max(0.01f, grappleSlowMultiplier));
-
-        ResetAttackFlags();
+ResetAttackFlags();
     }
 
     void ResetAttackFlags()
@@ -1069,66 +1096,72 @@ public class StalkerAI : MonoBehaviour
     }
 
     IEnumerator BowAttack(float windupSeconds)
-    {
-        FacePlayerHorizontal();
-        isAttacking = true;
-        yield return null;
-
-        if (enemyHealth.isHurt || enemyHealth.isDead) { isAttacking = false; yield break; }
-
-        ApplyAnimatorForRanged();
-        yield return null;
-
-        if (animator != null)
-        {
-            string trigger = facingRight ? "BowAttackRight" : "BowAttackLeft";
-            if (StalkerAnimatorHasTrigger(trigger))
-                animator.SetTrigger(trigger);
-            else if (StalkerAnimatorHasTrigger("BowAttackRight"))
-                animator.SetTrigger("BowAttackRight");
-        }
-
-        yield return new WaitForSeconds(windupSeconds);
-
-        if (enemyHealth.isHurt || enemyHealth.isDead)
-        {
-            ApplyAnimatorForMelee();
-            isAttacking = false;
-            yield break;
-        }
-
-        FacePlayerHorizontal();
-
-       if (arrowPrefab != null && arrowSpawnPoint != null)
 {
-    GameObject arrowObj = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
-    
-    // 1. CHANGE THE LAYER: Use the same layer as your Archer's arrow 
-    // so the Physics Matrix allows it to hit the Player.
-    arrowObj.layer = LayerMask.NameToLayer("Default"); 
+    FacePlayerHorizontal();
+    isAttacking = true;
+    isInAttackActiveFrames = true;  // lock movement during bow shot
+    yield return null;
 
-    Arrow arrow = arrowObj.GetComponent<Arrow>();
-    if (arrow != null)
-    {
-        // 2. SET TO FALSE: This triggers the "else" block in Arrow.cs 
-        // which looks for PlayerHealth.
-        arrow.isPlayerArrow = false; 
-        arrow.SetDirection(facingRight);
+    if (enemyHealth.isHurt || enemyHealth.isDead) 
+    { 
+        isAttacking = false; 
+        isInAttackActiveFrames = false;
+        yield break; 
     }
 
-    if (!facingRight)
+    ApplyAnimatorForRanged();
+    yield return null;
+
+    if (animator != null)
     {
-        Vector3 sc = arrowObj.transform.localScale;
-        sc.x = -Mathf.Abs(sc.x);
-        arrowObj.transform.localScale = sc;
+        string trigger = facingRight ? "BowAttackRight" : "BowAttackLeft";
+        if (StalkerAnimatorHasTrigger(trigger))
+            animator.SetTrigger(trigger);
+        else if (StalkerAnimatorHasTrigger("BowAttackRight"))
+            animator.SetTrigger("BowAttackRight");
     }
-}
 
-        yield return new WaitForSeconds(attackCooldown / Mathf.Max(0.01f, grappleSlowMultiplier));
+    yield return new WaitForSeconds(windupSeconds);
 
+    if (enemyHealth.isHurt || enemyHealth.isDead)
+    {
         ApplyAnimatorForMelee();
         isAttacking = false;
+        isInAttackActiveFrames = false;
+        yield break;
     }
+
+    FacePlayerHorizontal();
+
+    if (arrowPrefab != null && arrowSpawnPoint != null)
+    {
+        GameObject arrowObj = Instantiate(arrowPrefab, arrowSpawnPoint.position, Quaternion.identity);
+
+        arrowObj.layer = LayerMask.NameToLayer("Default");
+
+        Arrow arrow = arrowObj.GetComponent<Arrow>();
+        if (arrow != null)
+        {
+            arrow.isPlayerArrow = false;
+            arrow.SetDirection(facingRight);
+        }
+
+        if (!facingRight)
+        {
+            Vector3 sc = arrowObj.transform.localScale;
+            sc.x = -Mathf.Abs(sc.x);
+            arrowObj.transform.localScale = sc;
+        }
+    }
+
+    // brief pause after firing for animation completion, but unlock movement here
+    isInAttackActiveFrames = false;
+
+    yield return new WaitForSeconds(attackCooldown / Mathf.Max(0.01f, grappleSlowMultiplier));
+
+    ApplyAnimatorForMelee();
+    isAttacking = false;
+}
 
     IEnumerator BombAttack()
     {
@@ -1163,6 +1196,59 @@ public class StalkerAI : MonoBehaviour
         isAttacking = false;
     }
 
+IEnumerator DeathSequence()
+{
+    // stop all motion
+    if (rb != null)
+    {
+        rb.linearVelocity = Vector2.zero;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+    }
+
+    // disable any colliders so the corpse doesn't keep blocking the player
+    foreach (Collider2D col in GetComponentsInChildren<Collider2D>(true))
+        if (col != null) col.enabled = false;
+
+    // make sure we're using the melee animator (death animations live there)
+    ApplyAnimatorForMelee();
+
+    // trigger the right-facing or left-facing death animation
+    if (animator != null)
+    {
+        if (facingRight && StalkerAnimatorHasTrigger("DeathRight"))
+            animator.SetTrigger("DeathRight");
+        else if (!facingRight && StalkerAnimatorHasTrigger("DeathLeft"))
+            animator.SetTrigger("DeathLeft");
+        else if (StalkerAnimatorHasTrigger("DeathRight"))
+            animator.SetTrigger("DeathRight"); // fallback
+    }
+
+    // brief delay so the death animation plays before the fade starts
+    yield return new WaitForSeconds(deathFadeDelay);
+
+    // fade the sprite out over deathFadeDuration
+    if (spriteRenderer != null)
+    {
+        Color startColor = spriteRenderer.color;
+        float elapsed = 0f;
+        while (elapsed < deathFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / deathFadeDuration;
+            Color c = startColor;
+            c.a = Mathf.Lerp(startColor.a, 0f, t);
+            spriteRenderer.color = c;
+            yield return null;
+        }
+
+        Color finalColor = startColor;
+        finalColor.a = 0f;
+        spriteRenderer.color = finalColor;
+    }
+
+    // remove from scene
+    Destroy(gameObject);
+}
     #endregion
 
     #region Shared helpers
@@ -1249,10 +1335,17 @@ public class StalkerAI : MonoBehaviour
         return hit.collider == null;
     }
 
-   void Flip()
+  void Flip()
 {
     facingRight = !facingRight;
-    // Removed the localScale inversion to match how PlayerController handles facing!
+    
+    // mirror the sword hitbox to the new facing side
+    if (swordHitbox != null)
+    {
+        Vector3 hbPos = swordHitbox.transform.localPosition;
+        hbPos.x = -hbPos.x;
+        swordHitbox.transform.localPosition = hbPos;
+    }
 }
 
     void FacePlayerHorizontal()
